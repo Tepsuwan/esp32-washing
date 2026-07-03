@@ -214,9 +214,9 @@ def on_command(topic, msg):
 
         elif key == "update_version":
             updates = [
-                ("boot.py", "http://141.98.19.212/ota/washing/boot"),
-                ("main.py", "http://141.98.19.212/ota/washing/main"),
-                ("wash.py", "http://141.98.19.212/ota/washing/wash"),
+                ("boot.py", "https://raw.githubusercontent.com/Tepsuwan/esp32-washing/main/boot.py"),
+                ("main.py", "https://raw.githubusercontent.com/Tepsuwan/esp32-washing/main/main.py"),
+                ("wash.py", "https://raw.githubusercontent.com/Tepsuwan/esp32-washing/main/wash.py"),
             ]
             for fname, url in updates:
                 backup_file(fname, fname.split(".")[0] + ".bak")
