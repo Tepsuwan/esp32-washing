@@ -1,5 +1,5 @@
 # --- File: main.py ---
-# --- Version: 1.5 (ETH01 - Production Stable) ---
+# --- Version: 2.1 (ETH01 - Universal, Auto-restore, Production Stable) ---
 
 import machine
 import time
@@ -9,14 +9,15 @@ import ubinascii
 import os
 import requests
 from umqtt.simple import MQTTClient
-import wash
 
 # --- Identity ---
 MQTT_BROKER = "141.98.19.212"
 CLIENT_ID = ubinascii.hexlify(machine.unique_id()).decode('utf-8').upper()
-STATUS_TOPIC           = b"washing_machine/" + CLIENT_ID.encode() + b"/status"
 COMMAND_TOPIC          = b"washing_machine/" + CLIENT_ID.encode() + b"/commands"
 COMMAND_RESPONSE_TOPIC = b"washing_machine/" + CLIENT_ID.encode() + b"/command_response"
+
+# GitHub base URL
+GITHUB_RAW = "https://raw.githubusercontent.com/Tepsuwan/esp32-washing/main"
 
 # --- ปิด WiFi ก่อนเริ่ม LAN ---
 try:
@@ -26,7 +27,6 @@ try:
 except:
     pass
 
-# ตัวแปร global
 client = None
 lan    = None
 
@@ -74,6 +74,40 @@ def get_ip():
         return lan.ifconfig()[0]
     except:
         return "0.0.0.0"
+
+def download_file(url, dest):
+    """ดาวน์โหลดไฟล์จาก URL และบันทึกลงบอร์ด"""
+    r = requests.get(url)
+    if r.status_code == 200:
+        with open(dest, "w") as f:
+            f.write(r.text)
+        r.close()
+        return True
+    r.close()
+    return False
+
+# --- Auto-restore wash.py ถ้าพัง ---
+try:
+    import wash
+    wash.get_machine_status  # ทดสอบว่ามีฟังก์ชัน
+    MACHINE_APP = wash.MACHINE_TYPE  # "wash" หรือ "dryer"
+    print(f"wash.py OK — type: {MACHINE_APP}")
+except Exception as e:
+    print(f"wash.py error: {e}")
+    if check_file_exists("wash.bak"):
+        print("Restoring wash.py from backup...")
+        file_copy("wash.bak", "wash.py")
+        time.sleep(1)
+        machine.reset()
+    else:
+        print("No wash.bak found! Cannot restore.")
+        machine.reset()
+
+# wash.py ของแต่ละประเภทใน GitHub
+# เครื่องซัก → wash_washing.py, เครื่องอบ → wash_dryer.py
+WASH_PY_URL = f"{GITHUB_RAW}/wash_washing.py" if MACHINE_APP == "wash" else f"{GITHUB_RAW}/wash_dryer.py"
+
+STATUS_TOPIC = b"washing_machine/" + CLIENT_ID.encode() + b"/status"
 
 # --- Ethernet ---
 def connect_eth():
@@ -156,80 +190,92 @@ def on_command(topic, msg):
             time.sleep(3)
             machine.reset()
 
+        # --- Restore จาก backup ---
+        elif key == "restore_wash":
+            if check_file_exists("wash.bak"):
+                file_copy("wash.bak", "wash.py")
+                response_data = {"status": "success", "version": 5.0, "message": "wash.py restored. Rebooting..."}
+                client.publish(COMMAND_RESPONSE_TOPIC, json.dumps(response_data).encode())
+                time.sleep(3)
+                machine.reset()
+            else:
+                response_data = {"status": "error", "message": "No wash.bak found."}
+
+        elif key == "restore_main":
+            if check_file_exists("main.bak"):
+                file_copy("main.bak", "main.py")
+                response_data = {"status": "success", "version": 5.0, "message": "main.py restored. Rebooting..."}
+                client.publish(COMMAND_RESPONSE_TOPIC, json.dumps(response_data).encode())
+                time.sleep(3)
+                machine.reset()
+            else:
+                response_data = {"status": "error", "message": "No main.bak found."}
+
+        elif key == "restore_boot":
+            if check_file_exists("boot.bak"):
+                file_copy("boot.bak", "boot.py")
+                response_data = {"status": "success", "version": 5.0, "message": "boot.py restored. Rebooting..."}
+                client.publish(COMMAND_RESPONSE_TOPIC, json.dumps(response_data).encode())
+                time.sleep(3)
+                machine.reset()
+            else:
+                response_data = {"status": "error", "message": "No boot.bak found."}
+
+        # --- OTA Update ---
         elif key == "update_code" and "url" in cmd and "file_name" in cmd:
             fname = cmd["file_name"]
-            bak = fname.split(".")[0] + ".bak"
-            if not backup_file(fname, bak):
-                response_data = {"status": "error", "message": f"Backup {fname} failed. Aborted."}
-                client.publish(COMMAND_RESPONSE_TOPIC, json.dumps(response_data).encode())
-                return
-            r = requests.get(cmd["url"])
-            if r.status_code == 200:
-                with open(fname, "w") as f:
-                    f.write(r.text)
-                r.close()
+            backup_file(fname, fname.split(".")[0] + ".bak")
+            if download_file(cmd["url"], fname):
                 response_data = {"status": "success", "message": f"Updated {fname}. Rebooting..."}
                 client.publish(COMMAND_RESPONSE_TOPIC, json.dumps(response_data).encode())
                 time.sleep(5)
                 machine.reset()
             else:
-                r.close()
-                response_data = {"status": "error", "message": f"Download failed: {r.status_code}"}
+                response_data = {"status": "error", "message": f"Download failed."}
 
-        elif key == "update_wash" and "value" in cmd:
-            if not backup_file("wash.py", "wash.bak"):
-                response_data = {"status": "error", "message": "Backup wash.py failed."}
-                client.publish(COMMAND_RESPONSE_TOPIC, json.dumps(response_data).encode())
-                return
-            r = requests.get(cmd["value"])
-            if r.status_code == 200:
-                with open("wash.py", "w") as f:
-                    f.write(r.text)
-                r.close()
-                response_data = {"status": "success", "message": "Updated wash.py. Rebooting..."}
+        elif key == "update_wash":
+            # ดึง wash.py ให้ถูกประเภท (wash หรือ dryer) อัตโนมัติ
+            url = cmd.get("value", WASH_PY_URL)
+            backup_file("wash.py", "wash.bak")
+            if download_file(url, "wash.py"):
+                response_data = {"status": "success", "message": f"Updated wash.py ({MACHINE_APP}). Rebooting..."}
                 client.publish(COMMAND_RESPONSE_TOPIC, json.dumps(response_data).encode())
                 time.sleep(5)
                 machine.reset()
             else:
-                r.close()
-                response_data = {"status": "error", "message": f"Download failed: {r.status_code}"}
+                response_data = {"status": "error", "message": "Download wash.py failed."}
 
-        elif key == "update_main" and "value" in cmd:
-            if not backup_file("main.py", "main.bak"):
-                response_data = {"status": "error", "message": "Backup main.py failed."}
-                client.publish(COMMAND_RESPONSE_TOPIC, json.dumps(response_data).encode())
-                return
-            r = requests.get(cmd["value"])
-            if r.status_code == 200:
-                with open("main.py", "w") as f:
-                    f.write(r.text)
-                r.close()
+        elif key == "update_main":
+            url = cmd.get("value", f"{GITHUB_RAW}/main.py")
+            backup_file("main.py", "main.bak")
+            if download_file(url, "main.py"):
                 response_data = {"status": "success", "message": "Updated main.py. Rebooting..."}
                 client.publish(COMMAND_RESPONSE_TOPIC, json.dumps(response_data).encode())
                 time.sleep(5)
                 machine.reset()
             else:
-                r.close()
-                response_data = {"status": "error", "message": f"Download failed: {r.status_code}"}
+                response_data = {"status": "error", "message": "Download main.py failed."}
 
         elif key == "update_version":
+            # อัปเดตทุกไฟล์ — wash.py ดึงให้ถูกประเภทอัตโนมัติ
             updates = [
-                ("boot.py", "https://raw.githubusercontent.com/Tepsuwan/esp32-washing/main/boot.py"),
-                ("main.py", "https://raw.githubusercontent.com/Tepsuwan/esp32-washing/main/main.py"),
-                ("wash.py", "https://raw.githubusercontent.com/Tepsuwan/esp32-washing/main/wash.py"),
+                ("boot.py", f"{GITHUB_RAW}/boot.py"),
+                ("main.py", f"{GITHUB_RAW}/main.py"),
+                ("wash.py", WASH_PY_URL),  # ถูกประเภทอัตโนมัติ
             ]
+            failed = []
             for fname, url in updates:
                 backup_file(fname, fname.split(".")[0] + ".bak")
-                try:
-                    r = requests.get(url)
-                    if r.status_code == 200:
-                        with open(fname, "w") as f:
-                            f.write(r.text)
-                        print(f"Updated {fname}")
-                    r.close()
-                except Exception as e:
-                    print(f"OTA error {fname}: {e}")
-            response_data = {"status": "success", "version": 5.0, "message": "OTA done. Rebooting..."}
+                if download_file(url, fname):
+                    print(f"Updated {fname}")
+                else:
+                    failed.append(fname)
+                    print(f"Failed {fname}")
+
+            if failed:
+                response_data = {"status": "error", "version": 5.0, "message": f"Failed: {failed}. Rebooting..."}
+            else:
+                response_data = {"status": "success", "version": 5.0, "message": "OTA done. Rebooting..."}
             client.publish(COMMAND_RESPONSE_TOPIC, json.dumps(response_data).encode())
             time.sleep(5)
             machine.reset()
@@ -244,7 +290,7 @@ def on_command(topic, msg):
     finally:
         try:
             client.publish(COMMAND_RESPONSE_TOPIC, json.dumps(response_data).encode())
-            print(f"[{CLIENT_ID}] Response sent: {response_data.get('message','')}")
+            print(f"[{CLIENT_ID}] Response: {response_data.get('message','')}")
         except Exception as e:
             print(f"[{CLIENT_ID}] Publish response failed: {e}")
 
@@ -267,16 +313,15 @@ def connect_mqtt():
 # ================== BOOT ==================
 lan = connect_eth()
 
-# MQTT initial connect (retry 5 ครั้ง)
 for attempt in range(5):
     try:
         connect_mqtt()
         break
     except Exception as e:
-        print(f"MQTT connect attempt {attempt+1} failed: {e}")
+        print(f"MQTT attempt {attempt+1} failed: {e}")
         time.sleep(3)
         if attempt == 4:
-            print("Max retries reached. Rebooting...")
+            print("Max retries. Rebooting...")
             machine.reset()
 
 try:
@@ -284,10 +329,9 @@ try:
 except Exception as e:
     print(f"Backup check error: {e}")
 
-# แจ้ง online
 try:
     online_payload = {
-        "version": 5.0, "app": "washing", "device_type": "wash",
+        "version": 5.0, "app": MACHINE_APP, "device_type": MACHINE_APP,
         "ip": get_ip(), "client_id": CLIENT_ID,
         "status": "success", "online": True, "temp": "NA", "message": "online"
     }
@@ -297,20 +341,18 @@ except Exception as e:
 
 last_status = None
 ping_counter = 0
-print(f"[{CLIENT_ID}] System Running (V1.5)...")
+print(f"[{CLIENT_ID}] System Running (V2.1) — type: {MACHINE_APP}")
 
 # ================== MAIN LOOP ==================
 while True:
     try:
-        # รับคำสั่ง
         client.check_msg()
 
-        # อ่านสถานะเครื่องซัก
         status_str = wash.get_machine_status()
         wash_status = json.loads(status_str)
 
         payload = {
-            "version": 5.0, "app": "washing", "device_type": "wash",
+            "version": 5.0, "app": MACHINE_APP, "device_type": MACHINE_APP,
             "error_status": False, "ip": get_ip(),
             "client_id": CLIENT_ID, "online": True, "temp": "NA",
             "status": wash_status
@@ -321,7 +363,6 @@ while True:
             print(f"[{CLIENT_ID}] Status changed & published")
             last_status = status_str
 
-        # MQTT keepalive ping ทุก 60 วิ (12 รอบ x 5วิ)
         ping_counter += 1
         if ping_counter >= 12:
             client.ping()
