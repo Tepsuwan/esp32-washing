@@ -1,12 +1,12 @@
 # --- File: wash.py (dryer) ---
-# --- Version: 1.1 (ETH01 - Stability fixes) ---
+# --- Version: 1.3 (ETH01 - RX_PIN=5 only, keep original S3 logic) ---
 
 import machine
 import time
 import ujson
 
 RS485_TX_PIN = 17
-RS485_RX_PIN = 5  # ขา 5 หลบ LAN8720
+RS485_RX_PIN = 5  # ETH01: ขา 5 หลบ LAN8720 (S3 ใช้ 16)
 
 MODBUS_BAUDRATE = 9600
 MODBUS_DATA_BITS = 8
@@ -34,16 +34,7 @@ class ModbusRTUClient:
         self.slave_address = MODBUS_SLAVE_ADDRESS
         time.sleep_ms(100)
 
-    def _flush_uart(self):
-        deadline = time.ticks_add(time.ticks_ms(), 50)
-        while time.ticks_diff(deadline, time.ticks_ms()) > 0:
-            if self.uart.any():
-                self.uart.read()
-            else:
-                break
-
     def _send_modbus_request(self, slave_address, function_code, start_address, quantity_or_value):
-        self._flush_uart()
         pdu = bytearray([function_code])
         pdu.extend(start_address.to_bytes(2, 'big'))
         if function_code == 0x03:
@@ -61,7 +52,7 @@ class ModbusRTUClient:
     def _read_modbus_response(self):
         response = bytearray()
         start_time = time.ticks_ms()
-        while time.ticks_diff(time.ticks_ms(), start_time) < 500:
+        while (time.ticks_ms() - start_time) < 500:
             if self.uart.any():
                 response.extend(self.uart.read())
             if len(response) >= 5:
@@ -116,23 +107,18 @@ class ModbusRTUClient:
 
 modbus_client = ModbusRTUClient()
 
-def _read_register_safe(address, count=1):
-    result = modbus_client.read_holding_registers(address, count)
-    if result and len(result) >= count:
-        return result[0] if count == 1 else result
-    return 0 if count == 1 else None
-
 def get_machine_status():
+    # อ่าน 20 register เหมือน S3 เดิม
     status_data = modbus_client.read_holding_registers(20, 20)
-    if status_data and len(status_data) >= 16:
-        run_status_map = {0: "Power on", 1: "Standby", 2: "NA", 3: "Autorun", 4: "Manual", 5: "Idle"}
+    if status_data:
+        run_status_map  = {0: "Power on", 1: "Standby", 2: "NA", 3: "Autorun", 4: "Manual", 5: "Idle"}
         door_status_map = {0: "opened", 1: "closed", 2: "normal", 3: "locked", 4: "error", 5: "locking"}
         error_status_map = {0: "normal", 1: "error"}
 
         prog_data     = modbus_client.read_holding_registers(227, 5)
-        machine_size  = _read_register_safe(110)
-        screen_size   = _read_register_safe(121)
-        program_count = _read_register_safe(238)
+        machine_size  = modbus_client.read_holding_registers(110, 1)[0]
+        screen_size   = modbus_client.read_holding_registers(121, 1)[0]
+        program_count = modbus_client.read_holding_registers(238, 1)[0]
         prog_time     = modbus_client.read_holding_registers(240, 5)
         prog_temp     = modbus_client.read_holding_registers(153, 12)
 
@@ -145,20 +131,21 @@ def get_machine_status():
             "run_status":  run_status_map.get(status_data[0],  f"Unknown ({status_data[0]})"),
             "door_status": door_status_map.get(status_data[1], f"Unknown ({status_data[1]})"),
             "error_status": error_status_map.get(status_data[2], f"Unknown ({status_data[2]})"),
-            "auto_time_hour": status_data[3], "auto_time_min": status_data[4], "auto_time_sec": status_data[5],
+            "auto_time_hour": status_data[3],
+            "auto_time_min":  status_data[4],
+            "auto_time_sec":  status_data[5],
             "current_inlet_temperature":  status_data[6],
             "current_outlet_temperature": status_data[7],
             "currently_running_program_number": status_data[8],
             "currently_running_step_number":    status_data[9],
             "coins_required_of_currently_selecting_program": status_data[10],
-            "current_coins":           status_data[11],
-            "total_coins_recorded":    status_data[12],
+            "current_coins":              status_data[11],
+            "total_coins_recorded":       status_data[12],
             "coins_recorded_in_cash_box": status_data[13],
             "matchine_menu":    status_data[14],
             "coin_inserted":    status_data[15],
-            # FIX: ต้นฉบับ must_insert_coin/coin_insert ชี้ index 10,11 ซ้ำกัน แก้ให้ถูก
-            "must_insert_coin": status_data[16] if len(status_data) > 16 else 0,
-            "coin_insert":      status_data[17] if len(status_data) > 17 else 0,
+            "must_insert_coin": status_data[10],  # เหมือน S3 เดิม
+            "coin_insert":      status_data[11],  # เหมือน S3 เดิม
             "raw_data": status_data, "raw_erro": False,
             "message": "success", "error": False
         }
