@@ -6,7 +6,7 @@ import time
 import ujson
 
 RS485_TX_PIN = 17
-RS485_RX_PIN = 5  # ขา 5 หลบ LAN8720
+RS485_RX_PIN = 5   # ขา 5 หลบ LAN8720
 
 MODBUS_BAUDRATE = 9600
 MODBUS_DATA_BITS = 8
