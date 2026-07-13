@@ -224,4 +224,3 @@ def sendcommand(address, value):
 def send_command(address, value):
     result = modbus_client.write_multiple_registers(address, value)
     return ujson.dumps({"status": "success", "message": result})
-
