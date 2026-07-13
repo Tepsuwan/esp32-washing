@@ -6,7 +6,7 @@ import time
 import ujson
 
 RS485_TX_PIN = 17
-RS485_RX_PIN = 5  # ขา 5 หลบ LAN8720
+RS485_RX_PIN = 26  # ขา 5 หลบ LAN8720
 
 MODBUS_BAUDRATE = 9600
 MODBUS_DATA_BITS = 8
@@ -157,7 +157,7 @@ def get_machine_status():
             "currently_running_step_number":    status_data[9],
             "coins_required_of_currently_selecting_program": status_data[10],
             "current_coins":           status_data[11],
-            "total_coins_recorded":    status_data[18],
+            "total_coins_recorded":    status_data[12],
             "coins_recorded_in_cash_box": status_data[13],
             "matchine_menu":    status_data[14],
             "coin_inserted":    status_data[15],
