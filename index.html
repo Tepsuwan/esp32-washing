@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wash Lover Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Kanit', sans-serif;
+            background-color: #F8FAFC;
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+
+<body class="p-4 md:p-8">
+    <div class="max-w-7xl mx-auto">
+        <!-- Header -->
+        <div class="card p-6 mb-6 flex flex-col md:flex-row justify-between items-center gap-4">
+            <h1 class="text-3xl font-bold flex items-center gap-3">
+                <img src="https://i.ibb.co/v6F6dNMf/logo-removebg-preview.png" alt="Logo" class="h-12 w-auto">
+                <span class="text-blue-500">Wash</span><span class="text-pink-500">lover</span>
+            </h1>
+            <div class="flex gap-2">
+                <!-- เพิ่ม DatePicker สำหรับระบุวันได้อิสระ -->
+                <input type="date" id="customDateStart"
+                    class="bg-slate-100 rounded-xl px-3 py-2 border-none text-slate-700 text-sm hidden">
+                <input type="date" id="customDateEnd"
+                    class="bg-slate-100 rounded-xl px-3 py-2 border-none text-slate-700 text-sm hidden">
+
+                <select id="timeFilter" onchange="checkFilter()"
+                    class="bg-slate-100 rounded-xl px-4 py-2 border-none text-slate-700 font-semibold focus:ring-2 focus:ring-pink-300">
+                    <option value="daily">วันนี้</option>
+                    <option value="weekly">ย้อนหลัง 7 วัน</option>
+                    <option value="monthly">ย้อนหลัง 30 วัน</option>
+                    <option value="custom">ระบุวันที่...</option>
+                </select>
+                <button id="btnSearchCustom" onclick="fetchData()"
+                    class="bg-pink-500 text-white px-4 py-2 rounded-xl hidden hover:bg-pink-600 transition">ค้นหา</button>
+            </div>
+        </div>
+
+        <!-- Stats -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+            <div class="card p-6 border-b-4 border-pink-500">
+                <p class="text-sm text-slate-500 font-medium">รายได้รวม</p>
+                <h3 id="statCoins" class="text-2xl font-bold text-slate-800 mt-1">0 ฿</h3>
+            </div>
+            <div class="card p-6 border-b-4 border-blue-500">
+                <p class="text-sm text-slate-500 font-medium">รอบทำงานรวม</p>
+                <h3 id="statJobs" class="text-2xl font-bold text-slate-800 mt-1">0 ครั้ง</h3>
+            </div>
+            <div class="card p-6 border-b-4 border-sky-400">
+                <p class="text-sm text-slate-500 font-medium">เครื่องซัก</p>
+                <h3 id="statWasher" class="text-2xl font-bold text-slate-800 mt-1">0 ครั้ง</h3>
+            </div>
+            <div class="card p-6 border-b-4 border-orange-400">
+                <p class="text-sm text-slate-500 font-medium">เครื่องอบ</p>
+                <h3 id="statDryer" class="text-2xl font-bold text-slate-800 mt-1">0 ครั้ง</h3>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div class="card p-6 lg:col-span-1 flex flex-col justify-center items-center">
+                <h2 class="text-lg font-bold mb-4 text-slate-700 w-full text-left">สัดส่วนการใช้งาน</h2>
+                <div class="w-full max-w-[250px]">
+                    <canvas id="doughnutChart"></canvas>
+                </div>
+            </div>
+            <div class="card p-6 lg:col-span-2 overflow-x-auto max-h-[500px] overflow-y-auto">
+                <table class="w-full text-left relative">
+                    <thead class="sticky top-0 bg-white">
+                        <tr class="text-slate-400 border-b">
+                            <th class="pb-3">วันที่ / เวลา</th>
+                            <th class="pb-3">อุปกรณ์</th>
+                            <th class="pb-3">สถานะ</th>
+                            <th class="pb-3 text-right">ยอด (฿)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                        <tr>
+                            <td colspan="4" class="text-center py-4 text-slate-400">กำลังโหลดข้อมูล...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const APP_URL = 'https://script.google.com/macros/s/AKfycbzDCzyVOygR9PzmMAepkv-UcGcLdHiuAddr9GaQ3-2kNe7UGWiMXDNtjClJnt3SPZLClw/exec';
+        let chartInstance = null;
+        let cachedData = null;
+        let lastFetchTime = 0;
+        const CACHE_DURATION = 30000; // 30 วินาที
+        let fetchTimeout = null;
+
+        function checkFilter() {
+            const filterValue = document.getElementById('timeFilter').value;
+            const customStart = document.getElementById('customDateStart');
+            const customEnd = document.getElementById('customDateEnd');
+            const btnSearch = document.getElementById('btnSearchCustom');
+
+            if (filterValue === 'custom') {
+                customStart.classList.remove('hidden');
+                customEnd.classList.remove('hidden');
+                btnSearch.classList.remove('hidden');
+            } else {
+                customStart.classList.add('hidden');
+                customEnd.classList.add('hidden');
+                btnSearch.classList.add('hidden');
+                // ✅ Debounce 300ms
+                clearTimeout(fetchTimeout);
+                fetchTimeout = setTimeout(fetchData, 300);
+            }
+        }
+
+        function getDateRange() {
+            const filter = document.getElementById('timeFilter').value;
+            const today = new Date();
+            let start = new Date();
+            let end = new Date();
+
+            if (filter === 'daily') {
+                // start และ end คือวันนี้
+            } else if (filter === 'weekly') {
+                start.setDate(today.getDate() - 7);
+            } else if (filter === 'monthly') {
+                start.setDate(today.getDate() - 30);
+            } else if (filter === 'custom') {
+                start = new Date(document.getElementById('customDateStart').value || today);
+                end = new Date(document.getElementById('customDateEnd').value || today);
+            }
+
+            const formatDate = (date) => {
+                let d = new Date(date),
+                    month = '' + (d.getMonth() + 1),
+                    day = '' + d.getDate(),
+                    year = d.getFullYear();
+                if (month.length < 2) month = '0' + month;
+                if (day.length < 2) day = '0' + day;
+                return [year, month, day].join('-');
+            }
+
+            return { start: formatDate(start), end: formatDate(end) };
+        }
+
+        // ✅ Cache + Debounce
+        async function fetchData() {
+            const now = Date.now();
+            
+            if (cachedData && (now - lastFetchTime) < CACHE_DURATION) {
+                updateUI(cachedData);
+                return;
+            }
+
+            try {
+                document.getElementById('tableBody').innerHTML = '<tr><td colspan="4" class="text-center py-4 text-slate-400">กำลังโหลดข้อมูล...</td></tr>';
+
+                const dates = getDateRange();
+                const fetchUrl = `${APP_URL}?start=${dates.start}&end=${dates.end}`;
+
+                const res = await fetch(fetchUrl);
+                cachedData = await res.json();
+                lastFetchTime = now;
+                updateUI(cachedData);
+
+            } catch (err) {
+                console.error("Error:", err);
+                document.getElementById('tableBody').innerHTML = '<tr><td colspan="4" class="text-center py-4 text-red-500">เกิดข้อผิดพลาด</td></tr>';
+            }
+        }
+
+        function updateUI(data) {
+            document.getElementById('statCoins').innerText = (data.stats.total_income || 0).toLocaleString() + ' ฿';
+            document.getElementById('statJobs').innerText = (data.stats.total_jobs || 0).toLocaleString() + ' ครั้ง';
+            document.getElementById('statWasher').innerText = (data.stats.washer || 0).toLocaleString() + ' ครั้ง';
+            document.getElementById('statDryer').innerText = (data.stats.dryer || 0).toLocaleString() + ' ครั้ง';
+
+            // ✅ แสดง 15 แถวล่าสุดเท่านั้น
+            if (data.transactions && data.transactions.length > 0) {
+                const latest = data.transactions.slice(-15).reverse();
+                document.getElementById('tableBody').innerHTML = latest.map(t => {
+                    let timeStr = t.timestamp ? t.timestamp.substring(0, 16) : "-";
+                    let isDryer = t.device_name.includes('อบ');
+                    return `
+                    <tr class="border-b text-sm hover:bg-slate-50 transition">
+                        <td class="py-3 text-slate-500">${timeStr}</td>
+                        <td class="py-3 font-medium ${isDryer ? 'text-orange-600' : 'text-sky-600'}">${t.device_name}</td>
+                        <td class="py-3"><span class="bg-green-100 text-green-700 px-2 py-1 rounded-full text-xs">ทำงาน</span></td>
+                        <td class="py-3 text-right font-bold text-pink-500">+${t.income_baht || 0}</td>
+                    </tr>
+                    `;
+                }).join('');
+            } else {
+                document.getElementById('tableBody').innerHTML = '<tr><td colspan="4" class="text-center py-4 text-slate-400">ไม่พบข้อมูล</td></tr>';
+            }
+
+            updateChart(data.stats.washer || 0, data.stats.dryer || 0);
+        }
+
+        function updateChart(washerCount, dryerCount) {
+            const ctx = document.getElementById('doughnutChart').getContext('2d');
+
+            if (chartInstance) chartInstance.destroy();
+
+            chartInstance = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['เครื่องซัก', 'เครื่องอบ'],
+                    datasets: [{
+                        data: [washerCount, dryerCount],
+                        backgroundColor: ['#38bdf8', '#fb923c'],
+                        borderWidth: 0,
+                        hoverOffset: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: { legend: { position: 'bottom' } },
+                    cutout: '70%'
+                }
+            });
+        }
+
+        document.getElementById('customDateStart').valueAsDate = new Date();
+        document.getElementById('customDateEnd').valueAsDate = new Date();
+
+        fetchData();
+
+        // ✅ Refresh ทุก 30 วินาที
+        setInterval(fetchData, 30000);
+    </script>
+</body>
+
+</html>
