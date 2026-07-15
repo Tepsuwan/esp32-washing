@@ -12,6 +12,39 @@
         body {
             font-family: 'Kanit', sans-serif;
             background-color: #F8FAFC;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        /* Dark Mode Classes */
+        body.dark {
+            background-color: #0f172a;
+            color: #f1f5f9;
+        }
+
+        body.dark .card {
+            background: #1e293b;
+            border: 1px solid #334155;
+        }
+
+        body.dark .text-slate-800 {
+            color: #f8fafc;
+        }
+
+        body.dark .text-slate-500 {
+            color: #94a3b8;
+        }
+
+        body.dark .bg-slate-100 {
+            background: #334155;
+            color: #f8fafc;
+        }
+
+        body.dark .bg-white {
+            background: #1e293b;
+        }
+
+        body.dark .border-b {
+            border-color: #334155;
         }
 
         .card {
@@ -19,19 +52,65 @@
             border-radius: 20px;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
+
+        /* Loading Overlay */
+        #loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.9);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease;
+        }
+
+        body.dark #loading-overlay {
+            background: rgba(15, 23, 42, 0.9);
+        }
+
+        .spinner-logo {
+            width: 80px;
+            animation: spin 1.5s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg) scale(1);
+            }
+
+            50% {
+                transform: rotate(180deg) scale(1.2);
+            }
+
+            100% {
+                transform: rotate(360deg) scale(1);
+            }
+        }
     </style>
 </head>
 
 <body class="p-4 md:p-8">
+
+    <div id="loading-overlay">
+        <img src="https://i.ibb.co/v6F6dNMf/logo-removebg-preview.png" class="spinner-logo" alt="Loading...">
+        <p class="mt-4 font-bold text-pink-500 animate-pulse">กำลังซักข้อมูลให้คุณ...</p>
+    </div>
+
     <div class="max-w-7xl mx-auto">
-        <!-- Header -->
         <div class="card p-6 mb-6 flex flex-col md:flex-row justify-between items-center gap-4">
             <h1 class="text-3xl font-bold flex items-center gap-3">
                 <img src="https://i.ibb.co/v6F6dNMf/logo-removebg-preview.png" alt="Logo" class="h-12 w-auto">
                 <span class="text-blue-500">Wash</span><span class="text-pink-500">lover</span>
             </h1>
-            <div class="flex gap-2">
-                <!-- เพิ่ม DatePicker สำหรับระบุวันได้อิสระ -->
+            <div class="flex gap-2 items-center">
+                <!-- ปุ่มสลับโหมด -->
+
+
                 <input type="date" id="customDateStart"
                     class="bg-slate-100 rounded-xl px-3 py-2 border-none text-slate-700 text-sm hidden">
                 <input type="date" id="customDateEnd"
@@ -46,10 +125,14 @@
                 </select>
                 <button id="btnSearchCustom" onclick="fetchData()"
                     class="bg-pink-500 text-white px-4 py-2 rounded-xl hidden hover:bg-pink-600 transition">ค้นหา</button>
+
+                <button id="theme-toggle-btn" onclick="toggleDarkMode()"
+                    class="p-2 bg-slate-200 dark:bg-slate-700 rounded-xl text-xl transition-all duration-300">
+                    🌙
+                </button>
             </div>
         </div>
 
-        <!-- Stats -->
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
             <div class="card p-6 border-b-4 border-pink-500">
                 <p class="text-sm text-slate-500 font-medium">รายได้รวม</p>
@@ -69,17 +152,14 @@
             </div>
         </div>
 
-        <!-- Main Content -->
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <div class="card p-6 lg:col-span-1 flex flex-col justify-center items-center">
                 <h2 class="text-lg font-bold mb-4 text-slate-700 w-full text-left">สัดส่วนการใช้งาน</h2>
-                <div class="w-full max-w-[250px]">
-                    <canvas id="doughnutChart"></canvas>
-                </div>
+                <div class="w-full max-w-[250px]"><canvas id="doughnutChart"></canvas></div>
             </div>
             <div class="card p-6 lg:col-span-2 overflow-x-auto max-h-[500px] overflow-y-auto">
                 <table class="w-full text-left relative">
-                    <thead class="sticky top-0 bg-white">
+                    <thead class="sticky top-0 bg-white dark:bg-[#1e293b]">
                         <tr class="text-slate-400 border-b">
                             <th class="pb-3">วันที่ / เวลา</th>
                             <th class="pb-3">อุปกรณ์</th>
@@ -87,11 +167,7 @@
                             <th class="pb-3 text-right">ยอด (฿)</th>
                         </tr>
                     </thead>
-                    <tbody id="tableBody">
-                        <tr>
-                            <td colspan="4" class="text-center py-4 text-slate-400">กำลังโหลดข้อมูล...</td>
-                        </tr>
-                    </tbody>
+                    <tbody id="tableBody"></tbody>
                 </table>
             </div>
         </div>
@@ -100,147 +176,78 @@
     <script>
         const APP_URL = 'https://script.google.com/macros/s/AKfycbzDCzyVOygR9PzmMAepkv-UcGcLdHiuAddr9GaQ3-2kNe7UGWiMXDNtjClJnt3SPZLClw/exec';
         let chartInstance = null;
-        let cachedData = null;
-        let lastFetchTime = 0;
-        const CACHE_DURATION = 30000; // 30 วินาที
-        let fetchTimeout = null;
+
+        async function fetchData() {
+            const loader = document.getElementById('loading-overlay');
+            loader.style.display = 'flex'; loader.style.opacity = '1';
+            try {
+                const dates = getDateRange();
+                const res = await fetch(`${APP_URL}?start=${dates.start}&end=${dates.end}`);
+                const data = await res.json();
+                document.getElementById('statCoins').innerText = (data.stats.total_income || 0).toLocaleString() + ' ฿';
+                document.getElementById('statJobs').innerText = (data.stats.total_jobs || 0).toLocaleString() + ' ครั้ง';
+                document.getElementById('statWasher').innerText = (data.stats.washer || 0).toLocaleString() + ' ครั้ง';
+                document.getElementById('statDryer').innerText = (data.stats.dryer || 0).toLocaleString() + ' ครั้ง';
+
+                document.getElementById('tableBody').innerHTML = data.transactions?.length ? data.transactions.map(t => `
+                    <tr class="border-b text-sm hover:bg-slate-50 dark:hover:bg-slate-700 transition">
+                        <td class="py-3 text-slate-500">${t.timestamp.substring(0, 16)}</td>
+                        <td class="py-3 font-medium ${t.device_name.includes('อบ') ? 'text-orange-600' : 'text-sky-600'}">${t.device_name}</td>
+                        <td class="py-3"><span class="bg-green-100 text-green-700 px-2 py-1 rounded-full text-xs">ทำงาน</span></td>
+                        <td class="py-3 text-right font-bold text-pink-500">+${t.income_baht || 0}</td>
+                    </tr>`).join('') : '<tr><td colspan="4" class="text-center py-4 text-slate-400">ไม่พบข้อมูล</td></tr>';
+
+                updateChart(data.stats.washer || 0, data.stats.dryer || 0);
+            } catch (err) { console.error(err); }
+            finally { loader.style.opacity = '0'; setTimeout(() => loader.style.display = 'none', 500); }
+        }
 
         function checkFilter() {
-            const filterValue = document.getElementById('timeFilter').value;
-            const customStart = document.getElementById('customDateStart');
-            const customEnd = document.getElementById('customDateEnd');
-            const btnSearch = document.getElementById('btnSearchCustom');
-
-            if (filterValue === 'custom') {
-                customStart.classList.remove('hidden');
-                customEnd.classList.remove('hidden');
-                btnSearch.classList.remove('hidden');
-            } else {
-                customStart.classList.add('hidden');
-                customEnd.classList.add('hidden');
-                btnSearch.classList.add('hidden');
-                // ✅ Debounce 300ms
-                clearTimeout(fetchTimeout);
-                fetchTimeout = setTimeout(fetchData, 300);
-            }
+            const isCustom = document.getElementById('timeFilter').value === 'custom';
+            document.getElementById('customDateStart').classList.toggle('hidden', !isCustom);
+            document.getElementById('customDateEnd').classList.toggle('hidden', !isCustom);
+            document.getElementById('btnSearchCustom').classList.toggle('hidden', !isCustom);
+            if (!isCustom) fetchData();
         }
 
         function getDateRange() {
-            const filter = document.getElementById('timeFilter').value;
-            const today = new Date();
-            let start = new Date();
-            let end = new Date();
-
-            if (filter === 'daily') {
-                // start และ end คือวันนี้
-            } else if (filter === 'weekly') {
-                start.setDate(today.getDate() - 7);
-            } else if (filter === 'monthly') {
-                start.setDate(today.getDate() - 30);
-            } else if (filter === 'custom') {
-                start = new Date(document.getElementById('customDateStart').value || today);
-                end = new Date(document.getElementById('customDateEnd').value || today);
-            }
-
-            const formatDate = (date) => {
-                let d = new Date(date),
-                    month = '' + (d.getMonth() + 1),
-                    day = '' + d.getDate(),
-                    year = d.getFullYear();
-                if (month.length < 2) month = '0' + month;
-                if (day.length < 2) day = '0' + day;
-                return [year, month, day].join('-');
-            }
-
-            return { start: formatDate(start), end: formatDate(end) };
+            const f = document.getElementById('timeFilter').value;
+            const t = new Date(), s = new Date();
+            if (f === 'weekly') s.setDate(t.getDate() - 7);
+            if (f === 'monthly') s.setDate(t.getDate() - 30);
+            if (f === 'custom') { return { start: document.getElementById('customDateStart').value, end: document.getElementById('customDateEnd').value }; }
+            const fd = (d) => d.toISOString().split('T')[0];
+            return { start: fd(s), end: fd(t) };
         }
 
-        // ✅ Cache + Debounce
-        async function fetchData() {
-            const now = Date.now();
-            
-            if (cachedData && (now - lastFetchTime) < CACHE_DURATION) {
-                updateUI(cachedData);
-                return;
-            }
-
-            try {
-                document.getElementById('tableBody').innerHTML = '<tr><td colspan="4" class="text-center py-4 text-slate-400">กำลังโหลดข้อมูล...</td></tr>';
-
-                const dates = getDateRange();
-                const fetchUrl = `${APP_URL}?start=${dates.start}&end=${dates.end}`;
-
-                const res = await fetch(fetchUrl);
-                cachedData = await res.json();
-                lastFetchTime = now;
-                updateUI(cachedData);
-
-            } catch (err) {
-                console.error("Error:", err);
-                document.getElementById('tableBody').innerHTML = '<tr><td colspan="4" class="text-center py-4 text-red-500">เกิดข้อผิดพลาด</td></tr>';
-            }
-        }
-
-        function updateUI(data) {
-            document.getElementById('statCoins').innerText = (data.stats.total_income || 0).toLocaleString() + ' ฿';
-            document.getElementById('statJobs').innerText = (data.stats.total_jobs || 0).toLocaleString() + ' ครั้ง';
-            document.getElementById('statWasher').innerText = (data.stats.washer || 0).toLocaleString() + ' ครั้ง';
-            document.getElementById('statDryer').innerText = (data.stats.dryer || 0).toLocaleString() + ' ครั้ง';
-
-            // ✅ แสดง 15 แถวล่าสุดเท่านั้น
-            if (data.transactions && data.transactions.length > 0) {
-                const latest = data.transactions.slice(-15).reverse();
-                document.getElementById('tableBody').innerHTML = latest.map(t => {
-                    let timeStr = t.timestamp ? t.timestamp.substring(0, 16) : "-";
-                    let isDryer = t.device_name.includes('อบ');
-                    return `
-                    <tr class="border-b text-sm hover:bg-slate-50 transition">
-                        <td class="py-3 text-slate-500">${timeStr}</td>
-                        <td class="py-3 font-medium ${isDryer ? 'text-orange-600' : 'text-sky-600'}">${t.device_name}</td>
-                        <td class="py-3"><span class="bg-green-100 text-green-700 px-2 py-1 rounded-full text-xs">ทำงาน</span></td>
-                        <td class="py-3 text-right font-bold text-pink-500">+${t.income_baht || 0}</td>
-                    </tr>
-                    `;
-                }).join('');
-            } else {
-                document.getElementById('tableBody').innerHTML = '<tr><td colspan="4" class="text-center py-4 text-slate-400">ไม่พบข้อมูล</td></tr>';
-            }
-
-            updateChart(data.stats.washer || 0, data.stats.dryer || 0);
-        }
-
-        function updateChart(washerCount, dryerCount) {
-            const ctx = document.getElementById('doughnutChart').getContext('2d');
-
+        function updateChart(w, d) {
             if (chartInstance) chartInstance.destroy();
-
-            chartInstance = new Chart(ctx, {
+            chartInstance = new Chart(document.getElementById('doughnutChart').getContext('2d'), {
                 type: 'doughnut',
-                data: {
-                    labels: ['เครื่องซัก', 'เครื่องอบ'],
-                    datasets: [{
-                        data: [washerCount, dryerCount],
-                        backgroundColor: ['#38bdf8', '#fb923c'],
-                        borderWidth: 0,
-                        hoverOffset: 4
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: true,
-                    plugins: { legend: { position: 'bottom' } },
-                    cutout: '70%'
-                }
+                data: { labels: ['เครื่องซัก', 'เครื่องอบ'], datasets: [{ data: [w, d], backgroundColor: ['#38bdf8', '#fb923c'] }] },
+                options: { plugins: { legend: { labels: { color: document.body.classList.contains('dark') ? '#fff' : '#334' } } } }
             });
         }
-
-        document.getElementById('customDateStart').valueAsDate = new Date();
-        document.getElementById('customDateEnd').valueAsDate = new Date();
-
         fetchData();
 
-        // ✅ Refresh ทุก 30 วินาที
-        setInterval(fetchData, 30000);
+        function toggleDarkMode() {
+            const body = document.body;
+            const btn = document.getElementById('theme-toggle-btn');
+            body.classList.toggle('dark');
+
+            // เปลี่ยนไอคอนตามสถานะ
+            if (body.classList.contains('dark')) {
+                btn.innerText = '☀️'; // ถ้าเป็น Dark โชว์รูปพระอาทิตย์ เพื่อให้กดกลับไปโหมดปกติ
+            } else {
+                btn.innerText = '🌙'; // ถ้าเป็นโหมดปกติ โชว์รูปพระจันทร์
+            }
+
+            // อัปเดตสีของกราฟด้วยถ้ามีการเปลี่ยนโหมด
+            updateChart(
+                parseInt(document.getElementById('statWasher').innerText),
+                parseInt(document.getElementById('statDryer').innerText)
+            );
+        }
     </script>
 </body>
 
