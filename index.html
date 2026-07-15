@@ -53,7 +53,6 @@
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
 
-        /* Loading Overlay */
         #loading-overlay {
             position: fixed;
             top: 0;
@@ -79,17 +78,9 @@
         }
 
         @keyframes spin {
-            0% {
-                transform: rotate(0deg) scale(1);
-            }
-
-            50% {
-                transform: rotate(180deg) scale(1.2);
-            }
-
-            100% {
-                transform: rotate(360deg) scale(1);
-            }
+            0% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(180deg) scale(1.2); }
+            100% { transform: rotate(360deg) scale(1); }
         }
     </style>
 </head>
@@ -107,14 +98,19 @@
                 <img src="https://i.ibb.co/v6F6dNMf/logo-removebg-preview.png" alt="Logo" class="h-12 w-auto">
                 <span class="text-blue-500">Wash</span><span class="text-pink-500">lover</span>
             </h1>
-            <div class="flex gap-2 items-center">
-                <!-- ปุ่มสลับโหมด -->
 
-
-                <input type="date" id="customDateStart"
-                    class="bg-slate-100 rounded-xl px-3 py-2 border-none text-slate-700 text-sm hidden">
-                <input type="date" id="customDateEnd"
-                    class="bg-slate-100 rounded-xl px-3 py-2 border-none text-slate-700 text-sm hidden">
+            <div class="flex flex-wrap gap-2 items-center justify-center">
+                <!-- Group สำหรับเลือกวันที่ -->
+                <div id="customDateWrapper" class="hidden flex flex-col md:flex-row gap-2 items-center animate-in fade-in duration-300">
+                    <div class="flex items-center gap-2 bg-slate-100 dark:bg-slate-700 rounded-xl px-3 py-1.5 border border-slate-200 dark:border-slate-600">
+                        <span class="text-[10px] text-slate-400 font-bold uppercase">จาก:</span>
+                        <input type="date" id="customDateStart" class="bg-transparent border-none text-slate-700 dark:text-white text-sm focus:outline-none">
+                    </div>
+                    <div class="flex items-center gap-2 bg-slate-100 dark:bg-slate-700 rounded-xl px-3 py-1.5 border border-slate-200 dark:border-slate-600">
+                        <span class="text-[10px] text-slate-400 font-bold uppercase">ถึง:</span>
+                        <input type="date" id="customDateEnd" class="bg-transparent border-none text-slate-700 dark:text-white text-sm focus:outline-none">
+                    </div>
+                </div>
 
                 <select id="timeFilter" onchange="checkFilter()"
                     class="bg-slate-100 rounded-xl px-4 py-2 border-none text-slate-700 font-semibold focus:ring-2 focus:ring-pink-300">
@@ -123,6 +119,7 @@
                     <option value="monthly">ย้อนหลัง 30 วัน</option>
                     <option value="custom">ระบุวันที่...</option>
                 </select>
+
                 <button id="btnSearchCustom" onclick="fetchData()"
                     class="bg-pink-500 text-white px-4 py-2 rounded-xl hidden hover:bg-pink-600 transition">ค้นหา</button>
 
@@ -204,9 +201,13 @@
 
         function checkFilter() {
             const isCustom = document.getElementById('timeFilter').value === 'custom';
-            document.getElementById('customDateStart').classList.toggle('hidden', !isCustom);
-            document.getElementById('customDateEnd').classList.toggle('hidden', !isCustom);
+            const wrapper = document.getElementById('customDateWrapper');
+            
+            // ใช้ classList.toggle เพื่อจัดการสถานะ
+            wrapper.classList.toggle('hidden', !isCustom);
+            wrapper.classList.toggle('flex', isCustom);
             document.getElementById('btnSearchCustom').classList.toggle('hidden', !isCustom);
+            
             if (!isCustom) fetchData();
         }
 
@@ -228,25 +229,19 @@
                 options: { plugins: { legend: { labels: { color: document.body.classList.contains('dark') ? '#fff' : '#334' } } } }
             });
         }
+        
         fetchData();
 
         function toggleDarkMode() {
             const body = document.body;
             const btn = document.getElementById('theme-toggle-btn');
             body.classList.toggle('dark');
-
-            // เปลี่ยนไอคอนตามสถานะ
-            if (body.classList.contains('dark')) {
-                btn.innerText = '☀️'; // ถ้าเป็น Dark โชว์รูปพระอาทิตย์ เพื่อให้กดกลับไปโหมดปกติ
-            } else {
-                btn.innerText = '🌙'; // ถ้าเป็นโหมดปกติ โชว์รูปพระจันทร์
-            }
-
-            // อัปเดตสีของกราฟด้วยถ้ามีการเปลี่ยนโหมด
-            updateChart(
-                parseInt(document.getElementById('statWasher').innerText),
-                parseInt(document.getElementById('statDryer').innerText)
-            );
+            btn.innerText = body.classList.contains('dark') ? '☀️' : '🌙';
+            
+            // ดึงค่าจาก HTML เพื่ออัปเดต Chart
+            const w = parseInt(document.getElementById('statWasher').innerText);
+            const d = parseInt(document.getElementById('statDryer').innerText);
+            updateChart(w, d);
         }
     </script>
 </body>
