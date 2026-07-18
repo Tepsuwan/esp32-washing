@@ -6,6 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wash Lover Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+        tailwind.config = { darkMode: 'class' }
+    </script>
+
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;700&display=swap" rel="stylesheet">
     <style>
@@ -86,9 +91,17 @@
         }
 
         @keyframes spin {
-            0% { transform: rotate(0deg) scale(1); }
-            50% { transform: rotate(180deg) scale(1.2); }
-            100% { transform: rotate(360deg) scale(1); }
+            0% {
+                transform: rotate(0deg) scale(1);
+            }
+
+            50% {
+                transform: rotate(180deg) scale(1.2);
+            }
+
+            100% {
+                transform: rotate(360deg) scale(1);
+            }
         }
     </style>
 </head>
@@ -102,7 +115,7 @@
     </div>
 
     <div class="max-w-7xl mx-auto">
-        
+
         <!-- Header & Filter -->
         <div class="card p-6 mb-6 flex flex-col md:flex-row justify-between items-center gap-4">
             <h1 class="text-3xl font-bold flex items-center gap-3">
@@ -112,13 +125,17 @@
 
             <div class="flex flex-wrap gap-2 items-center justify-center">
                 <div id="customDateWrapper" class="hidden flex flex-col md:flex-row gap-2 items-center">
-                    <div class="flex items-center gap-2 bg-slate-100 dark:bg-slate-700 rounded-xl px-3 py-1.5 border border-slate-200 dark:border-slate-600">
+                    <div
+                        class="flex items-center gap-2 bg-slate-100 dark:bg-slate-700 rounded-xl px-3 py-1.5 border border-slate-200 dark:border-slate-600">
                         <span class="text-[10px] text-slate-400 font-bold uppercase">จาก:</span>
-                        <input type="date" id="customDateStart" class="bg-transparent border-none text-slate-700 dark:text-white text-sm focus:outline-none">
+                        <input type="date" id="customDateStart"
+                            class="bg-transparent border-none text-slate-700 dark:text-white text-sm focus:outline-none">
                     </div>
-                    <div class="flex items-center gap-2 bg-slate-100 dark:bg-slate-700 rounded-xl px-3 py-1.5 border border-slate-200 dark:border-slate-600">
+                    <div
+                        class="flex items-center gap-2 bg-slate-100 dark:bg-slate-700 rounded-xl px-3 py-1.5 border border-slate-200 dark:border-slate-600">
                         <span class="text-[10px] text-slate-400 font-bold uppercase">ถึง:</span>
-                        <input type="date" id="customDateEnd" class="bg-transparent border-none text-slate-700 dark:text-white text-sm focus:outline-none">
+                        <input type="date" id="customDateEnd"
+                            class="bg-transparent border-none text-slate-700 dark:text-white text-sm focus:outline-none">
                     </div>
                 </div>
 
@@ -167,7 +184,7 @@
                 <h2 class="text-lg font-bold mb-4 text-slate-700 w-full text-left">สัดส่วนการใช้งาน</h2>
                 <div class="w-full max-w-[200px] md:max-w-[230px]"><canvas id="doughnutChart"></canvas></div>
             </div>
-            
+
             <!-- กราฟแท่งแนวนอนตัวใหม่ (ขยายความสูงจาก 250px เป็น 420px เพื่อให้ไม่ชิดกัน) -->
             <div class="card p-6 lg:col-span-2 flex flex-col justify-between">
                 <h2 class="text-lg font-bold mb-4 text-slate-700 w-full text-left">รายได้แยกตามเครื่อง (฿)</h2>
@@ -186,6 +203,7 @@
                         <th class="pb-3">วันที่ / เวลา</th>
                         <th class="pb-3">อุปกรณ์</th>
                         <th class="pb-3">สถานะ</th>
+
                         <th class="pb-3 text-right">ยอด (฿)</th>
                     </tr>
                 </thead>
@@ -198,7 +216,7 @@
         const APP_URL = 'https://script.google.com/macros/s/AKfycbyJEr_ofrb2WpwQTknQhVzaRrKw78wkv0uw76_mIlTtrv-kJiH1KbzveKIPM68162xCfQ/exec';
         let doughnutChartInstance = null;
         let barChartInstance = null;
-        
+
         let cacheData = { washer: 0, dryer: 0, deviceLabels: [], deviceTotals: [] };
 
         async function fetchData() {
@@ -208,7 +226,7 @@
                 const dates = getDateRange();
                 const res = await fetch(`${APP_URL}?start=${dates.start}&end=${dates.end}`);
                 const data = await res.json();
-                
+
                 document.getElementById('statCoins').innerText = (data.stats.total_income || 0).toLocaleString() + ' ฿';
                 document.getElementById('statJobs').innerText = (data.stats.total_jobs || 0).toLocaleString() + ' ครั้ง';
                 document.getElementById('statWasher').innerText = (data.stats.washer || 0).toLocaleString() + ' ครั้ง';
@@ -236,11 +254,11 @@
                     .sort((a, b) => {
                         const isAWasher = a.name.includes('ซัก');
                         const isBWasher = b.name.includes('ซัก');
-                        
+
                         // ถ้าตัวนึงเป็นเครื่องซัก อีกตัวเป็นเครื่องอบ ให้เอาเครื่องซักขึ้นก่อน
                         if (isAWasher && !isBWasher) return -1;
                         if (!isAWasher && isBWasher) return 1;
-                        
+
                         // ถ้าประเภทเดียวกัน ให้ดึงตัวเลขท้ายชื่อเครื่องมาเทียบเพื่อเรียงจากน้อยไปมาก
                         const numA = parseInt(a.name.match(/\d+$/)?.[0] || 0);
                         const numB = parseInt(b.name.match(/\d+$/)?.[0] || 0);
@@ -260,11 +278,11 @@
         function checkFilter() {
             const isCustom = document.getElementById('timeFilter').value === 'custom';
             const wrapper = document.getElementById('customDateWrapper');
-            
+
             wrapper.classList.toggle('hidden', !isCustom);
             wrapper.classList.toggle('flex', isCustom);
             document.getElementById('btnSearchCustom').classList.toggle('hidden', !isCustom);
-            
+
             if (!isCustom) fetchData();
         }
 
@@ -286,18 +304,18 @@
             if (doughnutChartInstance) doughnutChartInstance.destroy();
             doughnutChartInstance = new Chart(document.getElementById('doughnutChart').getContext('2d'), {
                 type: 'doughnut',
-                data: { 
-                    labels: ['เครื่องซัก', 'เครื่องอบ'], 
-                    datasets: [{ data: [cacheData.washer, cacheData.dryer], backgroundColor: ['#38bdf8', '#fb923c'] }] 
+                data: {
+                    labels: ['เครื่องซัก', 'เครื่องอบ'],
+                    datasets: [{ data: [cacheData.washer, cacheData.dryer], backgroundColor: ['#38bdf8', '#fb923c'] }]
                 },
-                options: { 
+                options: {
                     responsive: true,
-                    plugins: { legend: { labels: { color: textColor, font: { family: 'Kanit' } } } } 
+                    plugins: { legend: { labels: { color: textColor, font: { family: 'Kanit' } } } }
                 }
             });
 
             if (barChartInstance) barChartInstance.destroy();
-            
+
             // ชุดโทนสีสดใสตามตัวอย่าง Graph Template (เหลือง, ส้ม, แดง, ชมพูอมม่วง, น้ำเงิน, ฟ้าอมเขียว, เขียวตอง)
             const themeColors = ['#facc15', '#f97316', '#ef4444', '#c026d3', '#2563eb', '#06b6d4', '#84cc16'];
             const backgroundColors = cacheData.deviceLabels.map((_, i) => themeColors[i % themeColors.length]);
@@ -335,7 +353,7 @@
                 }
             });
         }
-        
+
         fetchData();
 
         function toggleDarkMode() {
