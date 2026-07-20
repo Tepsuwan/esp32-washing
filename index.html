@@ -159,28 +159,46 @@
 
         <!-- Stat Cards -->
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-            <div class="card p-6 border-b-4 border-pink-500">
-                <p class="text-sm text-slate-500 font-medium">รายได้รวม</p>
-                <h3 id="statCoins" class="text-2xl font-bold text-slate-800 mt-1">0 ฿</h3>
+            <!-- การ์ดรายได้รวม -->
+            <div class="card p-4 sm:p-6 border-b-4 border-pink-500 flex items-center gap-2">
+                <div>
+                    <p class="text-xs sm:text-sm text-slate-500 font-medium">รายได้รวม</p>
+                    <h3 id="statCoins" class="text-xl sm:text-2xl font-bold text-slate-800 mt-1">0 ฿</h3>
+                </div>
+
             </div>
-            <div class="card p-6 border-b-4 border-blue-500">
-                <p class="text-sm text-slate-500 font-medium">รอบทำงานรวม</p>
-                <h3 id="statJobs" class="text-2xl font-bold text-slate-800 mt-1">0 ครั้ง</h3>
+
+            <!-- การ์ดรอบทำงานรวม -->
+            <div class="card p-4 sm:p-6 border-b-4 border-blue-500 flex items-center  gap-2">
+                <div>
+                    <p class="text-xs sm:text-sm text-slate-500 font-medium">รอบทำงานรวม</p>
+                    <h3 id="statJobs" class="text-xl sm:text-2xl font-bold text-slate-800 mt-1">0 ครั้ง</h3>
+                </div>
+
             </div>
-            <div class="card p-6 border-b-4 border-sky-400">
-                <p class="text-sm text-slate-500 font-medium">เครื่องซัก</p>
-                <h3 id="statWasher" class="text-2xl font-bold text-slate-800 mt-1">0 ครั้ง</h3>
+
+            <!-- การ์ดเครื่องซัก -->
+            <div class="card p-4 sm:p-6 border-b-4 border-sky-400 flex items-center gap-2">
+                <div>
+                    <p class="text-xs sm:text-sm text-slate-500 font-medium">เครื่องซัก</p>
+                    <h3 id="statWasher" class="text-xl sm:text-2xl font-bold text-slate-800 mt-1">0 ครั้ง</h3>
+                </div>
+
             </div>
-            <div class="card p-6 border-b-4 border-orange-400">
-                <p class="text-sm text-slate-500 font-medium">เครื่องอบ</p>
-                <h3 id="statDryer" class="text-2xl font-bold text-slate-800 mt-1">0 ครั้ง</h3>
+
+            <!-- การ์ดเครื่องอบ -->
+            <div class="card p-4 sm:p-6 border-b-4 border-orange-400 flex items-center  gap-2">
+                <div>
+                    <p class="text-xs sm:text-sm text-slate-500 font-medium">เครื่องอบ</p>
+                    <h3 id="statDryer" class="text-xl sm:text-2xl font-bold text-slate-800 mt-1">0 ครั้ง</h3>
+                </div>
+
             </div>
         </div>
 
-        <!-- แถวใหม่: กราฟเส้นวิเคราะห์ช่วงเวลาทำเงิน Peak Hours (Full-Width) -->
+        <!-- วิเคราะห์ช่วงเวลาทำเงิน Peak Hours (Full-Width) -->
         <div class="card p-6 mb-6">
-            <h2 class="text-lg font-bold mb-4 text-slate-700 w-full text-left">วิเคราะห์ช่วงเวลาการทำรายได้สะสม (Peak
-                Hours Analytics)</h2>
+            <h2 class="text-lg font-bold mb-4 text-slate-700 w-full text-left">ช่วงเวลาการทำรายได้สะสม</h2>
             <div class="w-full relative h-[300px] md:h-[350px]">
                 <canvas id="peakHoursLineChart"></canvas>
             </div>
@@ -266,7 +284,6 @@
                         deviceIncomeMap[t.device_name] = (deviceIncomeMap[t.device_name] || 0) + income;
                     }
 
-                    // แยกชั่วโมงสะสม (00:00 - 23:00) ตามประเภทเครื่อง
                     const hour = parseInt(t.timestamp.substring(11, 13));
                     if (!isNaN(hour) && hour >= 0 && hour < 24) {
                         if (t.device_name.includes('อบ')) {
@@ -314,6 +331,69 @@
             if (!isCustom) fetchData();
         }
 
+        // ฟังก์ชันเบื้องหลังสำหรับ Auto-Refresh โดยไม่แสดง Loading Overlay บดบังสายตา
+        async function silentFetchData() {
+            try {
+                const dates = getDateRange();
+                const res = await fetch(`${APP_URL}?start=${dates.start}&end=${dates.end}`);
+                const data = await res.json();
+
+                document.getElementById('statCoins').innerText = (data.stats.total_income || 0).toLocaleString() + ' ฿';
+                document.getElementById('statJobs').innerText = (data.stats.total_jobs || 0).toLocaleString() + ' ครั้ง';
+                document.getElementById('statWasher').innerText = (data.stats.washer || 0).toLocaleString() + ' ครั้ง';
+                document.getElementById('statDryer').innerText = (data.stats.dryer || 0).toLocaleString() + ' ครั้ง';
+
+                document.getElementById('tableBody').innerHTML = data.transactions?.length ? data.transactions.map(t => `
+                    <tr class="border-b text-sm hover:bg-slate-50 transition">
+                        <td class="py-3 text-slate-500">${t.timestamp.substring(0, 16)}</td>
+                        <td class="py-3 font-medium ${t.device_name.includes('อบ') ? 'text-orange-600 dark:text-orange-400' : 'text-sky-600 dark:text-sky-400'}">${t.device_name}</td>
+                        <td class="py-3"><span class="bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400 px-2 py-1 rounded-full text-xs">ทำงาน</span></td>
+                        <td class="py-3 text-right font-bold text-pink-500">+${t.income_baht || 0}</td>
+                    </tr>`).join('') : '<tr><td colspan="4" class="text-center py-4 text-slate-400">ไม่พบข้อมูล</td></tr>';
+
+                const deviceIncomeMap = {};
+                const washerHourly = Array(24).fill(0);
+                const dryerHourly = Array(24).fill(0);
+
+                data.transactions?.forEach(t => {
+                    const income = parseFloat(t.income_baht) || 0;
+                    if (income > 0) {
+                        deviceIncomeMap[t.device_name] = (deviceIncomeMap[t.device_name] || 0) + income;
+                    }
+
+                    const hour = parseInt(t.timestamp.substring(11, 13));
+                    if (!isNaN(hour) && hour >= 0 && hour < 24) {
+                        if (t.device_name.includes('อบ')) {
+                            dryerHourly[hour] += income;
+                        } else {
+                            washerHourly[hour] += income;
+                        }
+                    }
+                });
+
+                const sortedDevices = Object.entries(deviceIncomeMap)
+                    .map(([name, total]) => ({ name, total }))
+                    .sort((a, b) => {
+                        const isAWasher = a.name.includes('ซัก');
+                        const isBWasher = b.name.includes('ซัก');
+                        if (isAWasher && !isBWasher) return -1;
+                        if (!isAWasher && isBWasher) return 1;
+                        const numA = parseInt(a.name.match(/\d+$/)?.[0] || 0);
+                        const numB = parseInt(b.name.match(/\d+$/)?.[0] || 0);
+                        return numA - numB;
+                    });
+
+                cacheData.washer = data.stats.washer || 0;
+                cacheData.dryer = data.stats.dryer || 0;
+                cacheData.deviceLabels = sortedDevices.map(d => d.name);
+                cacheData.deviceTotals = sortedDevices.map(d => d.total);
+                cacheData.washerHourly = washerHourly;
+                cacheData.dryerHourly = dryerHourly;
+
+                updateCharts();
+            } catch (err) { console.error("Silent Refresh Error:", err); }
+        }
+
         function getDateRange() {
             const f = document.getElementById('timeFilter').value;
             const t = new Date(), s = new Date();
@@ -329,7 +409,6 @@
             const textColor = isDark ? '#f1f5f9' : '#334155';
             const gridColor = isDark ? '#334155' : '#e2e8f0';
 
-            // --- 1. กราฟวงกลมเดิม ---
             if (doughnutChartInstance) doughnutChartInstance.destroy();
             doughnutChartInstance = new Chart(document.getElementById('doughnutChart').getContext('2d'), {
                 type: 'doughnut',
@@ -343,11 +422,9 @@
                 }
             });
 
-            // --- 2. กราฟเส้น Area Chart ตัวใหม่ (วิเคราะห์ชั่วโมง Peak สะสม) ---
             if (lineChartInstance) lineChartInstance.destroy();
             const ctxLine = document.getElementById('peakHoursLineChart').getContext('2d');
 
-            // สร้าง Gradient สวยๆ ใต้เส้นกราฟ
             let gradWasher = ctxLine.createLinearGradient(0, 0, 0, 300);
             gradWasher.addColorStop(0, 'rgba(56, 189, 248, 0.25)');
             gradWasher.addColorStop(1, 'rgba(56, 189, 248, 0.0)');
@@ -404,7 +481,6 @@
                 }
             });
 
-            // --- 3. กราฟแท่งแนวนอนตัวเดิม ---
             if (barChartInstance) barChartInstance.destroy();
             const themeColors = ['#facc15', '#f97316', '#ef4444', '#c026d3', '#2563eb', '#06b6d4', '#84cc16'];
             const backgroundColors = cacheData.deviceLabels.map((_, i) => themeColors[i % themeColors.length]);
@@ -443,7 +519,12 @@
             });
         }
 
+        // เรียกดึงข้อมูลครั้งแรกเมื่อเปิดหน้าเว็บ
         fetchData();
+
+        // 🚀 เพิ่มระบบ Auto-Refresh ดึงข้อมูลอัตโนมัติเบื้องหลังทุกๆ 5 นาที (300,000 มิลลิวินาที)
+        // ใช้ฟังก์ชัน silentFetchData เพื่อให้หน้าจอกราฟอัปเดตเองโดยไม่มีหน้าต่างโหลดสีชมพูหมุนบดบังสายตา
+        setInterval(silentFetchData, 5 * 60 * 1000);
 
         function toggleDarkMode() {
             const body = document.body;
