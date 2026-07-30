@@ -123,6 +123,11 @@
                 <span class="text-blue-500">Wash</span><span class="text-pink-500">lover</span>
             </h1>
 
+            <div>
+                <p id="dateRangeDisplay" class="text-xs sm:text-sm text-slate-500 font-medium mt-3">เครื่องซัก</p>
+
+            </div>
+
             <div class="flex flex-wrap gap-2 items-center justify-center">
                 <div id="customDateWrapper" class="hidden flex flex-col md:flex-row gap-2 items-center">
                     <div
@@ -140,7 +145,7 @@
                 </div>
 
                 <select id="timeFilter" onchange="checkFilter()"
-                    class="bg-slate-100 rounded-xl px-4 py-2 border-none text-slate-700 font-semibold focus:ring-2 focus:ring-pink-300 dark:bg-slate-700 dark:text-white">
+                    class="bg-slate-100 rounded-xl  border-none text-slate-700 font-semibold focus:ring-2 focus:ring-pink-300 dark:bg-slate-700 dark:text-white">
                     <option value="daily">วันนี้</option>
                     <option value="weekly">ย้อนหลัง 7 วัน</option>
                     <option value="monthly">ย้อนหลัง 30 วัน</option>
@@ -253,6 +258,9 @@
             dryerHourly: Array(24).fill(0)
         };
 
+
+
+
         async function fetchData() {
             const loader = document.getElementById('loading-overlay');
             loader.style.display = 'flex'; loader.style.opacity = '1';
@@ -316,6 +324,8 @@
                 cacheData.dryerHourly = dryerHourly;
 
                 updateCharts();
+
+
             } catch (err) { console.error(err); }
             finally { loader.style.opacity = '0'; setTimeout(() => loader.style.display = 'none', 500); }
         }
@@ -394,6 +404,15 @@
             } catch (err) { console.error("Silent Refresh Error:", err); }
         }
 
+        function formatThaiDateShort(date) {
+            const months = ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.',
+                'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'];
+            const day = date.getDate();
+            const month = months[date.getMonth()];
+            const year = date.getFullYear() + 543; // แปลงเป็น พ.ศ.
+            return `${day} ${month} ${year}`;
+        }
+
         function getDateRange() {
             const f = document.getElementById('timeFilter').value;
             const t = new Date(), s = new Date();
@@ -401,6 +420,18 @@
             if (f === 'monthly') s.setDate(t.getDate() - 30);
             if (f === 'custom') { return { start: document.getElementById('customDateStart').value, end: document.getElementById('customDateEnd').value }; }
             const fd = (d) => d.toISOString().split('T')[0];
+
+            const dateStart = formatThaiDateShort(s);
+            const dateEnd = formatThaiDateShort(t);
+
+            if (dateStart == dateEnd) {
+                document.getElementById('dateRangeDisplay').innerText =
+                    `📅 วันที่: ${dateStart}`;
+            } else {
+                document.getElementById('dateRangeDisplay').innerText =
+                    `📅 วันที่: ${dateStart} ถึง ${dateEnd}`;
+            }
+
             return { start: fd(s), end: fd(t) };
         }
 
