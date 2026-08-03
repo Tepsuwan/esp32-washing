@@ -144,7 +144,7 @@
                     <!-- เมื่อผู้ใช้เปลี่ยนสาขา ให้เรียก fetchData() ใหม่ -->
                     <select id="branchFilter" onchange="fetchData()"
                         class="w-full sm:w-auto bg-blue-50 hover:bg-blue-100 dark:bg-blue-900/30 dark:hover:bg-blue-900/50 border-2 border-blue-100 dark:border-blue-800/50 text-blue-700 dark:text-blue-400 text-sm sm:text-base font-bold rounded-xl block pl-10 pr-10 py-2.5 focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900 transition-all appearance-none outline-none cursor-pointer">
-                        <option value="all">กำลังโหลดสาขา...</option>
+                        <!-- <option value="all">กำลังโหลดสาขา...</option> -->
                     </select>
 
                     <div
@@ -341,7 +341,7 @@
                 const branchSelect = document.getElementById('branchFilter');
 
                 // ล้างค่าเก่าทิ้ง
-                branchSelect.innerHTML = '<option value="all">รวมทุกสาขา</option>';
+                // branchSelect.innerHTML = '<option value="all">รวมทุกสาขา</option>';
 
                 // วนลูปเอาสาขามาใส่
                 branches.forEach(b => {
