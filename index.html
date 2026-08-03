@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wash Lover Dashboard</title>
+    <title>Wash Lover Dashboard - Glass Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
 
     <script>
@@ -12,312 +12,276 @@
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
     <style>
+        /* 🎨 Animated Gradient Background */
         body {
             font-family: 'Kanit', sans-serif;
-            background-color: #F8FAFC;
-            transition: background 0.3s, color 0.3s;
+            background: linear-gradient(-45deg, #ff9a9e, #fecfef, #a1c4fd, #c2e9fb);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            min-height: 100vh;
+            color: #1e293b;
+            transition: color 0.4s ease;
         }
 
         body.dark {
-            background-color: #0f172a;
+            background: linear-gradient(-45deg, #0f172a, #1e1b4b, #0f3460, #312e81);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
             color: #f1f5f9;
         }
 
-        body.dark .card {
-            background: #1e293b;
-            border: 1px solid #334155;
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
 
-        body.dark .text-slate-800 {
-            color: #f8fafc;
-        }
-
-        body.dark .text-slate-700 {
-            color: #cbd5e1;
-        }
-
-        body.dark .text-slate-500 {
-            color: #94a3b8;
-        }
-
-        body.dark .bg-slate-100 {
-            background: #334155;
-            color: #f8fafc;
-        }
-
-        body.dark .bg-white {
-            background: #1e293b;
-        }
-
-        body.dark .border-b {
-            border-color: #334155;
-        }
-
-        body.dark tr:hover {
-            background-color: #334155 !important;
-        }
-
+        /* 🧊 Glassmorphism Cards */
         .card {
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            border-radius: 24px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
         }
 
+        body.dark .card {
+            background: rgba(15, 23, 42, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px 0 rgba(31, 38, 135, 0.2);
+        }
+
+        body.dark .card:hover {
+            box-shadow: 0 15px 40px 0 rgba(0, 0, 0, 0.6);
+        }
+
+        /* 🚀 Animations */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+            animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            opacity: 0;
+        }
+        .delay-100 { animation-delay: 0.1s; }
+        .delay-200 { animation-delay: 0.2s; }
+        .delay-300 { animation-delay: 0.3s; }
+
+        /* 🌀 Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.2); border-radius: 10px; }
+        body.dark ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(0,0,0,0.4); }
+
+        /* 💎 Loading Screen Glass */
         #loading-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(255, 255, 255, 0.9);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-            transition: opacity 0.5s ease;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            z-index: 9999; transition: opacity 0.5s ease;
+        }
+        body.dark #loading-overlay { background: rgba(15, 23, 42, 0.5); }
+        .spinner-logo { 
+            width: 90px; 
+            animation: popSpin 2s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite; 
+            filter: drop-shadow(0 10px 15px rgba(0,0,0,0.2)); 
+        }
+        @keyframes popSpin {
+            0% { transform: rotate(0deg) scale(0.9); }
+            50% { transform: rotate(180deg) scale(1.1); }
+            100% { transform: rotate(360deg) scale(0.9); }
         }
 
-        body.dark #loading-overlay {
-            background: rgba(15, 23, 42, 0.9);
-        }
-
-        .spinner-logo {
-            width: 80px;
-            animation: spin 1.5s linear infinite;
-        }
-
-        @keyframes spin {
-            0% {
-                transform: rotate(0deg) scale(1);
-            }
-
-            50% {
-                transform: rotate(180deg) scale(1.2);
-            }
-
-            100% {
-                transform: rotate(360deg) scale(1);
-            }
-        }
+        /* 🌟 specific elements for Dark Mode */
+        body.dark .text-slate-800 { color: #ffffff; }
+        body.dark .text-slate-700 { color: #f1f5f9; }
+        body.dark .text-slate-500 { color: #94a3b8; }
+        body.dark tr:hover { background-color: rgba(255, 255, 255, 0.05) !important; }
     </style>
 </head>
 
-<body class="p-4 md:p-8">
+<body class="p-4 md:p-8 relative">
 
     <!-- Loading Overlay -->
     <div id="loading-overlay">
         <img src="https://i.ibb.co/v6F6dNMf/logo-removebg-preview.png" class="spinner-logo" alt="Loading...">
-        <p class="mt-4 font-bold text-pink-500 animate-pulse">กำลังซักข้อมูลให้คุณ...</p>
+        <p class="mt-6 text-lg font-bold bg-clip-text text-transparent bg-gradient-to-r from-pink-500 to-blue-600 dark:from-pink-400 dark:to-blue-400 animate-pulse drop-shadow-sm">กำลังจัดเตรียมข้อมูล...</p>
     </div>
 
-    <div class="max-w-7xl mx-auto">
+    <div class="max-w-7xl mx-auto space-y-6 relative z-10">
 
-        <!-- Header & Filter -->
-        <div
-            class="card p-4 sm:p-6 mb-6 flex flex-col xl:flex-row justify-between items-start xl:items-center gap-4 xl:gap-6">
-
-            <!-- 📌 โซนด้านซ้าย: โลโก้ + เลือกสาขา + ข้อความวันที่ -->
+        <!-- 🏷️ Header & Filter -->
+        <div class="card p-4 sm:p-6 flex flex-col xl:flex-row justify-between items-start xl:items-center gap-4 xl:gap-6 animate-fade-in">
             <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4 w-full xl:w-auto">
-
-                <h1 class="text-2xl sm:text-3xl font-bold flex items-center gap-2 shrink-0">
-                    <img src="https://i.ibb.co/v6F6dNMf/logo-removebg-preview.png" alt="Logo"
-                        class="h-10 sm:h-12 w-auto">
-                    <span class="text-blue-500">Wash</span><span class="text-pink-500">lover</span>
+                <h1 class="text-2xl sm:text-3xl font-bold flex items-center gap-2 shrink-0 drop-shadow-sm">
+                    <img src="https://i.ibb.co/v6F6dNMf/logo-removebg-preview.png" alt="Logo" class="h-10 sm:h-12 w-auto">
+                    <span class="text-blue-600 dark:text-blue-400">Wash</span><span class="text-pink-500 dark:text-pink-400">lover</span>
                 </h1>
 
-                <div class="hidden sm:block w-px h-10 bg-slate-200 dark:bg-slate-700"></div>
+                <div class="hidden sm:block w-px h-10 bg-slate-400/30"></div>
 
-                <!-- Dropdown เลือกสาขา (จะถูกเติมข้อมูลด้วย JavaScript) -->
+                <!-- Glass Input Select -->
                 <div class="relative w-full sm:w-auto">
-                    <div
-                        class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-blue-500 dark:text-blue-400">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1v1H9V7zm5 0h1v1h-1V7zm-5 4h1v1H9v-1zm5 0h1v1h-1v-1zm-3 4H2v2h1v-2zm5 0h1v1h-1v-1z">
-                            </path>
-                        </svg>
-                    </div>
-
-                    <!-- เมื่อผู้ใช้เปลี่ยนสาขา ให้เรียก fetchData() ใหม่ -->
-                    <select id="branchFilter" onchange="fetchData()"
-                        class="w-full sm:w-auto bg-blue-50 hover:bg-blue-100 dark:bg-blue-900/30 dark:hover:bg-blue-900/50 border-2 border-blue-100 dark:border-blue-800/50 text-blue-700 dark:text-blue-400 text-sm sm:text-base font-bold rounded-xl block pl-10 pr-10 py-2.5 focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900 transition-all appearance-none outline-none cursor-pointer">
-                        <!-- <option value="all">กำลังโหลดสาขา...</option> -->
+                    <select id="branchFilter" onchange="fetchData()" class="w-full sm:w-auto bg-white/40 dark:bg-black/20 border border-white/50 dark:border-white/10 text-slate-800 dark:text-white text-sm sm:text-base font-bold rounded-2xl block pl-4 pr-10 py-2.5 focus:ring-4 focus:ring-white/50 backdrop-blur-md transition-all outline-none cursor-pointer shadow-sm hover:bg-white/60 dark:hover:bg-black/40">
+                        <option value="all">กำลังโหลดสาขา...</option>
                     </select>
-
-                    <div
-                        class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-blue-500 dark:text-blue-400">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7">
-                            </path>
-                        </svg>
-                    </div>
                 </div>
 
                 <div class="w-full sm:w-auto mt-2 sm:mt-0">
-                    <p id="dateRangeDisplay"
-                        class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 font-medium whitespace-nowrap">📅
-                        กำลังโหลดวันที่...</p>
+                    <p id="dateRangeDisplay" class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 font-medium px-4 py-2 bg-white/40 dark:bg-black/20 backdrop-blur-md rounded-full inline-block shadow-sm border border-white/30 dark:border-white/10">📅 กำลังโหลดวันที่...</p>
                 </div>
             </div>
 
-            <!-- 📌 โซนด้านขวา: ตัวกรองวันที่ และปุ่ม Dark Mode -->
-            <div class="flex flex-wrap items-center gap-2 sm:gap-3 w-full xl:w-auto justify-start xl:justify-end">
-
-                <div id="customDateWrapper"
-                    class="hidden flex flex-col md:flex-row gap-2 items-center w-full md:w-auto">
-                    <div
-                        class="flex items-center justify-between w-full md:w-auto gap-2 bg-slate-100 dark:bg-slate-700 rounded-xl px-3 py-2 border border-slate-200 dark:border-slate-600">
-                        <span class="text-[10px] text-slate-400 font-bold uppercase shrink-0">จาก:</span>
-                        <input type="date" id="customDateStart"
-                            class="bg-transparent border-none text-slate-700 dark:text-white text-sm focus:outline-none w-full">
+            <!-- โซนด้านขวา -->
+            <div class="flex flex-wrap items-center gap-3 w-full xl:w-auto justify-start xl:justify-end">
+                <div id="customDateWrapper" class="hidden flex-col md:flex-row gap-2 items-center w-full md:w-auto">
+                    <div class="flex items-center gap-2 bg-white/40 dark:bg-black/20 backdrop-blur-md rounded-xl px-3 py-2 border border-white/30 dark:border-white/10 shadow-sm w-full md:w-auto">
+                        <span class="text-xs text-slate-500 dark:text-slate-400 font-bold uppercase shrink-0">จาก</span>
+                        <input type="date" id="customDateStart" class="bg-transparent border-none text-slate-800 dark:text-white text-sm focus:outline-none w-full cursor-pointer">
                     </div>
-                    <div
-                        class="flex items-center justify-between w-full md:w-auto gap-2 bg-slate-100 dark:bg-slate-700 rounded-xl px-3 py-2 border border-slate-200 dark:border-slate-600">
-                        <span class="text-[10px] text-slate-400 font-bold uppercase shrink-0">ถึง:</span>
-                        <input type="date" id="customDateEnd"
-                            class="bg-transparent border-none text-slate-700 dark:text-white text-sm focus:outline-none w-full">
+                    <div class="flex items-center gap-2 bg-white/40 dark:bg-black/20 backdrop-blur-md rounded-xl px-3 py-2 border border-white/30 dark:border-white/10 shadow-sm w-full md:w-auto">
+                        <span class="text-xs text-slate-500 dark:text-slate-400 font-bold uppercase shrink-0">ถึง</span>
+                        <input type="date" id="customDateEnd" class="bg-transparent border-none text-slate-800 dark:text-white text-sm focus:outline-none w-full cursor-pointer">
                     </div>
                 </div>
 
                 <div class="flex gap-2 w-full md:w-auto">
-                    <select id="timeFilter" onchange="checkFilter()"
-                        class="flex-1 md:flex-none bg-slate-100 rounded-xl px-4 py-2.5 border-none text-slate-700 font-semibold focus:ring-2 focus:ring-pink-300 dark:bg-slate-700 dark:text-white cursor-pointer transition-all appearance-none text-center sm:text-left">
+                    <select id="timeFilter" onchange="checkFilter()" class="flex-1 md:flex-none bg-white/40 dark:bg-black/20 backdrop-blur-md rounded-xl px-4 py-2.5 border border-white/30 dark:border-white/10 text-slate-800 dark:text-white font-semibold focus:ring-4 focus:ring-white/50 cursor-pointer shadow-sm hover:bg-white/60 dark:hover:bg-black/40 transition-all outline-none">
                         <option value="daily">วันนี้</option>
                         <option value="weekly">ย้อนหลัง 7 วัน</option>
                         <option value="monthly">ย้อนหลัง 30 วัน</option>
                         <option value="custom">ระบุวันที่...</option>
                     </select>
-
-                    <button id="btnSearchCustom" onclick="fetchData()"
-                        class="bg-pink-500 text-white px-6 py-2.5 rounded-xl hidden hover:bg-pink-600 transition font-bold shadow-md shadow-pink-500/30">ค้นหา</button>
-
-                    <button id="theme-toggle-btn" onclick="toggleDarkMode()"
-                        class="p-2.5 bg-slate-200 hover:bg-slate-300 dark:bg-slate-700 dark:hover:bg-slate-600 rounded-xl text-xl transition-all duration-300 shrink-0">
-                        🌙
-                    </button>
+                    <button id="btnSearchCustom" onclick="fetchData()" class="bg-gradient-to-r from-pink-500 to-rose-500 text-white px-6 py-2.5 rounded-xl hidden hover:shadow-lg hover:shadow-pink-500/40 transform hover:-translate-y-0.5 transition-all font-bold">ค้นหา</button>
+                    <button id="theme-toggle-btn" onclick="toggleDarkMode()" class="p-2.5 bg-white/50 hover:bg-white/70 dark:bg-black/30 dark:hover:bg-black/50 backdrop-blur-md rounded-xl text-xl transition-all shadow-sm shrink-0 border border-white/30 dark:border-white/10">🌙</button>
                 </div>
             </div>
         </div>
 
-        <!-- Stat Cards -->
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-            <!-- 💰 การ์ดรายได้รวม (ไอคอนใหม่ ธนบัตร) -->
-            <div class="card p-4 sm:p-6 border-b-4 border-pink-500 flex items-center justify-between gap-2">
-                <div>
-                    <p class="text-xs sm:text-sm text-slate-500 font-medium">รายได้รวม</p>
-                    <h3 id="statCoins" class="text-xl sm:text-2xl font-bold text-slate-800 mt-1">0 ฿</h3>
+        <!-- 📊 Stat Cards (Glass Style) -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 animate-fade-in delay-100">
+            <!-- ยอดเงินรวม -->
+            <div class="card p-5 sm:p-6 flex items-center justify-between gap-2 overflow-hidden relative group border-t border-l border-white/80 dark:border-white/20">
+                <div class="absolute top-0 right-0 w-32 h-32 bg-pink-400/20 rounded-bl-full -z-10 group-hover:scale-125 transition-transform duration-500"></div>
+                <div class="z-10">
+                    <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 font-bold tracking-wide uppercase opacity-80">รายได้รวม</p>
+                    <h3 id="statCoins" class="text-2xl sm:text-3xl font-bold text-pink-600 dark:text-pink-400 mt-1 drop-shadow-sm">0 ฿</h3>
                 </div>
-                <div
-                    class="p-2.5 sm:p-3 rounded-2xl bg-pink-50 text-pink-500 dark:bg-pink-500/10 dark:text-pink-400 shrink-0">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
-                        stroke="currentColor" class="w-5 h-5 sm:w-6 sm:h-6">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M2.25 18.75a60.07 60.07 0 0 1 15.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5h16.5a1.5 1.5 0 0 1 1.5 1.5v12a1.5 1.5 0 0 1-1.5 1.5H3.75a1.5 1.5 0 0 1-1.5-1.5V6.5a1.5 1.5 0 0 1 1.5-1.5Zm7.45 8.767c.184.077.38.118.583.118.826 0 1.5-.68 1.5-1.517v-.067c0-.822-.656-1.472-1.463-1.518l-.02-.001a1.496 1.496 0 0 0-1.487 1.488v.015c0 .855.674 1.537 1.487 1.488Zm0 0V16.5m0-7.5v.75m3.75 3h.008v.008h-.008v-.008Zm-7.5 0h.008v.008h-.008v-.008Z" />
-                    </svg>
+                <div class="p-3 rounded-2xl bg-white/50 dark:bg-black/30 backdrop-blur-md text-pink-500 dark:text-pink-400 shadow-sm z-10 border border-white/50 dark:border-white/10">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-7 h-7"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75a60.07 60.07 0 0 1 15.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5h16.5a1.5 1.5 0 0 1 1.5 1.5v12a1.5 1.5 0 0 1-1.5 1.5H3.75a1.5 1.5 0 0 1-1.5-1.5V6.5a1.5 1.5 0 0 1 1.5-1.5Zm7.45 8.767c.184.077.38.118.583.118.826 0 1.5-.68 1.5-1.517v-.067c0-.822-.656-1.472-1.463-1.518l-.02-.001a1.496 1.496 0 0 0-1.487 1.488v.015c0 .855.674 1.537 1.487 1.488Zm0 0V16.5m0-7.5v.75m3.75 3h.008v.008h-.008v-.008Zm-7.5 0h.008v.008h-.008v-.008Z" /></svg>
                 </div>
             </div>
 
-            <!-- 🔄 การ์ดรอบทำงานรวม (ไอคอนใหม่ วงจรทำงาน) -->
-            <div class="card p-4 sm:p-6 border-b-4 border-blue-500 flex items-center justify-between gap-2">
-                <div>
-                    <p class="text-xs sm:text-sm text-slate-500 font-medium">รอบทำงานรวม</p>
-                    <h3 id="statJobs" class="text-xl sm:text-2xl font-bold text-slate-800 mt-1">0 ครั้ง</h3>
+            <!-- รอบทำงาน -->
+            <div class="card p-5 sm:p-6 flex items-center justify-between gap-2 overflow-hidden relative group border-t border-l border-white/80 dark:border-white/20">
+                <div class="absolute top-0 right-0 w-32 h-32 bg-indigo-400/20 rounded-bl-full -z-10 group-hover:scale-125 transition-transform duration-500"></div>
+                <div class="z-10">
+                    <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 font-bold tracking-wide uppercase opacity-80">รอบทำงานรวม</p>
+                    <h3 id="statJobs" class="text-2xl sm:text-3xl font-bold text-indigo-600 dark:text-indigo-400 mt-1 drop-shadow-sm">0</h3>
                 </div>
-                <div
-                    class="p-2.5 sm:p-3 rounded-2xl bg-blue-50 text-blue-500 dark:bg-blue-500/10 dark:text-blue-400 shrink-0">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
-                        stroke="currentColor" class="w-5 h-5 sm:w-6 sm:h-6">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
-                    </svg>
+                <div class="p-3 rounded-2xl bg-white/50 dark:bg-black/30 backdrop-blur-md text-indigo-500 dark:text-indigo-400 shadow-sm z-10 border border-white/50 dark:border-white/10">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-7 h-7"><path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" /></svg>
                 </div>
             </div>
 
-            <!-- 🌊 การ์ดเครื่องซัก (ไอคอนใหม่ หยดน้ำ) -->
-            <div class="card p-4 sm:p-6 border-b-4 border-sky-400 flex items-center justify-between gap-2">
-                <div>
-                    <p class="text-xs sm:text-sm text-slate-500 font-medium">เครื่องซัก</p>
-                    <h3 id="statWasher" class="text-xl sm:text-2xl font-bold text-slate-800 mt-1">0 ครั้ง</h3>
+            <!-- เครื่องซัก -->
+            <div class="card p-5 sm:p-6 flex items-center justify-between gap-2 overflow-hidden relative group border-t border-l border-white/80 dark:border-white/20">
+                <div class="absolute top-0 right-0 w-32 h-32 bg-sky-400/20 rounded-bl-full -z-10 group-hover:scale-125 transition-transform duration-500"></div>
+                <div class="z-10">
+                    <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 font-bold tracking-wide uppercase opacity-80">เครื่องซัก</p>
+                    <h3 id="statWasher" class="text-2xl sm:text-3xl font-bold text-sky-600 dark:text-sky-400 mt-1 drop-shadow-sm">0</h3>
                 </div>
-                <div
-                    class="p-2.5 sm:p-3 rounded-2xl bg-sky-50 text-sky-500 dark:bg-sky-500/10 dark:text-sky-400 shrink-0">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
-                        stroke="currentColor" class="w-5 h-5 sm:w-6 sm:h-6">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M12 21a9.004 9.004 0 0 0 8.716-6.747M12 21a9.004 9.004 0 0 1-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 0 1 7.843 4.582M12 3a8.997 8.997 0 0 0-7.843 4.582m15.686 0A11.953 11.953 0 0 1 12 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0 1 21 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0 1 12 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 0 1 3 12c0-1.605.42-3.113 1.157-4.418" />
-                    </svg>
+                <div class="p-3 rounded-2xl bg-white/50 dark:bg-black/30 backdrop-blur-md text-sky-500 dark:text-sky-400 shadow-sm z-10 border border-white/50 dark:border-white/10">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-7 h-7"><path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.004 9.004 0 0 0 8.716-6.747M12 21a9.004 9.004 0 0 1-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 0 1 7.843 4.582M12 3a8.997 8.997 0 0 0-7.843 4.582m15.686 0A11.953 11.953 0 0 1 12 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0 1 21 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0 1 12 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 0 1 3 12c0-1.605.42-3.113 1.157-4.418" /></svg>
                 </div>
             </div>
 
-            <!-- ♨️ การ์ดเครื่องอบ (ไอคอนใหม่ เส้นความร้อน) -->
-            <div class="card p-4 sm:p-6 border-b-4 border-orange-400 flex items-center justify-between gap-2">
-                <div>
-                    <p class="text-xs sm:text-sm text-slate-500 font-medium">เครื่องอบ</p>
-                    <h3 id="statDryer" class="text-xl sm:text-2xl font-bold text-slate-800 mt-1">0 ครั้ง</h3>
+            <!-- เครื่องอบ -->
+            <div class="card p-5 sm:p-6 flex items-center justify-between gap-2 overflow-hidden relative group border-t border-l border-white/80 dark:border-white/20">
+                <div class="absolute top-0 right-0 w-32 h-32 bg-orange-400/20 rounded-bl-full -z-10 group-hover:scale-125 transition-transform duration-500"></div>
+                <div class="z-10">
+                    <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 font-bold tracking-wide uppercase opacity-80">เครื่องอบ</p>
+                    <h3 id="statDryer" class="text-2xl sm:text-3xl font-bold text-orange-600 dark:text-orange-400 mt-1 drop-shadow-sm">0</h3>
                 </div>
-                <div
-                    class="p-2.5 sm:p-3 rounded-2xl bg-orange-50 text-orange-500 dark:bg-orange-500/10 dark:text-orange-400 shrink-0">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
-                        stroke="currentColor" class="w-5 h-5 sm:w-6 sm:h-6">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M15.362 5.214A8.252 8.252 0 0 1 12 21 8.25 8.25 0 0 1 6.038 7.047 8.287 8.287 0 0 0 9 9.601a8.983 8.983 0 0 1 3.361-6.867 8.21 8.21 0 0 0 3 2.48Z" />
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M12 18a3.75 3.75 0 0 0 .495-7.468 5.99 5.99 0 0 0-1.925 3.547 5.975 5.975 0 0 1-2.133-1.001A3.75 3.75 0 0 0 12 18Z" />
-                    </svg>
+                <div class="p-3 rounded-2xl bg-white/50 dark:bg-black/30 backdrop-blur-md text-orange-500 dark:text-orange-400 shadow-sm z-10 border border-white/50 dark:border-white/10">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-7 h-7"><path stroke-linecap="round" stroke-linejoin="round" d="M15.362 5.214A8.252 8.252 0 0 1 12 21 8.25 8.25 0 0 1 6.038 7.047 8.287 8.287 0 0 0 9 9.601a8.983 8.983 0 0 1 3.361-6.867 8.21 8.21 0 0 0 3 2.48Z" /><path stroke-linecap="round" stroke-linejoin="round" d="M12 18a3.75 3.75 0 0 0 .495-7.468 5.99 5.99 0 0 0-1.925 3.547 5.975 5.975 0 0 1-2.133-1.001A3.75 3.75 0 0 0 12 18Z" /></svg>
                 </div>
             </div>
         </div>
 
-        <!-- วิเคราะห์ช่วงเวลาทำเงิน Peak Hours -->
-        <div class="card p-6 mb-6">
-            <h2 class="text-lg font-bold mb-4 text-slate-700 w-full text-left">ช่วงเวลาการทำรายได้สะสม (Peak Hours
-                Analytics)</h2>
+        <!-- 📈 กราฟแนวโน้ม -->
+        <div class="card p-6 animate-fade-in delay-200">
+            <h2 class="text-lg font-bold mb-4 text-slate-800 flex items-center gap-2 drop-shadow-sm">
+                <span class="text-xl">📊</span> แนวโน้มรายได้สะสม (Peak Hours)
+            </h2>
             <div class="w-full relative h-[300px] md:h-[350px]">
                 <canvas id="peakHoursLineChart"></canvas>
             </div>
         </div>
 
-        <!-- Charts Row -->
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+        <!-- 🍩 Charts Row -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 animate-fade-in delay-300">
             <div class="card p-6 lg:col-span-1 flex flex-col h-full">
-                <h2 class="text-lg font-bold mb-4 text-slate-700 w-full text-left shrink-0">สัดส่วนการใช้งาน</h2>
+                <h2 class="text-lg font-bold mb-4 text-slate-800 flex items-center gap-2 shrink-0 drop-shadow-sm">
+                    <span class="text-xl">🎯</span> สัดส่วนการใช้งาน
+                </h2>
                 <div class="flex-1 flex justify-center items-center">
                     <div class="w-full max-w-[200px] md:max-w-[230px]"><canvas id="doughnutChart"></canvas></div>
                 </div>
             </div>
 
             <div class="card p-6 lg:col-span-2 flex flex-col justify-between">
-                <h2 class="text-lg font-bold mb-4 text-slate-700 w-full text-left">รายได้แยกตามเครื่อง (฿)</h2>
+                <h2 class="text-lg font-bold mb-4 text-slate-800 flex items-center gap-2 drop-shadow-sm">
+                    <span class="text-xl">🏆</span> รายได้แยกตามเครื่อง (฿)
+                </h2>
                 <div class="w-full relative flex-1 min-h-[420px]">
                     <canvas id="horizontalBarChart"></canvas>
                 </div>
             </div>
         </div>
 
-        <!-- Transaction Table Full Width -->
-        <div class="card p-6 overflow-x-auto max-h-[450px] overflow-y-auto">
-            <h2 class="text-lg font-bold mb-4 text-slate-700">ประวัติการทำงานล่าสุด</h2>
-            <table class="w-full text-left relative">
-                <thead class="sticky top-0 bg-white dark:bg-[#1e293b] z-10">
-                    <tr class="text-slate-400 border-b">
-                        <th class="pb-3">วันที่ / เวลา</th>
-                        <th class="pb-3">อุปกรณ์</th>
-                        <th class="pb-3">ประเภท</th>
-                        <th class="pb-3 text-right">ยอด (฿)</th>
-                    </tr>
-                </thead>
-                <tbody id="tableBody"></tbody>
-            </table>
+        <!-- 📋 Transaction Table -->
+        <div class="card p-0 overflow-hidden animate-fade-in delay-300">
+            <div class="p-6 border-b border-white/20 dark:border-white/5">
+                <h2 class="text-lg font-bold text-slate-800 flex items-center gap-2 drop-shadow-sm">
+                    <span class="text-xl">🧾</span> ประวัติการทำงานล่าสุด
+                </h2>
+            </div>
+            <div class="overflow-x-auto max-h-[450px] overflow-y-auto px-6 pb-6 pt-2">
+                <table class="w-full text-left relative border-collapse">
+                    <thead class="sticky top-0 bg-white/70 dark:bg-slate-900/70 backdrop-blur-md z-10">
+                        <tr class="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wider border-b border-slate-200/50 dark:border-slate-700/50">
+                            <th class="pb-3 pt-2 font-bold">วันที่ / เวลา</th>
+                            <th class="pb-3 pt-2 font-bold">อุปกรณ์</th>
+                            <th class="pb-3 pt-2 font-bold text-center">ประเภท</th>
+                            <th class="pb-3 pt-2 font-bold text-right">ยอด (฿)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody" class="divide-y divide-slate-200/30 dark:divide-slate-700/30">
+                        <!-- JS วางข้อมูลที่นี่ -->
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 
+    <!-- Script ควบคุมการทำงาน -->
     <script>
-        // ใช้ API ฐานข้อมูลหลัก (โหลดเร็วปรี๊ด ⚡)
         const DB_API_URL = 'https://api.all123th.com/inw/api/wl_transactions/';
-        // API สำหรับดึงรายชื่อสาขา
         const BRANCH_API_URL = 'https://washing.adokub.com/api/branch';
 
         let doughnutChartInstance = null;
@@ -325,61 +289,45 @@
         let lineChartInstance = null;
 
         let cacheData = {
-            washer: 0,
-            dryer: 0,
-            deviceLabels: [],
-            deviceTotals: [],
-            washerHourly: Array(24).fill(0),
-            dryerHourly: Array(24).fill(0)
+            washer: 0, dryer: 0, deviceLabels: [], deviceTotals: [],
+            washerHourly: Array(24).fill(0), dryerHourly: Array(24).fill(0)
         };
 
-        // 🌟 1. ฟังก์ชันโหลดสาขาจาก API ตอนเปิดเว็บครั้งแรก
         async function loadBranches() {
             try {
                 const res = await fetch(BRANCH_API_URL);
                 const branches = await res.json();
                 const branchSelect = document.getElementById('branchFilter');
-
-                // ล้างค่าเก่าทิ้ง
-                // branchSelect.innerHTML = '<option value="all">รวมทุกสาขา</option>';
-
-                // วนลูปเอาสาขามาใส่
+                
+                branchSelect.innerHTML = '';
+                
                 branches.forEach(b => {
                     const option = document.createElement('option');
-                    option.value = b.serial; // เก็บค่า serial ไว้ใช้ค้นหา
-                    option.textContent = b.name; // แสดงชื่อภาษาไทย
+                    option.value = b.serial;
+                    option.textContent = b.name;
                     branchSelect.appendChild(option);
                 });
-
-                // บังคับเลือก Default เป็น "ladkabung"
-                branchSelect.value = 'ladkabung';
-
+                // Default
+                if(branches.find(b => b.serial === 'ladkabung')) {
+                    branchSelect.value = 'ladkabung';
+                }
             } catch (error) {
-                console.error("โหลดรายชื่อสาขาไม่สำเร็จ:", error);
-                // Fallback เผื่อ API สาขาล่ม อย่างน้อยก็ยังมีลาดกระบังให้กด
-                document.getElementById('branchFilter').innerHTML = `
-                    <option value="all">รวมทุกสาขา</option>
-                    <option value="ladkabung" selected>ลาดกระบัง</option>
-                `;
+                document.getElementById('branchFilter').innerHTML = `<option value="all">รวมทุกสาขา</option><option value="ladkabung" selected>ลาดกระบัง</option>`;
             }
         }
 
-        // 🌟 2. ฟังก์ชันดึงข้อมูล (แบบมี Loading)
         async function fetchData() {
             const loader = document.getElementById('loading-overlay');
             loader.style.display = 'flex'; loader.style.opacity = '1';
             try {
-                // ดึงข้อมูล 2000 แถวจาก Database
                 const res = await fetch(`${DB_API_URL}?limit=2000`);
                 let rawTransactions = await res.json();
 
-                // ดึงวันที่ และ สาขาที่เลือกปัจจุบัน
                 const dates = getDateRange();
                 const targetStart = dates.start + " 00:00:00";
                 const targetEnd = dates.end + " 23:59:59";
                 const selectedBranch = document.getElementById('branchFilter').value;
 
-                // ใช้ JS กรอง (วันที่ + สาขา)
                 let filteredTransactions = rawTransactions.filter(t => {
                     if (!t.timestamp) return false;
                     const isDateMatch = t.timestamp >= targetStart && t.timestamp <= targetEnd;
@@ -389,19 +337,17 @@
 
                 processDataAndRender(filteredTransactions);
             } catch (err) {
-                console.error("API Fetch Error:", err);
+                console.error("API Error:", err);
             } finally {
                 loader.style.opacity = '0';
                 setTimeout(() => loader.style.display = 'none', 500);
             }
         }
 
-        // ฟังก์ชันดึงข้อมูลเบื้องหลังทุก 5 นาที (ไม่แสดง Loading)
         async function silentFetchData() {
             try {
                 const res = await fetch(`${DB_API_URL}?limit=2000`);
                 let rawTransactions = await res.json();
-
                 const dates = getDateRange();
                 const targetStart = dates.start + " 00:00:00";
                 const targetEnd = dates.end + " 23:59:59";
@@ -409,289 +355,191 @@
 
                 let filteredTransactions = rawTransactions.filter(t => {
                     if (!t.timestamp) return false;
-                    const isDateMatch = t.timestamp >= targetStart && t.timestamp <= targetEnd;
-                    const isBranchMatch = selectedBranch === 'all' || t.branch === selectedBranch;
-                    return isDateMatch && isBranchMatch;
+                    return (t.timestamp >= targetStart && t.timestamp <= targetEnd) && (selectedBranch === 'all' || t.branch === selectedBranch);
                 });
-
                 processDataAndRender(filteredTransactions);
-            } catch (err) {
-                console.error("Silent API Fetch Error:", err);
-            }
+            } catch (err) {}
         }
 
-        // ฟังก์ชันคำนวณและแสดงผลกราฟ
         function processDataAndRender(transactions) {
-            let totalIncome = 0;
-            let totalJobs = transactions.length;
-            let washerCount = 0;
-            let dryerCount = 0;
+            let totalIncome = 0, totalJobs = transactions.length;
+            let washerCount = 0, dryerCount = 0;
+            const deviceIncomeMap = {}, washerHourly = Array(24).fill(0), dryerHourly = Array(24).fill(0);
 
-            const deviceIncomeMap = {};
-            const washerHourly = Array(24).fill(0);
-            const dryerHourly = Array(24).fill(0);
-
-            const tableHtml = transactions.length ? transactions.map(t => {
+            const tableHtml = transactions.length ? transactions.map((t) => {
                 const coins = parseInt(t.coins_paid) || 0;
                 const incomeBaht = coins * 10;
                 totalIncome += incomeBaht;
-
                 const isDryer = t.machine_type === 'Dryer' || t.device_name.includes('อบ');
-                if (isDryer) {
-                    dryerCount++;
-                } else {
-                    washerCount++;
-                }
-
-                if (incomeBaht > 0) {
-                    deviceIncomeMap[t.device_name] = (deviceIncomeMap[t.device_name] || 0) + incomeBaht;
-                }
-
+                if (isDryer) dryerCount++; else washerCount++;
+                if (incomeBaht > 0) deviceIncomeMap[t.device_name] = (deviceIncomeMap[t.device_name] || 0) + incomeBaht;
+                
                 const hour = parseInt(t.timestamp.substring(11, 13));
                 if (!isNaN(hour) && hour >= 0 && hour < 24) {
-                    if (isDryer) {
-                        dryerHourly[hour] += incomeBaht;
-                    } else {
-                        washerHourly[hour] += incomeBaht;
-                    }
+                    if (isDryer) dryerHourly[hour] += incomeBaht; else washerHourly[hour] += incomeBaht;
                 }
 
+                const badgeClass = isDryer 
+                    ? 'bg-orange-500/20 text-orange-600 dark:bg-orange-500/30 dark:text-orange-400 border border-orange-500/30' 
+                    : 'bg-sky-500/20 text-sky-600 dark:bg-sky-500/30 dark:text-sky-400 border border-sky-500/30';
+
                 return `
-                    <tr class="border-b text-sm hover:bg-slate-50 transition">
-                        <td class="py-3 text-slate-500">${t.timestamp.substring(0, 16)}</td>
-                        <td class="py-3 font-medium ${isDryer ? 'text-orange-600 dark:text-orange-400' : 'text-sky-600 dark:text-sky-400'}">${t.device_name}</td>
-                        <td class="py-3"><span class="bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400 px-2 py-1 rounded-full text-xs">${isDryer ? 'เครื่องอบ' : 'เครื่องซัก'}</span></td>
-                        <td class="py-3 text-right font-bold text-pink-500">+${incomeBaht}</td>
+                    <tr class="text-sm transition-colors duration-200">
+                        <td class="py-3.5 text-slate-600 dark:text-slate-300 font-medium whitespace-nowrap">${t.timestamp.substring(0, 16)}</td>
+                        <td class="py-3.5 font-bold ${isDryer ? 'text-orange-600 dark:text-orange-400' : 'text-sky-600 dark:text-sky-400'}">${t.device_name}</td>
+                        <td class="py-3.5 text-center"><span class="${badgeClass} px-3 py-1 rounded-full text-xs font-bold tracking-wide backdrop-blur-sm">${isDryer ? 'อบผ้า' : 'ซักผ้า'}</span></td>
+                        <td class="py-3.5 text-right font-bold text-slate-800 text-base drop-shadow-sm">+${incomeBaht} <span class="text-xs opacity-70">฿</span></td>
                     </tr>`;
-            }).join('') : `<tr><td colspan="4" class="text-center py-8 text-slate-400">
-                <span class="block text-2xl mb-2">🔍</span> 
-                ไม่พบข้อมูลในช่วงเวลานี้<br><span class="text-xs text-pink-400">(แนะนำ: เลือก "ระบุวันที่" แล้วลองเลือก ปี 2026 ดูครับ)</span>
+            }).join('') : `<tr><td colspan="4" class="text-center py-12 text-slate-500/50 dark:text-slate-400/50">
+                <span class="block text-4xl mb-3">🔍</span> 
+                <p class="font-medium text-lg">ไม่พบข้อมูลในช่วงเวลานี้</p>
             </td></tr>`;
 
             document.getElementById('statCoins').innerText = totalIncome.toLocaleString() + ' ฿';
-            document.getElementById('statJobs').innerText = totalJobs.toLocaleString() + ' ครั้ง';
-            document.getElementById('statWasher').innerText = washerCount.toLocaleString() + ' ครั้ง';
-            document.getElementById('statDryer').innerText = dryerCount.toLocaleString() + ' ครั้ง';
+            document.getElementById('statJobs').innerText = totalJobs.toLocaleString();
+            document.getElementById('statWasher').innerText = washerCount.toLocaleString();
+            document.getElementById('statDryer').innerText = dryerCount.toLocaleString();
             document.getElementById('tableBody').innerHTML = tableHtml;
 
             const sortedDevices = Object.entries(deviceIncomeMap)
                 .map(([name, total]) => ({ name, total }))
                 .sort((a, b) => {
-                    const isAWasher = a.name.includes('ซัก');
-                    const isBWasher = b.name.includes('ซัก');
+                    const isAWasher = a.name.includes('ซัก'), isBWasher = b.name.includes('ซัก');
                     if (isAWasher && !isBWasher) return -1;
                     if (!isAWasher && isBWasher) return 1;
                     return parseInt(a.name.match(/\d+$/)?.[0] || 0) - parseInt(b.name.match(/\d+$/)?.[0] || 0);
                 });
 
-            cacheData.washer = washerCount;
-            cacheData.dryer = dryerCount;
+            cacheData.washer = washerCount; cacheData.dryer = dryerCount;
             cacheData.deviceLabels = sortedDevices.map(d => d.name);
             cacheData.deviceTotals = sortedDevices.map(d => d.total);
-            cacheData.washerHourly = washerHourly;
-            cacheData.dryerHourly = dryerHourly;
+            cacheData.washerHourly = washerHourly; cacheData.dryerHourly = dryerHourly;
 
             updateCharts();
         }
 
-        // จัดการซ่อน/โชว์ช่องเลือกวันที่
         function checkFilter() {
             const isCustom = document.getElementById('timeFilter').value === 'custom';
             const wrapper = document.getElementById('customDateWrapper');
-
             wrapper.classList.toggle('hidden', !isCustom);
             wrapper.classList.toggle('flex', isCustom);
             document.getElementById('btnSearchCustom').classList.toggle('hidden', !isCustom);
-
             if (!isCustom) fetchData();
         }
 
-        // จัดการตัวหนังสือวันที่ (ภาษาไทย)
         function formatThaiDateShort(dateStr) {
             if (!dateStr) return "-";
             const parts = dateStr.split('-');
             const months = ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'];
-            const day = parseInt(parts[2]);
-            const month = months[parseInt(parts[1]) - 1];
-            const year = parseInt(parts[0]) + 543;
-            return `${day} ${month} ${year}`;
+            return `${parseInt(parts[2])} ${months[parseInt(parts[1]) - 1]} ${parseInt(parts[0]) + 543}`;
         }
 
         function getDateRange() {
             const f = document.getElementById('timeFilter').value;
             let startStr = "", endStr = "";
-
-            const formatDate = (d) => {
-                const year = d.getFullYear();
-                const month = String(d.getMonth() + 1).padStart(2, '0');
-                const day = String(d.getDate()).padStart(2, '0');
-                return `${year}-${month}-${day}`;
-            };
+            const formatDate = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 
             if (f === 'custom') {
                 startStr = document.getElementById('customDateStart').value;
                 endStr = document.getElementById('customDateEnd').value;
             } else {
-                const t = new Date();
-                const s = new Date();
+                const t = new Date(), s = new Date();
                 if (f === 'weekly') s.setDate(t.getDate() - 7);
                 if (f === 'monthly') s.setDate(t.getDate() - 30);
-                startStr = formatDate(s);
-                endStr = formatDate(t);
+                startStr = formatDate(s); endStr = formatDate(t);
             }
-
-            const dateStartThai = formatThaiDateShort(startStr);
-            const dateEndThai = formatThaiDateShort(endStr);
 
             const displayEl = document.getElementById('dateRangeDisplay');
-            if (displayEl) {
-                if (startStr === endStr) {
-                    displayEl.innerText = `📅 วันที่: ${dateStartThai}`;
-                } else {
-                    displayEl.innerText = `📅 วันที่: ${dateStartThai} ถึง ${dateEndThai}`;
-                }
-            }
-
+            if (displayEl) displayEl.innerText = startStr === endStr ? `📅 ${formatThaiDateShort(startStr)}` : `📅 ${formatThaiDateShort(startStr)} - ${formatThaiDateShort(endStr)}`;
             return { start: startStr, end: endStr };
         }
 
-        // วาดกราฟ
+        Chart.defaults.font.family = "'Kanit', sans-serif";
+        Chart.defaults.color = 'rgba(150,150,150,0.8)';
+
         function updateCharts() {
             const isDark = document.body.classList.contains('dark');
-            const textColor = isDark ? '#f1f5f9' : '#334155';
-            const gridColor = isDark ? '#334155' : '#e2e8f0';
+            const textColor = isDark ? '#f1f5f9' : '#1e293b';
+            const gridColor = isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.05)';
 
             if (doughnutChartInstance) doughnutChartInstance.destroy();
             doughnutChartInstance = new Chart(document.getElementById('doughnutChart').getContext('2d'), {
                 type: 'doughnut',
                 data: {
                     labels: ['เครื่องซัก', 'เครื่องอบ'],
-                    datasets: [{ data: [cacheData.washer, cacheData.dryer], backgroundColor: ['#38bdf8', '#fb923c'] }]
+                    datasets: [{ 
+                        data: [cacheData.washer, cacheData.dryer], 
+                        backgroundColor: ['rgba(14, 165, 233, 0.8)', 'rgba(249, 115, 22, 0.8)'],
+                        borderColor: isDark ? 'rgba(15, 23, 42, 0.5)' : 'rgba(255,255,255,0.5)',
+                        borderWidth: 2,
+                        hoverOffset: 4
+                    }]
                 },
-                options: {
-                    responsive: true,
-                    plugins: { legend: { labels: { color: textColor, font: { family: 'Kanit' } } } }
-                }
+                options: { responsive: true, cutout: '70%', plugins: { legend: { position: 'bottom', labels: { color: textColor, padding: 20, usePointStyle: true, font: {weight: 'bold'} } } } }
             });
 
             if (lineChartInstance) lineChartInstance.destroy();
             const ctxLine = document.getElementById('peakHoursLineChart').getContext('2d');
-
-            let gradWasher = ctxLine.createLinearGradient(0, 0, 0, 300);
-            gradWasher.addColorStop(0, 'rgba(56, 189, 248, 0.25)');
-            gradWasher.addColorStop(1, 'rgba(56, 189, 248, 0.0)');
-
-            let gradDryer = ctxLine.createLinearGradient(0, 0, 0, 300);
-            gradDryer.addColorStop(0, 'rgba(251, 146, 60, 0.25)');
-            gradDryer.addColorStop(1, 'rgba(251, 146, 60, 0.0)');
+            let gradW = ctxLine.createLinearGradient(0, 0, 0, 350); gradW.addColorStop(0, 'rgba(14, 165, 233, 0.5)'); gradW.addColorStop(1, 'rgba(14, 165, 233, 0)');
+            let gradD = ctxLine.createLinearGradient(0, 0, 0, 350); gradD.addColorStop(0, 'rgba(249, 115, 22, 0.5)'); gradD.addColorStop(1, 'rgba(249, 115, 22, 0)');
 
             lineChartInstance = new Chart(ctxLine, {
                 type: 'line',
                 data: {
                     labels: Array.from({ length: 24 }, (_, i) => String(i).padStart(2, '0') + ':00'),
                     datasets: [
-                        {
-                            label: 'เครื่องซักผ้า',
-                            data: cacheData.washerHourly,
-                            borderColor: '#38bdf8',
-                            backgroundColor: gradWasher,
-                            fill: true,
-                            tension: 0.4,
-                            pointBackgroundColor: '#38bdf8',
-                            pointHoverRadius: 6
-                        },
-                        {
-                            label: 'เครื่องอบผ้า',
-                            data: cacheData.dryerHourly,
-                            borderColor: '#fb923c',
-                            backgroundColor: gradDryer,
-                            fill: true,
-                            tension: 0.4,
-                            pointBackgroundColor: '#fb923c',
-                            pointHoverRadius: 6
-                        }
+                        { label: 'ซักผ้า', data: cacheData.washerHourly, borderColor: '#0ea5e9', backgroundColor: gradW, fill: true, tension: 0.4, borderWidth: 3, pointRadius: 0, pointHoverRadius: 6 },
+                        { label: 'อบผ้า', data: cacheData.dryerHourly, borderColor: '#f97316', backgroundColor: gradD, fill: true, tension: 0.4, borderWidth: 3, pointRadius: 0, pointHoverRadius: 6 }
                     ]
                 },
                 options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { labels: { color: textColor, font: { family: 'Kanit' } } },
-                        tooltip: { callbacks: { label: (ctx) => ` รายได้สะสม: ${ctx.raw} ฿` } }
-                    },
+                    responsive: true, maintainAspectRatio: false,
+                    interaction: { mode: 'index', intersect: false },
+                    plugins: { legend: { position: 'top', align: 'end', labels: { color: textColor, usePointStyle: true, boxWidth: 8, font: {weight: 'bold'} } } },
                     scales: {
-                        x: {
-                            grid: { color: gridColor },
-                            ticks: { color: textColor, font: { family: 'Kanit' }, maxRotation: 45, minRotation: 45 }
-                        },
-                        y: {
-                            grid: { color: gridColor },
-                            ticks: { color: textColor, font: { family: 'Kanit' } },
-                            beginAtZero: true
-                        }
+                        x: { grid: { display: false }, ticks: { color: textColor, maxRotation: 45, font: {weight: 'bold'} } },
+                        y: { grid: { color: gridColor, borderDash: [5, 5] }, ticks: { color: textColor, font: {weight: 'bold'} }, beginAtZero: true }
                     }
                 }
             });
 
             if (barChartInstance) barChartInstance.destroy();
-            const themeColors = ['#facc15', '#f97316', '#ef4444', '#c026d3', '#2563eb', '#06b6d4', '#84cc16'];
-            const backgroundColors = cacheData.deviceLabels.map((_, i) => themeColors[i % themeColors.length]);
-
             barChartInstance = new Chart(document.getElementById('horizontalBarChart').getContext('2d'), {
                 type: 'bar',
                 data: {
                     labels: cacheData.deviceLabels,
                     datasets: [{
                         data: cacheData.deviceTotals,
-                        backgroundColor: backgroundColors,
-                        borderRadius: 20,
-                        borderSkipped: false,
-                        barThickness: 12
+                        backgroundColor: cacheData.deviceLabels.map(l => l.includes('ซัก') ? 'rgba(14, 165, 233, 0.8)' : 'rgba(249, 115, 22, 0.8)'),
+                        borderColor: isDark ? 'rgba(15, 23, 42, 0.2)' : 'rgba(255,255,255,0.5)',
+                        borderWidth: 1,
+                        borderRadius: 6,
+                        barThickness: 16
                     }]
                 },
                 options: {
-                    indexAxis: 'y',
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { display: false },
-                        tooltip: { callbacks: { label: (ctx) => ` รายได้: ${ctx.raw} ฿` } }
-                    },
+                    indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
                     scales: {
-                        x: {
-                            grid: { color: gridColor },
-                            ticks: { color: textColor, font: { family: 'Kanit' } }
-                        },
-                        y: {
-                            grid: { display: false },
-                            ticks: { color: textColor, font: { family: 'Kanit' } }
-                        }
+                        x: { grid: { color: gridColor, borderDash: [5, 5] }, ticks: { color: textColor, font: {weight: 'bold'} } },
+                        y: { grid: { display: false }, ticks: { color: textColor, font: {weight: 'bold'} } }
                     }
                 }
             });
         }
 
-        // 🌟 3. ระบบเริ่มต้นการทำงานเมื่อโหลดหน้าเว็บ
         async function initDashboard() {
-            await loadBranches(); // รอโหลดรายชื่อสาขาให้เสร็จก่อน
-            await fetchData();    // แล้วค่อยโหลดกราฟของสาขาลาดกระบัง
+            await loadBranches(); 
+            await fetchData();    
         }
-
-        // เรียกใช้ตอนเปิดเว็บ
         initDashboard();
-
-        // รีเฟรชเงียบๆ ทุก 5 นาที
         setInterval(silentFetchData, 5 * 60 * 1000);
 
-        // เปิดปิด Dark Mode
         function toggleDarkMode() {
-            const body = document.body;
-            const btn = document.getElementById('theme-toggle-btn');
-            body.classList.toggle('dark');
-            btn.innerText = body.classList.contains('dark') ? '☀️' : '🌙';
+            document.body.classList.toggle('dark');
+            document.getElementById('theme-toggle-btn').innerText = document.body.classList.contains('dark') ? '☀️' : '🌙';
             updateCharts();
         }
     </script>
 </body>
-
 </html>
