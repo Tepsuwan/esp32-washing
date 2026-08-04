@@ -191,7 +191,7 @@
     <!-- Loading -->
     <div id="loading-overlay">
         <img src="https://i.ibb.co/v6F6dNMf/logo-removebg-preview.png" class="spinner-logo" alt="Loading...">
-        <p class="mt-6 text-lg font-extrabold tracking-widest text-zinc-800 dark:text-zinc-200 uppercase">Syncing...</p>
+        <p class="mt-6 text-lg font-extrabold tracking-widest text-zinc-800 dark:text-zinc-200 uppercase">กำลังโหลด...</p>
     </div>
 
     <div class="max-w-7xl mx-auto space-y-6">
@@ -261,52 +261,52 @@
             <div class="card p-5 md:p-6 bg-[#E0F2FE] dark:bg-[#082F49] border-[#bae6fd] dark:border-[#0369a1]">
                 <div class="flex justify-between items-start mb-4">
                     <span
-                        class="text-xs md:text-sm font-extrabold uppercase text-[#0284c7] dark:text-[#38bdf8] tracking-wider">Revenue</span>
+                        class="text-xs md:text-sm font-extrabold uppercase text-[#0284c7] dark:text-[#38bdf8] tracking-wider">รายได้ทั้งหมด</span>
                     <span class="text-2xl bg-white dark:bg-zinc-900 p-2 rounded-xl shadow-sm">💰</span>
                 </div>
                 <h3 id="statCoins"
                     class="text-2xl sm:text-3xl md:text-4xl font-black text-[#0c4a6e] dark:text-white truncate tracking-tight">
                     0</h3>
-                <p class="text-xs font-bold text-[#0369a1] dark:text-[#7dd3fc] mt-1">Total THB</p>
+                <p class="text-xs font-bold text-[#0369a1] dark:text-[#7dd3fc] mt-1">ทั้งหมด บาท</p>
             </div>
 
             <!-- Widget: รอบทำงาน -->
             <div class="card p-5 md:p-6 bg-[#F3E8FF] dark:bg-[#3B0764] border-[#e9d5ff] dark:border-[#7e22ce]">
                 <div class="flex justify-between items-start mb-4">
                     <span
-                        class="text-xs md:text-sm font-extrabold uppercase text-[#7e22ce] dark:text-[#c084fc] tracking-wider">Operations</span>
+                        class="text-xs md:text-sm font-extrabold uppercase text-[#7e22ce] dark:text-[#c084fc] tracking-wider">รอบซัก/อบ</span>
                     <span class="text-2xl bg-white dark:bg-zinc-900 p-2 rounded-xl shadow-sm">⚙️</span>
                 </div>
                 <h3 id="statJobs"
                     class="text-2xl sm:text-3xl md:text-4xl font-black text-[#3b0764] dark:text-white truncate tracking-tight">
                     0</h3>
-                <p class="text-xs font-bold text-[#6b21a8] dark:text-[#d8b4fe] mt-1">Total Cycles</p>
+                <p class="text-xs font-bold text-[#6b21a8] dark:text-[#d8b4fe] mt-1">รอบทั้งหมด</p>
             </div>
 
             <!-- Widget: ซักผ้า -->
             <div class="card p-5 md:p-6 bg-[#DCFCE7] dark:bg-[#052E16] border-[#bbf7d0] dark:border-[#15803d]">
                 <div class="flex justify-between items-start mb-4">
                     <span
-                        class="text-xs md:text-sm font-extrabold uppercase text-[#15803d] dark:text-[#4ade80] tracking-wider">Washer</span>
+                        class="text-xs md:text-sm font-extrabold uppercase text-[#15803d] dark:text-[#4ade80] tracking-wider">ซัก</span>
                     <span class="text-2xl bg-white dark:bg-zinc-900 p-2 rounded-xl shadow-sm">🌊</span>
                 </div>
                 <h3 id="statWasher"
                     class="text-2xl sm:text-3xl md:text-4xl font-black text-[#052e16] dark:text-white truncate tracking-tight">
                     0</h3>
-                <p class="text-xs font-bold text-[#166534] dark:text-[#86efac] mt-1">Cycles</p>
+                <p class="text-xs font-bold text-[#166534] dark:text-[#86efac] mt-1">รอบ</p>
             </div>
 
             <!-- Widget: อบผ้า -->
             <div class="card p-5 md:p-6 bg-[#FFEDD5] dark:bg-[#431407] border-[#fed7aa] dark:border-[#c2410c]">
                 <div class="flex justify-between items-start mb-4">
                     <span
-                        class="text-xs md:text-sm font-extrabold uppercase text-[#c2410c] dark:text-[#fb923c] tracking-wider">Dryer</span>
+                        class="text-xs md:text-sm font-extrabold uppercase text-[#c2410c] dark:text-[#fb923c] tracking-wider">อบ</span>
                     <span class="text-2xl bg-white dark:bg-zinc-900 p-2 rounded-xl shadow-sm">♨️</span>
                 </div>
                 <h3 id="statDryer"
                     class="text-2xl sm:text-3xl md:text-4xl font-black text-[#431407] dark:text-white truncate tracking-tight">
                     0</h3>
-                <p class="text-xs font-bold text-[#9a3412] dark:text-[#fdba74] mt-1">Cycles</p>
+                <p class="text-xs font-bold text-[#9a3412] dark:text-[#fdba74] mt-1">รอบ</p>
             </div>
         </div>
 
@@ -314,8 +314,7 @@
         <div class="card p-4 md:p-6 animate-fade delay-200">
             <div class="flex items-center gap-3 mb-6">
                 <div class="h-8 w-2 bg-zinc-800 dark:bg-white rounded-full"></div>
-                <h2 class="text-base md:text-xl font-black text-zinc-800 dark:text-white uppercase tracking-wide">Peak
-                    Analytics</h2>
+                <h2 class="text-base md:text-xl font-black text-zinc-800 dark:text-white uppercase tracking-wide">กราฟความถี่การใช้งาน</h2>
             </div>
             <div class="w-full relative h-[250px] sm:h-[300px] md:h-[350px]">
                 <canvas id="peakHoursLineChart"></canvas>
@@ -329,7 +328,7 @@
                 <div class="flex items-center gap-3 mb-6 shrink-0">
                     <div class="h-8 w-2 bg-pink-500 rounded-full"></div>
                     <h2 class="text-base md:text-lg font-black text-zinc-800 dark:text-white uppercase tracking-wide">
-                        Ratio</h2>
+                        อัตราซัก อบ</h2>
                 </div>
                 <div class="flex-1 flex justify-center items-center py-2">
                     <div class="w-full max-w-[180px] sm:max-w-[200px] md:max-w-[240px]"><canvas
@@ -341,7 +340,7 @@
                 <div class="flex items-center gap-3 mb-4 shrink-0">
                     <div class="h-8 w-2 bg-blue-500 rounded-full"></div>
                     <h2 class="text-base md:text-lg font-black text-zinc-800 dark:text-white uppercase tracking-wide">
-                        Top Devices</h2>
+                        การทำงานของอุปกรณ์</h2>
                 </div>
                 <div class="w-full relative flex-1 min-h-[300px] sm:min-h-[400px]">
                     <canvas id="horizontalBarChart"></canvas>
@@ -355,7 +354,7 @@
                 <div class="flex items-center gap-3">
                     <div class="h-8 w-2 bg-green-500 rounded-full"></div>
                     <h2 class="text-base md:text-lg font-black text-zinc-800 dark:text-white uppercase tracking-wide">
-                        Live Feed</h2>
+                        ฟีดการใช้งาน</h2>
                 </div>
             </div>
 
@@ -364,10 +363,10 @@
                     <thead class="sticky top-0 bg-zinc-50 dark:bg-zinc-900/90 backdrop-blur z-10 shadow-sm">
                         <tr
                             class="text-[10px] md:text-xs text-zinc-400 uppercase tracking-widest font-black whitespace-nowrap">
-                            <th class="py-4 px-4">Timestamp</th>
-                            <th class="py-4 px-4">Device ID</th>
-                            <th class="py-4 px-4 text-center">Type</th>
-                            <th class="py-4 px-4 text-right">Amount</th>
+                            <th class="py-4 px-4">เวลา</th>
+                            <th class="py-4 px-4">ชื่อเครื่อง</th>
+                            <th class="py-4 px-4 text-center">ชนิด</th>
+                            <th class="py-4 px-4 text-right">ยอด</th>
                         </tr>
                     </thead>
                     <tbody id="tableBody" class="font-bold">
@@ -468,7 +467,7 @@
                     <tr class="text-xs sm:text-sm hover:bg-white dark:hover:bg-zinc-800 transition-colors">
                         <td class="py-3 px-4 text-zinc-500 whitespace-nowrap">${t.timestamp.substring(0, 16)}</td>
                         <td class="py-3 px-4 text-zinc-800 dark:text-zinc-200 font-extrabold whitespace-nowrap">${t.device_name}</td>
-                        <td class="py-3 px-4 text-center whitespace-nowrap"><span class="${badgeClass} px-3 py-1.5 rounded-xl text-[10px] sm:text-xs font-black uppercase tracking-wider whitespace-nowrap">${isDryer ? 'DRY' : 'WASH'}</span></td>
+                        <td class="py-3 px-4 text-center whitespace-nowrap"><span class="${badgeClass} px-3 py-1.5 rounded-xl text-[10px] sm:text-xs font-black uppercase tracking-wider whitespace-nowrap">${isDryer ? 'อบ' : 'ซัก'}</span></td>
                         <td class="py-3 px-4 text-right font-black text-lg text-zinc-900 dark:text-white whitespace-nowrap">+${incomeBaht}</td>
                     </tr>`;
             }).join('') : `<tr><td colspan="4" class="text-center py-10 text-zinc-400">ไม่มีข้อมูล</td></tr>`;
@@ -548,7 +547,7 @@
             doughnutChartInstance = new Chart(document.getElementById('doughnutChart').getContext('2d'), {
                 type: 'doughnut',
                 data: {
-                    labels: ['WASH', 'DRY'],
+                    labels: ['ซัก', 'อบ'],
                     datasets: [{
                         data: [cacheData.washer, cacheData.dryer],
                         backgroundColor: [colorW, colorD],
@@ -568,8 +567,8 @@
                 data: {
                     labels: Array.from({ length: 24 }, (_, i) => String(i).padStart(2, '0') + ':00'),
                     datasets: [
-                        { label: 'WASH', data: cacheData.washerHourly, borderColor: colorW, backgroundColor: 'transparent', tension: 0.4, borderWidth: 4, pointRadius: 0, pointHoverRadius: 6 },
-                        { label: 'DRY', data: cacheData.dryerHourly, borderColor: colorD, backgroundColor: 'transparent', tension: 0.4, borderWidth: 4, pointRadius: 0, pointHoverRadius: 6 }
+                        { label: 'ซัก', data: cacheData.washerHourly, borderColor: colorW, backgroundColor: 'transparent', tension: 0.4, borderWidth: 4, pointRadius: 0, pointHoverRadius: 6 },
+                        { label: 'อบ', data: cacheData.dryerHourly, borderColor: colorD, backgroundColor: 'transparent', tension: 0.4, borderWidth: 4, pointRadius: 0, pointHoverRadius: 6 }
                     ]
                 },
                 options: {
