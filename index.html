@@ -1,16 +1,13 @@
 <!DOCTYPE html>
 <html lang="th">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wash Lover Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
-
     <script>
         tailwind.config = { darkMode: 'class' }
     </script>
-
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
@@ -21,78 +18,61 @@
             transition: background 0.4s ease, color 0.4s ease;
             min-height: 100vh;
         }
-
         body.dark {
             background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
             color: #f1f5f9;
         }
-
-        ::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
-        }
-        ::-webkit-scrollbar-track {
-            background: transparent;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-            border-radius: 10px;
-        }
-        body.dark ::-webkit-scrollbar-thumb {
-            background: #475569;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #94a3b8;
-        }
-
+        ::-webkit-scrollbar { width: 4px; height: 4px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        body.dark ::-webkit-scrollbar-thumb { background: #475569; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        
         /* 🧊 Card Design */
         .card {
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.5);
-            border-radius: 24px;
+            border-radius: 16px; /* ลดความโค้งนิดนึงให้เหมาะกับมือถือ */
             box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
             transition: all 0.3s ease;
         }
-
+        @media (min-width: 768px) { .card { border-radius: 24px; } }
+        
         body.dark .card {
             background: rgba(30, 41, 59, 0.95);
             border: 1px solid rgba(255, 255, 255, 0.05);
             box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
         }
-
+        
         /* 🚀 Animations */
         @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(20px); }
+            from { opacity: 0; transform: translateY(15px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        .animate-fade-in {
-            animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-            opacity: 0;
-        }
+        .animate-fade-in { animation: fadeInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; }
         .delay-100 { animation-delay: 0.1s; }
         .delay-200 { animation-delay: 0.2s; }
         .delay-300 { animation-delay: 0.3s; }
-
-        /* 🌟 specific elements for Dark Mode */
+        
+        /* 🌟 Dark Mode specific */
         body.dark .text-slate-800 { color: #f8fafc; }
         body.dark .text-slate-700 { color: #e2e8f0; }
         body.dark .text-slate-500 { color: #94a3b8; }
         body.dark .border-b { border-color: rgba(255, 255, 255, 0.05); }
         body.dark tr:hover { background-color: rgba(255, 255, 255, 0.03) !important; }
-
+        
         /* 🌀 Loading Screen */
         #loading-overlay {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(8px);
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(8px);
             display: flex; flex-direction: column; justify-content: center; align-items: center;
             z-index: 9999; transition: opacity 0.5s ease;
         }
         body.dark #loading-overlay { background: rgba(15, 23, 42, 0.85); }
-        .spinner-logo { width: 90px; animation: popSpin 2s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1)); }
-        
+        .spinner-logo { width: 70px; animation: popSpin 2s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1)); }
+        @media (min-width: 768px) { .spinner-logo { width: 90px; } }
+
         @keyframes popSpin {
             0% { transform: rotate(0deg) scale(0.9); }
             50% { transform: rotate(180deg) scale(1.1); }
@@ -100,146 +80,143 @@
         }
     </style>
 </head>
-
-<body class="p-4 md:p-8">
-
+<body class="p-3 sm:p-4 md:p-8">
+    
     <!-- Loading Overlay -->
     <div id="loading-overlay">
         <img src="https://i.ibb.co/v6F6dNMf/logo-removebg-preview.png" class="spinner-logo" alt="Loading...">
-        <p class="mt-6 text-lg font-bold bg-clip-text text-transparent bg-gradient-to-r from-pink-500 to-blue-500 animate-pulse">กำลังจัดเตรียมข้อมูล...</p>
+        <p class="mt-4 md:mt-6 text-sm md:text-lg font-bold bg-clip-text text-transparent bg-gradient-to-r from-pink-500 to-blue-500 animate-pulse">กำลังจัดเตรียมข้อมูล...</p>
     </div>
 
-    <div class="max-w-7xl mx-auto space-y-6">
-
+    <div class="max-w-7xl mx-auto space-y-4 sm:space-y-6">
+        
         <!-- 🏷️ Header & Filter -->
-        <div class="card p-4 sm:p-6 flex flex-col xl:flex-row justify-between items-start xl:items-center gap-4 xl:gap-6 animate-fade-in">
-            <!-- โซนด้านซ้าย -->
-            <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4 w-full xl:w-auto">
-                <h1 class="text-2xl sm:text-3xl font-bold flex items-center gap-2 shrink-0 drop-shadow-sm">
-                    <img src="https://i.ibb.co/v6F6dNMf/logo-removebg-preview.png" alt="Logo" class="h-10 sm:h-12 w-auto">
-                    <span class="text-blue-500">Wash</span><span class="text-pink-500">lover</span>
-                </h1>
-
-                <div class="hidden sm:block w-px h-10 bg-slate-200 dark:bg-slate-700/50"></div>
-
-                <div class="relative w-full sm:w-auto">
-                    <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-blue-500">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1v1H9V7zm5 0h1v1h-1V7zm-5 4h1v1H9v-1zm5 0h1v1h-1v-1zm-3 4H2v2h1v-2zm5 0h1v1h-1v-1z"></path></svg>
-                    </div>
-                    <select id="branchFilter" onchange="fetchData()" class="w-full sm:w-auto bg-white/50 dark:bg-slate-800/50 border-2 border-blue-100 dark:border-blue-900/50 text-blue-700 dark:text-blue-300 text-sm sm:text-base font-bold rounded-2xl block pl-10 pr-10 py-2.5 focus:ring-4 focus:ring-blue-500/20 transition-all outline-none cursor-pointer shadow-sm hover:shadow-md">
-                        <!-- Options generated by JS -->
-                    </select>
-                    <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-blue-500"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></div>
+        <div class="card p-4 sm:p-6 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 animate-fade-in">
+            <!-- โซนด้านซ้าย: โลโก้ + สาขา -->
+            <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3 w-full lg:w-auto">
+                <div class="flex items-center gap-2 shrink-0">
+                    <img src="https://i.ibb.co/v6F6dNMf/logo-removebg-preview.png" alt="Logo" class="h-8 sm:h-10 md:h-12 w-auto drop-shadow-sm">
+                    <h1 class="text-xl sm:text-2xl md:text-3xl font-bold flex items-center">
+                        <span class="text-blue-500">Wash</span><span class="text-pink-500">lover</span>
+                    </h1>
                 </div>
-
-                <div class="w-full sm:w-auto mt-2 sm:mt-0">
-                    <p id="dateRangeDisplay" class="text-xs sm:text-sm text-slate-500 font-medium px-3 py-1.5 bg-slate-100 dark:bg-slate-800 rounded-full inline-block shadow-inner">📅 กำลังโหลดวันที่...</p>
+                
+                <div class="hidden sm:block w-px h-8 md:h-10 bg-slate-200 dark:bg-slate-700/50 mx-2"></div>
+                
+                <div class="relative w-full sm:w-auto mt-2 sm:mt-0">
+                    <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-blue-500">
+                        <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1v1H9V7zm5 0h1v1h-1V7zm-5 4h1v1H9v-1zm5 0h1v1h-1v-1zm-3 4H2v2h1v-2zm5 0h1v1h-1v-1z"></path></svg>
+                    </div>
+                    <select id="branchFilter" onchange="fetchData()" class="w-full sm:w-auto bg-white/50 dark:bg-slate-800/50 border-2 border-blue-100 dark:border-blue-900/50 text-blue-700 dark:text-blue-300 text-sm sm:text-base font-bold rounded-xl md:rounded-2xl block pl-9 pr-8 sm:pl-10 sm:pr-10 py-2 sm:py-2.5 focus:ring-4 focus:ring-blue-500/20 transition-all outline-none cursor-pointer shadow-sm">
+                    </select>
                 </div>
             </div>
-
-            <!-- โซนด้านขวา -->
-            <div class="flex flex-wrap items-center gap-3 w-full xl:w-auto justify-start xl:justify-end">
-                <div id="customDateWrapper" class="hidden flex-col md:flex-row gap-2 items-center w-full md:w-auto">
-                    <div class="flex items-center gap-2 bg-slate-50 dark:bg-slate-800 rounded-xl px-3 py-2 border border-slate-200 dark:border-slate-700 shadow-sm w-full md:w-auto">
-                        <span class="text-xs text-slate-400 font-bold uppercase shrink-0">จาก</span>
-                        <input type="date" id="customDateStart" class="bg-transparent border-none text-slate-700 dark:text-white text-sm focus:outline-none w-full cursor-pointer">
-                    </div>
-                    <div class="flex items-center gap-2 bg-slate-50 dark:bg-slate-800 rounded-xl px-3 py-2 border border-slate-200 dark:border-slate-700 shadow-sm w-full md:w-auto">
-                        <span class="text-xs text-slate-400 font-bold uppercase shrink-0">ถึง</span>
-                        <input type="date" id="customDateEnd" class="bg-transparent border-none text-slate-700 dark:text-white text-sm focus:outline-none w-full cursor-pointer">
-                    </div>
+            
+            <!-- โซนด้านขวา: ตัวกรองวันที่ -->
+            <div class="flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-2 sm:gap-3 w-full lg:w-auto justify-start lg:justify-end">
+                <div class="w-full sm:w-auto flex justify-start">
+                    <p id="dateRangeDisplay" class="text-[10px] sm:text-xs md:text-sm text-slate-500 font-medium px-3 py-1.5 bg-slate-100 dark:bg-slate-800 rounded-full inline-block shadow-inner w-full sm:w-auto text-center truncate">📅 โหลดข้อมูล...</p>
                 </div>
 
-                <div class="flex gap-2 w-full md:w-auto">
-                    <select id="timeFilter" onchange="checkFilter()" class="flex-1 md:flex-none bg-slate-50 dark:bg-slate-800 rounded-xl px-4 py-2.5 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-white font-semibold focus:ring-4 focus:ring-pink-500/20 cursor-pointer shadow-sm hover:shadow-md transition-all outline-none">
+                <div id="customDateWrapper" class="hidden flex-col sm:flex-row gap-2 items-stretch w-full sm:w-auto">
+                    <div class="flex items-center justify-between gap-2 bg-slate-50 dark:bg-slate-800 rounded-xl px-3 py-2 border border-slate-200 dark:border-slate-700 shadow-sm">
+                        <span class="text-[10px] sm:text-xs text-slate-400 font-bold uppercase shrink-0">จาก</span>
+                        <input type="date" id="customDateStart" class="bg-transparent border-none text-slate-700 dark:text-white text-xs sm:text-sm focus:outline-none w-full cursor-pointer">
+                    </div>
+                    <div class="flex items-center justify-between gap-2 bg-slate-50 dark:bg-slate-800 rounded-xl px-3 py-2 border border-slate-200 dark:border-slate-700 shadow-sm">
+                        <span class="text-[10px] sm:text-xs text-slate-400 font-bold uppercase shrink-0">ถึง</span>
+                        <input type="date" id="customDateEnd" class="bg-transparent border-none text-slate-700 dark:text-white text-xs sm:text-sm focus:outline-none w-full cursor-pointer">
+                    </div>
+                </div>
+                
+                <div class="flex gap-2 w-full sm:w-auto mt-2 sm:mt-0">
+                    <select id="timeFilter" onchange="checkFilter()" class="flex-1 sm:flex-none bg-slate-50 dark:bg-slate-800 rounded-xl px-3 py-2 sm:py-2.5 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-white text-sm sm:text-base font-semibold focus:ring-4 focus:ring-pink-500/20 cursor-pointer shadow-sm outline-none">
                         <option value="daily">วันนี้</option>
                         <option value="weekly">ย้อนหลัง 7 วัน</option>
                         <option value="monthly">ย้อนหลัง 30 วัน</option>
                         <option value="custom">ระบุวันที่...</option>
                     </select>
-                    <button id="btnSearchCustom" onclick="fetchData()" class="bg-gradient-to-r from-pink-500 to-rose-500 text-white px-6 py-2.5 rounded-xl hidden hover:shadow-lg hover:shadow-pink-500/40 transform hover:-translate-y-0.5 transition-all font-bold">ค้นหา</button>
-                    <button id="theme-toggle-btn" onclick="toggleDarkMode()" class="p-2.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 rounded-xl text-xl transition-all shadow-sm shrink-0 border border-slate-200 dark:border-slate-700">🌙</button>
+                    <button id="btnSearchCustom" onclick="fetchData()" class="bg-gradient-to-r from-pink-500 to-rose-500 text-white px-4 sm:px-6 py-2 sm:py-2.5 rounded-xl hidden text-sm sm:text-base font-bold shadow-md">ค้นหา</button>
+                    <button id="theme-toggle-btn" onclick="toggleDarkMode()" class="p-2 sm:p-2.5 bg-slate-100 dark:bg-slate-800 rounded-xl text-lg sm:text-xl shrink-0 border border-slate-200 dark:border-slate-700">🌙</button>
                 </div>
             </div>
         </div>
 
         <!-- 📊 Stat Cards -->
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 animate-fade-in delay-100">
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6 animate-fade-in delay-100">
             <!-- ยอดเงินรวม -->
-            <div class="card p-5 sm:p-6 flex items-center justify-between gap-2 hover:-translate-y-1 hover:shadow-xl transition-all duration-300 border-l-4 border-l-pink-500 overflow-hidden relative group">
-                <div class="absolute top-0 right-0 w-24 h-24 bg-pink-500/5 rounded-bl-full -z-10 group-hover:scale-110 transition-transform"></div>
-                <div class="z-10">
-                    <p class="text-xs sm:text-sm text-slate-500 font-medium tracking-wide uppercase">รายได้รวม</p>
-                    <h3 id="statCoins" class="text-2xl sm:text-3xl font-bold text-slate-800 mt-1">0 ฿</h3>
+            <div class="card p-3 sm:p-4 md:p-6 flex items-center justify-between gap-2 border-l-4 border-l-pink-500 overflow-hidden relative group">
+                <div class="absolute top-0 right-0 w-16 h-16 sm:w-24 sm:h-24 bg-pink-500/5 rounded-bl-full -z-10"></div>
+                <div class="z-10 w-full">
+                    <p class="text-[10px] sm:text-xs md:text-sm text-slate-500 font-medium tracking-wide whitespace-nowrap truncate">รายได้รวม</p>
+                    <!-- ปรับขนาดฟอนต์บนมือถือให้เล็กลง -->
+                    <h3 id="statCoins" class="text-lg sm:text-xl md:text-3xl font-bold text-slate-800 mt-1">0 ฿</h3>
                 </div>
-                <div class="p-3 sm:p-4 rounded-2xl bg-gradient-to-br from-pink-400 to-rose-500 text-white shadow-lg shadow-pink-500/30 z-10">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75a60.07 60.07 0 0 1 15.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5h16.5a1.5 1.5 0 0 1 1.5 1.5v12a1.5 1.5 0 0 1-1.5 1.5H3.75a1.5 1.5 0 0 1-1.5-1.5V6.5a1.5 1.5 0 0 1 1.5-1.5Zm7.45 8.767c.184.077.38.118.583.118.826 0 1.5-.68 1.5-1.517v-.067c0-.822-.656-1.472-1.463-1.518l-.02-.001a1.496 1.496 0 0 0-1.487 1.488v.015c0 .855.674 1.537 1.487 1.488Zm0 0V16.5m0-7.5v.75m3.75 3h.008v.008h-.008v-.008Zm-7.5 0h.008v.008h-.008v-.008Z" /></svg>
+                <div class="p-2 sm:p-3 md:p-4 rounded-xl md:rounded-2xl bg-gradient-to-br from-pink-400 to-rose-500 text-white shadow-md shrink-0 z-10">
+                    <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75a60.07 60.07 0 0 1 15.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5h16.5a1.5 1.5 0 0 1 1.5 1.5v12a1.5 1.5 0 0 1-1.5 1.5H3.75a1.5 1.5 0 0 1-1.5-1.5V6.5a1.5 1.5 0 0 1 1.5-1.5Zm7.45 8.767c.184.077.38.118.583.118.826 0 1.5-.68 1.5-1.517v-.067c0-.822-.656-1.472-1.463-1.518l-.02-.001a1.496 1.496 0 0 0-1.487 1.488v.015c0 .855.674 1.537 1.487 1.488Zm0 0V16.5m0-7.5v.75m3.75 3h.008v.008h-.008v-.008Zm-7.5 0h.008v.008h-.008v-.008Z" /></svg>
                 </div>
             </div>
-
             <!-- รอบทำงาน -->
-            <div class="card p-5 sm:p-6 flex items-center justify-between gap-2 hover:-translate-y-1 hover:shadow-xl transition-all duration-300 border-l-4 border-l-blue-500 overflow-hidden relative group">
-                <div class="absolute top-0 right-0 w-24 h-24 bg-blue-500/5 rounded-bl-full -z-10 group-hover:scale-110 transition-transform"></div>
-                <div class="z-10">
-                    <p class="text-xs sm:text-sm text-slate-500 font-medium tracking-wide uppercase">รอบทำงานรวม</p>
-                    <h3 id="statJobs" class="text-2xl sm:text-3xl font-bold text-slate-800 mt-1">0</h3>
+            <div class="card p-3 sm:p-4 md:p-6 flex items-center justify-between gap-2 border-l-4 border-l-blue-500 overflow-hidden relative group">
+                <div class="absolute top-0 right-0 w-16 h-16 sm:w-24 sm:h-24 bg-blue-500/5 rounded-bl-full -z-10"></div>
+                <div class="z-10 w-full">
+                    <p class="text-[10px] sm:text-xs md:text-sm text-slate-500 font-medium tracking-wide whitespace-nowrap truncate">รอบทำงานรวม</p>
+                    <h3 id="statJobs" class="text-lg sm:text-xl md:text-3xl font-bold text-slate-800 mt-1">0</h3>
                 </div>
-                <div class="p-3 sm:p-4 rounded-2xl bg-gradient-to-br from-blue-400 to-indigo-500 text-white shadow-lg shadow-blue-500/30 z-10">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" /></svg>
+                <div class="p-2 sm:p-3 md:p-4 rounded-xl md:rounded-2xl bg-gradient-to-br from-blue-400 to-indigo-500 text-white shadow-md shrink-0 z-10">
+                    <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" /></svg>
                 </div>
             </div>
-
             <!-- เครื่องซัก -->
-            <div class="card p-5 sm:p-6 flex items-center justify-between gap-2 hover:-translate-y-1 hover:shadow-xl transition-all duration-300 border-l-4 border-l-sky-400 overflow-hidden relative group">
-                <div class="absolute top-0 right-0 w-24 h-24 bg-sky-500/5 rounded-bl-full -z-10 group-hover:scale-110 transition-transform"></div>
-                <div class="z-10">
-                    <p class="text-xs sm:text-sm text-slate-500 font-medium tracking-wide uppercase">เครื่องซัก</p>
-                    <h3 id="statWasher" class="text-2xl sm:text-3xl font-bold text-slate-800 mt-1">0</h3>
+            <div class="card p-3 sm:p-4 md:p-6 flex items-center justify-between gap-2 border-l-4 border-l-sky-400 overflow-hidden relative group">
+                <div class="absolute top-0 right-0 w-16 h-16 sm:w-24 sm:h-24 bg-sky-500/5 rounded-bl-full -z-10"></div>
+                <div class="z-10 w-full">
+                    <p class="text-[10px] sm:text-xs md:text-sm text-slate-500 font-medium tracking-wide whitespace-nowrap truncate">เครื่องซัก</p>
+                    <h3 id="statWasher" class="text-lg sm:text-xl md:text-3xl font-bold text-slate-800 mt-1">0</h3>
                 </div>
-                <div class="p-3 sm:p-4 rounded-2xl bg-gradient-to-br from-cyan-400 to-sky-500 text-white shadow-lg shadow-sky-500/30 z-10">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.004 9.004 0 0 0 8.716-6.747M12 21a9.004 9.004 0 0 1-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 0 1 7.843 4.582M12 3a8.997 8.997 0 0 0-7.843 4.582m15.686 0A11.953 11.953 0 0 1 12 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0 1 21 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0 1 12 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 0 1 3 12c0-1.605.42-3.113 1.157-4.418" /></svg>
+                <div class="p-2 sm:p-3 md:p-4 rounded-xl md:rounded-2xl bg-gradient-to-br from-cyan-400 to-sky-500 text-white shadow-md shrink-0 z-10">
+                    <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.004 9.004 0 0 0 8.716-6.747M12 21a9.004 9.004 0 0 1-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 0 1 7.843 4.582M12 3a8.997 8.997 0 0 0-7.843 4.582m15.686 0A11.953 11.953 0 0 1 12 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0 1 21 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0 1 12 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 0 1 3 12c0-1.605.42-3.113 1.157-4.418" /></svg>
                 </div>
             </div>
-
             <!-- เครื่องอบ -->
-            <div class="card p-5 sm:p-6 flex items-center justify-between gap-2 hover:-translate-y-1 hover:shadow-xl transition-all duration-300 border-l-4 border-l-orange-400 overflow-hidden relative group">
-                <div class="absolute top-0 right-0 w-24 h-24 bg-orange-500/5 rounded-bl-full -z-10 group-hover:scale-110 transition-transform"></div>
-                <div class="z-10">
-                    <p class="text-xs sm:text-sm text-slate-500 font-medium tracking-wide uppercase">เครื่องอบ</p>
-                    <h3 id="statDryer" class="text-2xl sm:text-3xl font-bold text-slate-800 mt-1">0</h3>
+            <div class="card p-3 sm:p-4 md:p-6 flex items-center justify-between gap-2 border-l-4 border-l-orange-400 overflow-hidden relative group">
+                <div class="absolute top-0 right-0 w-16 h-16 sm:w-24 sm:h-24 bg-orange-500/5 rounded-bl-full -z-10"></div>
+                <div class="z-10 w-full">
+                    <p class="text-[10px] sm:text-xs md:text-sm text-slate-500 font-medium tracking-wide whitespace-nowrap truncate">เครื่องอบ</p>
+                    <h3 id="statDryer" class="text-lg sm:text-xl md:text-3xl font-bold text-slate-800 mt-1">0</h3>
                 </div>
-                <div class="p-3 sm:p-4 rounded-2xl bg-gradient-to-br from-amber-400 to-orange-500 text-white shadow-lg shadow-orange-500/30 z-10">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M15.362 5.214A8.252 8.252 0 0 1 12 21 8.25 8.25 0 0 1 6.038 7.047 8.287 8.287 0 0 0 9 9.601a8.983 8.983 0 0 1 3.361-6.867 8.21 8.21 0 0 0 3 2.48Z" /><path stroke-linecap="round" stroke-linejoin="round" d="M12 18a3.75 3.75 0 0 0 .495-7.468 5.99 5.99 0 0 0-1.925 3.547 5.975 5.975 0 0 1-2.133-1.001A3.75 3.75 0 0 0 12 18Z" /></svg>
+                <div class="p-2 sm:p-3 md:p-4 rounded-xl md:rounded-2xl bg-gradient-to-br from-amber-400 to-orange-500 text-white shadow-md shrink-0 z-10">
+                    <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M15.362 5.214A8.252 8.252 0 0 1 12 21 8.25 8.25 0 0 1 6.038 7.047 8.287 8.287 0 0 0 9 9.601a8.983 8.983 0 0 1 3.361-6.867 8.21 8.21 0 0 0 3 2.48Z" /><path stroke-linecap="round" stroke-linejoin="round" d="M12 18a3.75 3.75 0 0 0 .495-7.468 5.99 5.99 0 0 0-1.925 3.547 5.975 5.975 0 0 1-2.133-1.001A3.75 3.75 0 0 0 12 18Z" /></svg>
                 </div>
             </div>
         </div>
 
         <!-- 📈 กราฟแนวโน้ม -->
-        <div class="card p-6 animate-fade-in delay-200">
-            <h2 class="text-lg font-bold mb-4 text-slate-700 flex items-center gap-2">
-                <span class="text-xl">📊</span> แนวโน้มรายได้สะสม (Peak Hours)
+        <div class="card p-4 sm:p-6 animate-fade-in delay-200">
+            <h2 class="text-base md:text-lg font-bold mb-4 text-slate-700 flex items-center gap-2">
+                <span class="text-lg md:text-xl">📊</span> แนวโน้มรายได้สะสม
             </h2>
-            <div class="w-full relative h-[300px] md:h-[350px]">
+            <div class="w-full relative h-[250px] sm:h-[300px] md:h-[350px]">
                 <canvas id="peakHoursLineChart"></canvas>
             </div>
         </div>
 
         <!-- 🍩 Charts Row -->
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 animate-fade-in delay-300">
-            <div class="card p-6 lg:col-span-1 flex flex-col h-full hover:shadow-xl transition-shadow">
-                <h2 class="text-lg font-bold mb-4 text-slate-700 flex items-center gap-2 shrink-0">
-                    <span class="text-xl">🎯</span> สัดส่วนการใช้งาน
+        <div class="grid grid-cols-1 xl:grid-cols-3 gap-4 sm:gap-6 animate-fade-in delay-300">
+            <div class="card p-4 sm:p-6 xl:col-span-1 flex flex-col h-full">
+                <h2 class="text-base md:text-lg font-bold mb-4 text-slate-700 flex items-center gap-2 shrink-0">
+                    <span class="text-lg md:text-xl">🎯</span> สัดส่วนการใช้งาน
                 </h2>
-                <div class="flex-1 flex justify-center items-center">
-                    <div class="w-full max-w-[200px] md:max-w-[230px]"><canvas id="doughnutChart"></canvas></div>
+                <div class="flex-1 flex justify-center items-center py-4">
+                    <div class="w-full max-w-[180px] sm:max-w-[200px] md:max-w-[230px]"><canvas id="doughnutChart"></canvas></div>
                 </div>
             </div>
-
-            <div class="card p-6 lg:col-span-2 flex flex-col justify-between hover:shadow-xl transition-shadow">
-                <h2 class="text-lg font-bold mb-4 text-slate-700 flex items-center gap-2">
-                    <span class="text-xl">🏆</span> รายได้แยกตามเครื่อง (฿)
+            <div class="card p-4 sm:p-6 xl:col-span-2 flex flex-col justify-between">
+                <h2 class="text-base md:text-lg font-bold mb-4 text-slate-700 flex items-center gap-2">
+                    <span class="text-lg md:text-xl">🏆</span> รายได้แยกตามเครื่อง
                 </h2>
-                <div class="w-full relative flex-1 min-h-[420px]">
+                <!-- ปรับความสูงกราฟแท่งให้เล็กลงหน่อยในมือถือ -->
+                <div class="w-full relative flex-1 min-h-[300px] sm:min-h-[420px]">
                     <canvas id="horizontalBarChart"></canvas>
                 </div>
             </div>
@@ -247,19 +224,23 @@
 
         <!-- 📋 Transaction Table -->
         <div class="card p-0 overflow-hidden animate-fade-in delay-300">
-            <div class="p-6 border-b border-slate-100 dark:border-slate-800">
-                <h2 class="text-lg font-bold text-slate-700 flex items-center gap-2">
-                    <span class="text-xl">🧾</span> ประวัติการทำงานล่าสุด
+            <div class="p-4 md:p-6 border-b border-slate-100 dark:border-slate-800">
+                <h2 class="text-base md:text-lg font-bold text-slate-700 flex items-center gap-2">
+                    <span class="text-lg md:text-xl">🧾</span> ประวัติการทำงานล่าสุด
                 </h2>
             </div>
-            <div class="overflow-x-auto max-h-[450px] overflow-y-auto px-6 pb-6 pt-2">
-                <table class="w-full text-left relative border-collapse">
+            
+            <!-- ใส่ overflow-x-auto ให้ตารางสามารถเลื่อนซ้ายขวาได้ในมือถือ -->
+            <div class="overflow-x-auto overflow-y-auto max-h-[400px] md:max-h-[450px]">
+                <!-- ปรับความกว้างขั้นต่ำของตาราง เพื่อไม่ให้ข้อความโดนบีบ -->
+                <table class="w-full text-left relative border-collapse min-w-[450px]">
                     <thead class="sticky top-0 bg-white/95 dark:bg-[#1e293b]/95 backdrop-blur-sm z-10">
-                        <tr class="text-xs text-slate-400 uppercase tracking-wider border-b">
-                            <th class="pb-3 font-semibold">วันที่ / เวลา</th>
-                            <th class="pb-3 font-semibold">อุปกรณ์</th>
-                            <th class="pb-3 font-semibold text-center">ประเภท</th>
-                            <th class="pb-3 font-semibold text-right">ยอด (฿)</th>
+                        <!-- บังคับ whitespace-nowrap ในส่วนหัว -->
+                        <tr class="text-[10px] md:text-xs text-slate-400 uppercase tracking-wider border-b whitespace-nowrap">
+                            <th class="py-3 px-4 font-semibold">วันที่ / เวลา</th>
+                            <th class="py-3 px-2 font-semibold">อุปกรณ์</th>
+                            <th class="py-3 px-2 font-semibold text-center">ประเภท</th>
+                            <th class="py-3 px-4 font-semibold text-right">ยอด (฿)</th>
                         </tr>
                     </thead>
                     <tbody id="tableBody" class="divide-y divide-slate-50 dark:divide-slate-800/50">
@@ -270,15 +251,13 @@
         </div>
     </div>
 
-    <!-- Script ควบคุม (เหมือนเดิมเป๊ะ ปรับแค่หน้าตาตอน Render) -->
+    <!-- Script ควบคุม -->
     <script>
         const DB_API_URL = 'https://api.all123th.com/inw/api/wl_transactions/';
         const BRANCH_API_URL = 'https://washing.adokub.com/api/branch';
-
         let doughnutChartInstance = null;
         let barChartInstance = null;
         let lineChartInstance = null;
-
         let cacheData = {
             washer: 0, dryer: 0, deviceLabels: [], deviceTotals: [],
             washerHourly: Array(24).fill(0), dryerHourly: Array(24).fill(0)
@@ -289,7 +268,7 @@
                 const res = await fetch(BRANCH_API_URL);
                 const branches = await res.json();
                 const branchSelect = document.getElementById('branchFilter');
-                
+                branchSelect.innerHTML = '';
                 branches.forEach(b => {
                     const option = document.createElement('option');
                     option.value = b.serial;
@@ -306,21 +285,19 @@
             const loader = document.getElementById('loading-overlay');
             loader.style.display = 'flex'; loader.style.opacity = '1';
             try {
+                // แก้ Syntax error ตรงนี้ให้ถูกต้อง
                 const res = await fetch(`${DB_API_URL}?limit=2000`);
                 let rawTransactions = await res.json();
-
                 const dates = getDateRange();
                 const targetStart = dates.start + " 00:00:00";
                 const targetEnd = dates.end + " 23:59:59";
                 const selectedBranch = document.getElementById('branchFilter').value;
-
                 let filteredTransactions = rawTransactions.filter(t => {
                     if (!t.timestamp) return false;
                     const isDateMatch = t.timestamp >= targetStart && t.timestamp <= targetEnd;
                     const isBranchMatch = selectedBranch === 'all' || t.branch === selectedBranch;
                     return isDateMatch && isBranchMatch;
                 });
-
                 processDataAndRender(filteredTransactions);
             } catch (err) {
                 console.error("API Error:", err);
@@ -338,7 +315,6 @@
                 const targetStart = dates.start + " 00:00:00";
                 const targetEnd = dates.end + " 23:59:59";
                 const selectedBranch = document.getElementById('branchFilter').value;
-
                 let filteredTransactions = rawTransactions.filter(t => {
                     if (!t.timestamp) return false;
                     return (t.timestamp >= targetStart && t.timestamp <= targetEnd) && (selectedBranch === 'all' || t.branch === selectedBranch);
@@ -355,44 +331,43 @@
             const deviceIncomeMap = {};
             const washerHourly = Array(24).fill(0);
             const dryerHourly = Array(24).fill(0);
-
-            const tableHtml = transactions.length ? transactions.map((t, index) => {
+            
+            const tableHtml = transactions.length ? transactions.map((t) => {
                 const coins = parseInt(t.coins_paid) || 0;
                 const incomeBaht = coins * 10;
                 totalIncome += incomeBaht;
                 const isDryer = t.machine_type === 'Dryer' || t.device_name.includes('อบ');
                 if (isDryer) dryerCount++; else washerCount++;
                 if (incomeBaht > 0) deviceIncomeMap[t.device_name] = (deviceIncomeMap[t.device_name] || 0) + incomeBaht;
-                
+
                 const hour = parseInt(t.timestamp.substring(11, 13));
                 if (!isNaN(hour) && hour >= 0 && hour < 24) {
                     if (isDryer) dryerHourly[hour] += incomeBaht; else washerHourly[hour] += incomeBaht;
                 }
-
-                // ✨ ปรับสีป้าย Badges ให้เป็นแบบไล่สี (Gradients)
-                const badgeClass = isDryer 
-                    ? 'bg-gradient-to-r from-orange-400 to-pink-500 text-white shadow-sm shadow-orange-500/20' 
+                
+                const badgeClass = isDryer
+                    ? 'bg-gradient-to-r from-orange-400 to-pink-500 text-white shadow-sm shadow-orange-500/20'
                     : 'bg-gradient-to-r from-sky-400 to-blue-500 text-white shadow-sm shadow-blue-500/20';
-
+                
+                // 🛠️ หัวใจสำคัญ: ใส่ whitespace-nowrap ในทุก <td> และ <span> เพื่อไม่ให้ข้อความขาดครึ่งในมือถือ
                 return `
-                    <tr class="text-sm hover:bg-slate-50 transition-colors duration-200">
-                        <td class="py-3.5 text-slate-500 font-medium whitespace-nowrap">${t.timestamp.substring(0, 16)}</td>
-                        <td class="py-3.5 font-bold ${isDryer ? 'text-orange-500 dark:text-orange-400' : 'text-sky-500 dark:text-sky-400'}">${t.device_name}</td>
-                        <td class="py-3.5 text-center"><span class="${badgeClass} px-3 py-1 rounded-full text-xs font-semibold tracking-wide">${isDryer ? 'อบผ้า' : 'ซักผ้า'}</span></td>
-                        <td class="py-3.5 text-right font-bold text-slate-700 text-base">+${incomeBaht} <span class="text-xs text-slate-400">฿</span></td>
+                    <tr class="text-xs sm:text-sm hover:bg-slate-50 transition-colors duration-200">
+                        <td class="py-2.5 px-4 text-slate-500 font-medium whitespace-nowrap">${t.timestamp.substring(0, 16)}</td>
+                        <td class="py-2.5 px-2 font-bold whitespace-nowrap ${isDryer ? 'text-orange-500 dark:text-orange-400' : 'text-sky-500 dark:text-sky-400'}">${t.device_name}</td>
+                        <td class="py-2.5 px-2 text-center whitespace-nowrap"><span class="${badgeClass} px-2.5 py-1 rounded-full text-[10px] sm:text-xs font-semibold tracking-wide whitespace-nowrap">${isDryer ? 'อบผ้า' : 'ซักผ้า'}</span></td>
+                        <td class="py-2.5 px-4 text-right font-bold text-slate-700 text-sm sm:text-base whitespace-nowrap">+${incomeBaht} <span class="text-[10px] sm:text-xs text-slate-400">฿</span></td>
                     </tr>`;
             }).join('') : `<tr><td colspan="4" class="text-center py-12 text-slate-400">
-                <span class="block text-4xl mb-3 opacity-50">🔍</span> 
-                <p class="font-medium text-lg">ไม่พบข้อมูลในช่วงเวลานี้</p>
+                <span class="block text-4xl mb-3 opacity-50">🔍</span>
+                <p class="font-medium text-sm md:text-lg">ไม่พบข้อมูลในช่วงเวลานี้</p>
             </td></tr>`;
-
-            // Animate Numbers (สร้างลูกเล่นเวลากระพริบตัวเลข)
+            
             document.getElementById('statCoins').innerText = totalIncome.toLocaleString() + ' ฿';
             document.getElementById('statJobs').innerText = totalJobs.toLocaleString();
             document.getElementById('statWasher').innerText = washerCount.toLocaleString();
             document.getElementById('statDryer').innerText = dryerCount.toLocaleString();
             document.getElementById('tableBody').innerHTML = tableHtml;
-
+            
             const sortedDevices = Object.entries(deviceIncomeMap)
                 .map(([name, total]) => ({ name, total }))
                 .sort((a, b) => {
@@ -402,12 +377,11 @@
                     if (!isAWasher && isBWasher) return 1;
                     return parseInt(a.name.match(/\d+$/)?.[0] || 0) - parseInt(b.name.match(/\d+$/)?.[0] || 0);
                 });
-
             cacheData.washer = washerCount; cacheData.dryer = dryerCount;
             cacheData.deviceLabels = sortedDevices.map(d => d.name);
             cacheData.deviceTotals = sortedDevices.map(d => d.total);
             cacheData.washerHourly = washerHourly; cacheData.dryerHourly = dryerHourly;
-
+            
             updateCharts();
         }
 
@@ -431,7 +405,6 @@
             const f = document.getElementById('timeFilter').value;
             let startStr = "", endStr = "";
             const formatDate = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
-
             if (f === 'custom') {
                 startStr = document.getElementById('customDateStart').value;
                 endStr = document.getElementById('customDateEnd').value;
@@ -441,7 +414,6 @@
                 if (f === 'monthly') s.setDate(t.getDate() - 30);
                 startStr = formatDate(s); endStr = formatDate(t);
             }
-
             const displayEl = document.getElementById('dateRangeDisplay');
             if (displayEl) displayEl.innerText = startStr === endStr ? `📅 วันที่: ${formatThaiDateShort(startStr)}` : `📅 วันที่: ${formatThaiDateShort(startStr)} - ${formatThaiDateShort(endStr)}`;
             return { start: startStr, end: endStr };
@@ -453,43 +425,47 @@
             const isDark = document.body.classList.contains('dark');
             const textColor = isDark ? '#cbd5e1' : '#475569';
             const gridColor = isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)';
+            
+            // Adjust chart fonts based on screen size
+            const isMobile = window.innerWidth < 768;
+            const chartFontSize = isMobile ? 10 : 12;
 
             if (doughnutChartInstance) doughnutChartInstance.destroy();
             doughnutChartInstance = new Chart(document.getElementById('doughnutChart').getContext('2d'), {
                 type: 'doughnut',
                 data: {
                     labels: ['เครื่องซัก', 'เครื่องอบ'],
-                    datasets: [{ 
-                        data: [cacheData.washer, cacheData.dryer], 
+                    datasets: [{
+                        data: [cacheData.washer, cacheData.dryer],
                         backgroundColor: ['#0ea5e9', '#f97316'],
                         borderWidth: 0,
                         hoverOffset: 4
                     }]
                 },
-                options: { responsive: true, cutout: '70%', plugins: { legend: { position: 'bottom', labels: { color: textColor, padding: 20, usePointStyle: true } } } }
+                options: { responsive: true, cutout: '70%', plugins: { legend: { position: 'bottom', labels: { color: textColor, padding: 15, usePointStyle: true, font: { size: chartFontSize } } } } }
             });
 
             if (lineChartInstance) lineChartInstance.destroy();
             const ctxLine = document.getElementById('peakHoursLineChart').getContext('2d');
             let gradW = ctxLine.createLinearGradient(0, 0, 0, 350); gradW.addColorStop(0, 'rgba(14, 165, 233, 0.4)'); gradW.addColorStop(1, 'rgba(14, 165, 233, 0)');
             let gradD = ctxLine.createLinearGradient(0, 0, 0, 350); gradD.addColorStop(0, 'rgba(249, 115, 22, 0.4)'); gradD.addColorStop(1, 'rgba(249, 115, 22, 0)');
-
+            
             lineChartInstance = new Chart(ctxLine, {
                 type: 'line',
                 data: {
                     labels: Array.from({ length: 24 }, (_, i) => String(i).padStart(2, '0') + ':00'),
                     datasets: [
-                        { label: 'ซักผ้า', data: cacheData.washerHourly, borderColor: '#0ea5e9', backgroundColor: gradW, fill: true, tension: 0.4, borderWidth: 3, pointRadius: 0, pointHoverRadius: 6 },
-                        { label: 'อบผ้า', data: cacheData.dryerHourly, borderColor: '#f97316', backgroundColor: gradD, fill: true, tension: 0.4, borderWidth: 3, pointRadius: 0, pointHoverRadius: 6 }
+                        { label: 'ซักผ้า', data: cacheData.washerHourly, borderColor: '#0ea5e9', backgroundColor: gradW, fill: true, tension: 0.4, borderWidth: isMobile ? 2 : 3, pointRadius: 0, pointHoverRadius: 6 },
+                        { label: 'อบผ้า', data: cacheData.dryerHourly, borderColor: '#f97316', backgroundColor: gradD, fill: true, tension: 0.4, borderWidth: isMobile ? 2 : 3, pointRadius: 0, pointHoverRadius: 6 }
                     ]
                 },
                 options: {
                     responsive: true, maintainAspectRatio: false,
                     interaction: { mode: 'index', intersect: false },
-                    plugins: { legend: { position: 'top', align: 'end', labels: { color: textColor, usePointStyle: true, boxWidth: 8 } } },
+                    plugins: { legend: { position: 'top', align: 'end', labels: { color: textColor, usePointStyle: true, boxWidth: 6, font: { size: chartFontSize } } } },
                     scales: {
-                        x: { grid: { display: false }, ticks: { color: textColor, maxRotation: 45 } },
-                        y: { grid: { color: gridColor, borderDash: [5, 5] }, ticks: { color: textColor }, beginAtZero: true }
+                        x: { grid: { display: false }, ticks: { color: textColor, maxRotation: 45, font: { size: chartFontSize } } },
+                        y: { grid: { color: gridColor, borderDash: [5, 5] }, ticks: { color: textColor, font: { size: chartFontSize } }, beginAtZero: true }
                     }
                 }
             });
@@ -501,35 +477,43 @@
                     labels: cacheData.deviceLabels,
                     datasets: [{
                         data: cacheData.deviceTotals,
-                        // ใช้สีสลับกันสำหรับความสวยงาม
                         backgroundColor: cacheData.deviceLabels.map(l => l.includes('ซัก') ? '#0ea5e9' : '#f97316'),
-                        borderRadius: 6,
-                        barThickness: 16
+                        borderRadius: 4,
+                        barThickness: isMobile ? 12 : 16
                     }]
                 },
                 options: {
                     indexAxis: 'y', responsive: true, maintainAspectRatio: false,
                     plugins: { legend: { display: false } },
                     scales: {
-                        x: { grid: { color: gridColor, borderDash: [5, 5] }, ticks: { color: textColor } },
-                        y: { grid: { display: false }, ticks: { color: textColor, font: {weight: 'bold'} } }
+                        x: { grid: { color: gridColor, borderDash: [5, 5] }, ticks: { color: textColor, font: { size: chartFontSize } } },
+                        y: { grid: { display: false }, ticks: { color: textColor, font: {weight: 'bold', size: chartFontSize} } }
                     }
                 }
             });
         }
 
         async function initDashboard() {
-            await loadBranches(); 
+            await loadBranches();
             await fetchData();    
         }
         initDashboard();
+        
+        // แก้ไข syntax error ของ setInterval ตรงนี้
         setInterval(silentFetchData, 5 * 60 * 1000);
-
+        
         function toggleDarkMode() {
             document.body.classList.toggle('dark');
             document.getElementById('theme-toggle-btn').innerText = document.body.classList.contains('dark') ? '☀️' : '🌙';
             updateCharts();
         }
+
+        // ทำให้กราฟ Resize อัตโนมัติเวลาหมุนจอ
+        window.addEventListener('resize', () => {
+            if (doughnutChartInstance && lineChartInstance && barChartInstance) {
+                updateCharts();
+            }
+        });
     </script>
 </body>
 </html>
