@@ -1,19 +1,34 @@
-<!DOCTYPE html>
+
+                        <!DOCTYPE html>
+                        <html lang="en">
+                        <head>
+                            <meta charset="UTF-8">
+                            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+							<style>
+								body {
+									background-color: white; /* Ensure the iframe has a white background */
+								}
+
+								
+							</style>
+                        </head>
+                        <body>
+                            <!DOCTYPE html>
 <html lang="th" data-bs-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wash Lover - Premium App Widget Edition</title>
+    <title>Wash Lover - Ultimate Responsive 3D Edition</title>
     
-    <!-- Bootstrap 5.3 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap 5.2.3 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 
     <style>
         :root {
             /* 🌈 โหมดสว่าง */
-            --bg-body: #f1f5f9;
+            --bg-body: #f4f7fb;
             --bg-card: #ffffff;
             --border-color: #e2e8f0;
             --text-main: #0f172a;
@@ -75,10 +90,12 @@
             height: 100%;
         }
         [data-bs-theme="dark"] .neon-card { box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5); }
-        
+        .neon-card:hover { transform: translateY(-3px); box-shadow: 0 15px 35px -10px rgba(0, 0, 0, 0.12); }
+        [data-bs-theme="dark"] .neon-card:hover { box-shadow: 0 15px 35px -10px rgba(0, 0, 0, 0.8); }
+
         /* ✨ 3D Emoji Icons */
         .icon-3d {
-            width: 48px; height: 48px;
+            width: 50px; height: 50px;
             border-radius: 16px;
             display: flex; align-items: center; justify-content: center;
             font-size: 24px;
@@ -90,6 +107,7 @@
             flex-shrink: 0;
         }
         [data-bs-theme="dark"] .icon-3d { background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(255, 255, 255, 0.05); }
+        .neon-card:hover .icon-3d { transform: scale(1.15) rotate(5deg); }
         
         .glow-income { box-shadow: 0 10px 20px var(--shadow-income); }
         .glow-jobs { box-shadow: 0 10px 20px var(--shadow-jobs); }
@@ -104,48 +122,20 @@
 
         /* 🔘 Controls */
         .control-pill {
-            border-radius: 50px !important; padding: 0.5rem 1rem;
+            border-radius: 50px !important; 
+            padding: 0.5rem 1.2rem;
             border: 1px solid var(--border-color) !important;
             background-color: var(--bg-card); color: var(--text-main);
-            font-weight: 600; font-size: 0.9rem;
+            font-weight: 700; font-size: 0.9rem;
             box-shadow: 0 2px 6px rgba(0,0,0,0.02);
             transition: all 0.2s; outline: none;
+            height: 42px; /* ล็อกความสูงให้ปุ่มเท่ากันหมด */
+            display: flex; align-items: center; justify-content: center;
         }
-        .control-pill:focus { border-color: #0ea5e9 !important; box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.2) !important; }
+        .control-pill:focus { border-color: #0ea5e9 !important; box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.2) !important; }
 
         /* =========================================
-           📱 MOBILE RESPONSIVE TWEAKS (จัดระเบียบให้มือถือ)
-           ========================================= */
-        @media (max-width: 767px) {
-            body { padding: 1rem 0.5rem; }
-            .neon-card { border-radius: 20px; padding: 1rem !important; }
-            
-            /* ย่อไอคอนให้พอดีมือถือ */
-            .icon-3d { width: 42px; height: 42px; font-size: 20px; border-radius: 12px; }
-            
-            /* ปรับ Font ตัวเลขให้ไม่ล้นกรอบ */
-            .stat-number { font-size: 1.8rem !important; }
-            
-            /* แผงควบคุม (Controls) ให้แบ่ง 2 ฝั่งสวยๆ */
-            .mobile-controls-grid {
-                display: grid;
-                grid-template-columns: 1fr 1fr;
-                gap: 0.5rem;
-                width: 100%;
-            }
-            .mobile-full { grid-column: span 2; }
-        }
-
-        @media (min-width: 768px) {
-            .neon-card { padding: 1.5rem !important; }
-            .stat-number { font-size: 2.5rem !important; }
-            .neon-card:hover { transform: translateY(-4px); box-shadow: 0 15px 35px -10px rgba(0, 0, 0, 0.12); }
-            [data-bs-theme="dark"] .neon-card:hover { box-shadow: 0 15px 35px -10px rgba(0, 0, 0, 0.6); }
-            .neon-card:hover .icon-3d { transform: scale(1.1) rotate(5deg); }
-        }
-
-        /* =========================================
-           📋 BEAUTIFUL TABLE
+           📋 BEAUTIFUL TABLE DESIGN 
            ========================================= */
         .table-floating { border-collapse: separate; border-spacing: 0 10px; margin: 0; }
         .table-floating thead th { 
@@ -158,24 +148,25 @@
         .table-floating tbody tr { 
             background-color: var(--table-row-bg) !important; 
             box-shadow: 0 4px 8px rgba(0,0,0,0.03); 
-            transition: all 0.2s; border-radius: 16px;
+            transition: all 0.2s; border-radius: 14px;
         }
         [data-bs-theme="dark"] .table-floating tbody tr { box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
 
         .table-floating tbody tr:hover { 
             background-color: var(--table-row-hover) !important;
-            transform: scale(1.01) translateY(-2px); 
-            box-shadow: 0 10px 20px rgba(0,0,0,0.08); position: relative; z-index: 10;
+            transform: scale(1.005) translateY(-2px); 
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08); 
+            position: relative; z-index: 10;
         }
-        [data-bs-theme="dark"] .table-floating tbody tr:hover { box-shadow: 0 10px 20px rgba(0,0,0,0.5); }
+        [data-bs-theme="dark"] .table-floating tbody tr:hover { box-shadow: 0 8px 20px rgba(0,0,0,0.6); }
 
         .table-floating td { 
             border: none; padding: 1rem; vertical-align: middle; 
             border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color);
             background: transparent !important; white-space: nowrap;
         }
-        .table-floating td:first-child { border-top-left-radius: 16px; border-bottom-left-radius: 16px; border-left: 1px solid var(--border-color); }
-        .table-floating td:last-child { border-top-right-radius: 16px; border-bottom-right-radius: 16px; border-right: 1px solid var(--border-color); }
+        .table-floating td:first-child { border-top-left-radius: 14px; border-bottom-left-radius: 14px; border-left: 1px solid var(--border-color); }
+        .table-floating td:last-child { border-top-right-radius: 14px; border-bottom-right-radius: 14px; border-right: 1px solid var(--border-color); }
 
         .row-wash td:first-child { border-left: 5px solid #0ea5e9 !important; }
         .row-dry td:first-child { border-left: 5px solid #f97316 !important; }
@@ -183,7 +174,7 @@
         /* 💊 Badge สถานะเครื่อง */
         .badge-neon {
             display: inline-flex; align-items: center; gap: 4px;
-            padding: 6px 14px; border-radius: 50px;
+            padding: 6px 12px; border-radius: 50px;
             font-size: 0.75rem; font-weight: 800; color: white !important;
             text-transform: uppercase; letter-spacing: 0.5px;
         }
@@ -193,8 +184,9 @@
         /* 🟢 Uptime Badge */
         .time-badge {
             background: #dcfce7; color: #15803d;
-            padding: 2px 10px; border-radius: 50px; font-size: 0.7rem; font-weight: 700;
-            border: 1px solid #bbf7d0; display: inline-flex; align-items: center; gap: 4px; margin-left: 6px;
+            padding: 2px 8px; border-radius: 50px; font-size: 0.7rem; font-weight: 700;
+            border: 1px solid #bbf7d0; display: inline-flex; align-items: center; gap: 4px;
+            margin-left: 8px;
         }
         [data-bs-theme="dark"] .time-badge { background: rgba(34, 197, 94, 0.15); color: #4ade80; border-color: rgba(34, 197, 94, 0.3); }
 
@@ -217,15 +209,33 @@
 
         #loading-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(5px);
+            background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px);
             display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 9999; transition: opacity 0.3s;
         }
         [data-bs-theme="dark"] #loading-overlay { background: rgba(9, 14, 23, 0.95); }
-        .spinner-logo { width: 80px; animation: heartbeat 1.5s infinite; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.1));}
+        .spinner-logo { width: 70px; animation: heartbeat 1.5s infinite; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.1));}
         @keyframes heartbeat { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+
+        /* =========================================
+           📱 RESPONSIVE DESIGN TWEAKS
+           ========================================= */
+        .chart-container-line { height: 250px; }
+        .chart-container-bar { min-height: 280px; }
+        
+        @media (min-width: 768px) {
+            .chart-container-line { height: 350px; }
+            .chart-container-bar { min-height: 350px; }
+            .icon-3d { width: 64px; height: 64px; font-size: 32px; }
+            .stat-number { font-size: 3rem !important; }
+        }
+
+        @media (max-width: 575px) {
+            .icon-3d { width: 42px; height: 42px; font-size: 20px; border-radius: 12px; }
+            .stat-number { font-size: 1.8rem !important; }
+        }
     </style>
 </head>
-<body>
+<body class="p-2 p-sm-3 p-md-4">
 
     <!-- Loading -->
     <div id="loading-overlay">
@@ -233,124 +243,106 @@
         <p class="mt-4 fs-6 fw-black text-uppercase text-grad-wash" style="letter-spacing: 2px;">Syncing Data...</p>
     </div>
 
-    <!-- Container หลัก -->
-    <div class="container-fluid mx-auto d-flex flex-column gap-3" style="max-width: 85rem;">
+    <!-- Container หลักยืดหยุ่น -->
+    <div class="container-fluid mx-auto d-flex flex-column gap-3 gap-md-4" style="max-width: 85rem; padding: 0;">
 
         <!-- 🎛️ Header Console -->
-        <div class="neon-card d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-3 animate-fade">
+        <div class="neon-card p-3 p-md-4 d-flex flex-column flex-xl-row justify-content-between align-items-center gap-3 animate-fade">
             
             <!-- Logo Area -->
-            <div class="d-flex align-items-center gap-3 w-100" style="max-width: fit-content;">
-                <div class="p-1 rounded-circle" style="background: var(--bg-body); border: 1px solid var(--border-color); box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);">
+            <div class="d-flex align-items-center gap-3 w-100 justify-content-center justify-content-xl-start">
+                <div class="p-1 p-md-2 rounded-circle" style="background: var(--bg-body); border: 1px solid var(--border-color); box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);">
                     <img src="https://i.ibb.co/v6F6dNMf/logo-removebg-preview.png" alt="Logo" style="height: 3rem; width: 3rem; object-fit: contain;">
                 </div>
                 <div>
-                    <h1 class="fs-3 fw-black m-0 text-grad-wash" style="line-height: 1;">WASH LOVER</h1>
-                    <div class="d-flex align-items-center gap-1 mt-1">
+                    <h1 class="fs-4 fs-md-2 fw-black m-0 text-grad-wash" style="line-height: 1;">WASH LOVER</h1>
+                    <div class="d-flex align-items-center gap-1 mt-1 justify-content-center justify-content-xl-start">
                         <div class="pulse-dot" style="width: 5px; height: 5px;"></div>
-                        <span class="fw-bold text-uppercase" style="color: var(--text-muted); font-size: 0.65rem; letter-spacing: 1px;">Live Dashboard</span>
+                        <span class="fw-bold text-uppercase" style="color: var(--text-muted); font-size: 0.7rem; letter-spacing: 1px;">Live Dashboard</span>
                     </div>
                 </div>
             </div>
 
-            <!-- Mobile Grid Controls (จัดเรียงใหม่ให้มือถือกดง่าย) -->
-            <div class="mobile-controls-grid">
-                <select id="branchFilter" onchange="fetchData()" class="form-select control-pill w-100">
+            <!-- Controls (ฉลาดขึ้น: มือถือเรียง 2 แถว / คอมเรียง 1 แถวยาวฝั่งขวา) -->
+            <div class="d-flex flex-wrap justify-content-center justify-content-xl-end align-items-center gap-2 w-100">
+                
+                <select id="branchFilter" onchange="fetchData()" class="form-select control-pill flex-grow-1 flex-md-grow-0" style="min-width: 140px; max-width: 200px;">
                     <option value="all">กำลังโหลดสาขา...</option>
                 </select>
 
-                <div id="dateRangeDisplay" class="control-pill d-flex align-items-center justify-content-center text-truncate w-100" style="color: var(--text-muted);">
+                <div id="dateRangeDisplay" class="control-pill flex-grow-1 flex-md-grow-0 text-truncate" style="color: var(--text-muted); min-width: 180px; max-width: 250px;">
                     📅 โหลดข้อมูล...
                 </div>
 
-                <div id="customDateWrapper" class="d-none mobile-full flex-column flex-sm-row gap-2">
-                    <input type="date" id="customDateStart" class="form-control control-pill">
-                    <input type="date" id="customDateEnd" class="form-control control-pill">
+                <div id="customDateWrapper" class="d-none w-100 w-md-auto flex-wrap gap-2 justify-content-center">
+                    <input type="date" id="customDateStart" class="form-control control-pill flex-grow-1" style="min-width: 140px; max-width: 180px;">
+                    <input type="date" id="customDateEnd" class="form-control control-pill flex-grow-1" style="min-width: 140px; max-width: 180px;">
                 </div>
 
-                <select id="timeFilter" onchange="checkFilter()" class="form-select control-pill w-100">
+                <select id="timeFilter" onchange="checkFilter()" class="form-select control-pill flex-grow-1 flex-md-grow-0" style="min-width: 140px; max-width: 180px;">
                     <option value="daily">วันนี้</option>
                     <option value="weekly">7 วันล่าสุด</option>
                     <option value="monthly">30 วันล่าสุด</option>
                     <option value="custom">ระบุเอง</option>
                 </select>
 
-                <div class="d-flex gap-2">
-                    <button id="btnSearchCustom" onclick="fetchData()" class="btn text-white d-none w-100 rounded-pill fw-bold border-0 shadow-sm" style="background: var(--grad-wash); font-size: 0.85rem;">ค้นหา</button>
-                    <!-- ปุ่ม Theme เปลี่ยนจาก พระจันทร์ เป็น ดวงอาทิตย์ ตามค่าเริ่มต้น Light mode -->
-                    <button id="theme-toggle-btn" onclick="toggleDarkMode()" class="btn control-pill py-1 d-flex align-items-center justify-content-center w-100">🌙</button>
-                </div>
+                <button id="btnSearchCustom" onclick="fetchData()" class="btn text-white d-none control-pill border-0 shadow-sm flex-grow-1 flex-md-grow-0" style="background: var(--grad-wash); min-width: 100px;">ค้นหา</button>
+                <button id="theme-toggle-btn" onclick="toggleDarkMode()" class="btn control-pill fs-5 d-flex align-items-center justify-content-center flex-shrink-0" style="width: 42px; padding: 0;">🌙</button>
             </div>
         </div>
 
-        <!-- 🧩 Stats Widgets (App Widget Style 2x2 บนมือถือ) -->
-        <div class="row g-2 g-sm-3 animate-fade delay-100">
-            
+        <!-- 🧩 Stats Widgets -->
+        <div class="row g-2 g-sm-3 g-md-4 animate-fade delay-100">
             <!-- รายได้ -->
-            <div class="col-6 col-lg-3">
-                <!-- เปลี่ยน Layout เป็น Flex-column ให้อีโมจิอยู่บน ตัวเลขอยู่ล่าง เหมือนแอปมือถือ -->
-                <div class="neon-card d-flex flex-column justify-content-between align-items-start">
-                    <div class="mb-3 d-flex flex-column gap-2">
-                        <div class="icon-3d glow-income">💸</div>
-                        <span class="fw-bold text-uppercase d-none d-sm-block" style="color: var(--text-muted); font-size: 0.75rem; letter-spacing: 0.5px;">รายได้ทั้งหมด</span>
+            <div class="col-6 col-xl-3">
+                <!-- โครงสร้างที่ฉลาด: มือถือ (ไอคอนบน-เลขล่าง) / คอม (เลขซ้าย-ไอคอนขวา) -->
+                <div class="neon-card p-3 p-xl-4 d-flex flex-column flex-xl-row justify-content-between align-items-start align-items-xl-center">
+                    <div class="d-flex flex-column order-2 order-xl-1 mt-3 mt-xl-0 w-100">
+                        <span class="small fw-bold text-uppercase mb-1" style="color: var(--text-muted); font-size: 0.75rem; letter-spacing: 0.5px;">รายได้ทั้งหมด</span>
+                        <h3 id="statCoins" class="fw-black m-0 text-grad-income stat-number text-truncate" style="line-height: 1.1;">0</h3>
+                        <p class="fw-bold m-0 mt-1" style="color: var(--text-muted); font-size: 0.75rem;">บาท (THB)</p>
                     </div>
-                    <div>
-                        <span class="fw-bold text-uppercase d-block d-sm-none mb-1" style="color: var(--text-muted); font-size: 0.65rem;">รายได้ทั้งหมด</span>
-                        <h3 id="statCoins" class="fw-black m-0 text-grad-income stat-number text-truncate">0</h3>
-                        <p class="fw-bold m-0" style="color: var(--text-muted); font-size: 0.7rem;">บาท (THB)</p>
-                    </div>
+                    <div class="icon-3d glow-income order-1 order-xl-2">💸</div>
                 </div>
             </div>
-
             <!-- รอบทำงาน -->
-            <div class="col-6 col-lg-3">
-                <div class="neon-card d-flex flex-column justify-content-between align-items-start">
-                    <div class="mb-3 d-flex flex-column gap-2">
-                        <div class="icon-3d glow-jobs">🧺</div>
-                        <span class="fw-bold text-uppercase d-none d-sm-block" style="color: var(--text-muted); font-size: 0.75rem; letter-spacing: 0.5px;">จำนวนรอบ</span>
+            <div class="col-6 col-xl-3">
+                <div class="neon-card p-3 p-xl-4 d-flex flex-column flex-xl-row justify-content-between align-items-start align-items-xl-center">
+                    <div class="d-flex flex-column order-2 order-xl-1 mt-3 mt-xl-0 w-100">
+                        <span class="small fw-bold text-uppercase mb-1" style="color: var(--text-muted); font-size: 0.75rem; letter-spacing: 0.5px;">จำนวนรอบ</span>
+                        <h3 id="statJobs" class="fw-black m-0 text-grad-jobs stat-number text-truncate" style="line-height: 1.1;">0</h3>
+                        <p class="fw-bold m-0 mt-1" style="color: var(--text-muted); font-size: 0.75rem;">รอบซัก/อบ</p>
                     </div>
-                    <div>
-                        <span class="fw-bold text-uppercase d-block d-sm-none mb-1" style="color: var(--text-muted); font-size: 0.65rem;">จำนวนรอบ</span>
-                        <h3 id="statJobs" class="fw-black m-0 text-grad-jobs stat-number text-truncate">0</h3>
-                        <p class="fw-bold m-0" style="color: var(--text-muted); font-size: 0.7rem;">รอบซัก/อบ</p>
-                    </div>
+                    <div class="icon-3d glow-jobs order-1 order-xl-2">🧺</div>
                 </div>
             </div>
-
             <!-- ซักผ้า -->
-            <div class="col-6 col-lg-3">
-                <div class="neon-card d-flex flex-column justify-content-between align-items-start">
-                    <div class="mb-3 d-flex flex-column gap-2">
-                        <div class="icon-3d glow-wash">🫧</div>
-                        <span class="fw-bold text-uppercase d-none d-sm-block" style="color: var(--text-muted); font-size: 0.75rem; letter-spacing: 0.5px;">เครื่องซักผ้า</span>
+            <div class="col-6 col-xl-3">
+                <div class="neon-card p-3 p-xl-4 d-flex flex-column flex-xl-row justify-content-between align-items-start align-items-xl-center">
+                    <div class="d-flex flex-column order-2 order-xl-1 mt-3 mt-xl-0 w-100">
+                        <span class="small fw-bold text-uppercase mb-1" style="color: var(--text-muted); font-size: 0.75rem; letter-spacing: 0.5px;">เครื่องซักผ้า</span>
+                        <h3 id="statWasher" class="fw-black m-0 text-grad-wash stat-number text-truncate" style="line-height: 1.1;">0</h3>
+                        <p class="fw-bold m-0 mt-1" style="color: var(--text-muted); font-size: 0.75rem;">รอบทำงาน</p>
                     </div>
-                    <div>
-                        <span class="fw-bold text-uppercase d-block d-sm-none mb-1" style="color: var(--text-muted); font-size: 0.65rem;">เครื่องซักผ้า</span>
-                        <h3 id="statWasher" class="fw-black m-0 text-grad-wash stat-number text-truncate">0</h3>
-                        <p class="fw-bold m-0" style="color: var(--text-muted); font-size: 0.7rem;">รอบทำงาน</p>
-                    </div>
+                    <div class="icon-3d glow-wash order-1 order-xl-2">🫧</div>
                 </div>
             </div>
-
             <!-- อบผ้า -->
-            <div class="col-6 col-lg-3">
-                <div class="neon-card d-flex flex-column justify-content-between align-items-start">
-                    <div class="mb-3 d-flex flex-column gap-2">
-                        <div class="icon-3d glow-dry">♨️</div>
-                        <span class="fw-bold text-uppercase d-none d-sm-block" style="color: var(--text-muted); font-size: 0.75rem; letter-spacing: 0.5px;">เครื่องอบผ้า</span>
+            <div class="col-6 col-xl-3">
+                <div class="neon-card p-3 p-xl-4 d-flex flex-column flex-xl-row justify-content-between align-items-start align-items-xl-center">
+                    <div class="d-flex flex-column order-2 order-xl-1 mt-3 mt-xl-0 w-100">
+                        <span class="small fw-bold text-uppercase mb-1" style="color: var(--text-muted); font-size: 0.75rem; letter-spacing: 0.5px;">เครื่องอบผ้า</span>
+                        <h3 id="statDryer" class="fw-black m-0 text-grad-dry stat-number text-truncate" style="line-height: 1.1;">0</h3>
+                        <p class="fw-bold m-0 mt-1" style="color: var(--text-muted); font-size: 0.75rem;">รอบทำงาน</p>
                     </div>
-                    <div>
-                        <span class="fw-bold text-uppercase d-block d-sm-none mb-1" style="color: var(--text-muted); font-size: 0.65rem;">เครื่องอบผ้า</span>
-                        <h3 id="statDryer" class="fw-black m-0 text-grad-dry stat-number text-truncate">0</h3>
-                        <p class="fw-bold m-0" style="color: var(--text-muted); font-size: 0.7rem;">รอบทำงาน</p>
-                    </div>
+                    <div class="icon-3d glow-dry order-1 order-xl-2">♨️</div>
                 </div>
             </div>
         </div>
 
         <!-- 📈 กราฟแนวโน้ม -->
-        <div class="neon-card animate-fade delay-200">
-            <h2 class="fs-5 fw-black mb-3 d-flex align-items-center gap-2">
+        <div class="neon-card p-3 p-md-5 animate-fade delay-200">
+            <h2 class="fs-5 fs-md-4 fw-black mb-3 mb-md-4 d-flex align-items-center gap-2">
                 <span>📈</span> แนวโน้มการใช้งาน
             </h2>
             <div class="w-100 position-relative chart-container-line">
@@ -359,18 +351,18 @@
         </div>
 
         <!-- 🍩 Charts Group -->
-        <div class="row g-2 g-sm-3 animate-fade delay-300">
-            <div class="col-12 col-lg-4">
-                <div class="neon-card d-flex flex-column h-100">
-                    <h2 class="fs-5 fw-black mb-3 flex-shrink-0">📊 สัดส่วน</h2>
+        <div class="row g-2 g-sm-3 g-md-4 animate-fade delay-300">
+            <div class="col-12 col-xl-4">
+                <div class="neon-card p-3 p-md-5 d-flex flex-column h-100">
+                    <h2 class="fs-5 fs-md-4 fw-black mb-3 flex-shrink-0">📊 สัดส่วน</h2>
                     <div class="flex-grow-1 d-flex justify-content-center align-items-center py-2">
-                        <div style="width: 100%; max-width: 220px;"><canvas id="doughnutChart"></canvas></div>
+                        <div style="width: 100%; max-width: 250px;"><canvas id="doughnutChart"></canvas></div>
                     </div>
                 </div>
             </div>
-            <div class="col-12 col-lg-8">
-                <div class="neon-card d-flex flex-column h-100">
-                    <h2 class="fs-5 fw-black mb-3 flex-shrink-0">🏆 รายได้แยกตามตู้</h2>
+            <div class="col-12 col-xl-8">
+                <div class="neon-card p-3 p-md-5 d-flex flex-column h-100">
+                    <h2 class="fs-5 fs-md-4 fw-black mb-3 flex-shrink-0">🏆 รายได้แยกตามตู้</h2>
                     <div class="w-100 position-relative flex-grow-1 chart-container-bar">
                         <canvas id="horizontalBarChart"></canvas>
                     </div>
@@ -378,23 +370,23 @@
             </div>
         </div>
 
-        <!-- 📋 Data Table (ตารางลอยเนียนตา มีอีโมจิ) -->
-        <div class="neon-card animate-fade delay-300 mb-3">
-            <div class="mb-3 d-flex align-items-center gap-2">
+        <!-- 📋 Data Table (มี Padding ล้อมรอบเงาตาราง) -->
+        <div class="neon-card p-3 p-md-4 animate-fade delay-300 mb-4">
+            <div class="mb-3 d-flex align-items-center gap-2 px-2">
                 <span style="font-size: 1.5rem;">🧾</span>
-                <h2 class="fs-5 fw-black m-0 text-main">รายการล่าสุด 
+                <h2 class="fs-5 fs-md-4 fw-black m-0 text-main">รายการล่าสุด 
                     <span class="fw-bold d-none d-sm-inline" style="color: var(--text-muted); font-size: 0.8rem;">(100 รายการ)</span>
                 </h2>
             </div>
             
-            <div class="table-responsive px-1 pb-2" style="max-height: 500px;">
+            <div class="table-responsive px-2 pb-3" style="max-height: 500px;">
                 <table class="table table-floating w-100 m-0" style="min-width: 600px;">
                     <thead class="position-sticky top-0 z-1" style="background: var(--bg-card);">
                         <tr>
-                            <th class="text-start ps-3">วัน / เวลา</th>
+                            <th class="text-start ps-4">วัน / เวลา</th>
                             <th class="text-start">ชื่ออุปกรณ์</th>
                             <th class="text-center">ประเภท</th>
-                            <th class="text-end pe-3">รายได้ (฿)</th>
+                            <th class="text-end pe-4">รายได้ (฿)</th>
                         </tr>
                     </thead>
                     <tbody id="tableBody">
@@ -492,13 +484,13 @@
         function formatUptimeBadge(minutes) {
             if (minutes === null || minutes === undefined || isNaN(minutes)) { return ""; }
             let m = parseInt(minutes);
-            let timeText = m >= 1440 ? `${Math.floor(m / 1440)}d ${Math.floor((m % 1440) / 60) > 0 ? Math.floor((m % 1440) / 60) + 'h' : ''}`
-                       : m >= 60 ? `${Math.floor(m / 60)}h ${m % 60 > 0 ? (m % 60) + 'm' : ''}`
-                       : `${m}m`;
+            let timeText = m >= 1440 ? `${Math.floor(m / 1440)} ว. ${Math.floor((m % 1440) / 60) > 0 ? Math.floor((m % 1440) / 60) + ' ช.' : ''}`
+                       : m >= 60 ? `${Math.floor(m / 60)} ช. ${m % 60 > 0 ? (m % 60) + ' น.' : ''}`
+                       : `${m} น.`;
             return `
                 <span class="time-badge">
                     <span class="pulse-dot"></span>
-                    <span class="d-none d-sm-inline">ON</span> ${timeText}
+                    <span class="d-none d-sm-inline">ออนไลน์</span> ${timeText}
                 </span>
             `;
         }
@@ -539,10 +531,10 @@
 
                 return `
                 <tr class="${rowClass}">
-                    <td class="fw-bold ps-3" style="color: var(--text-muted); font-size: 0.8rem;">
+                    <td class="fw-bold ps-3 ps-md-4" style="color: var(--text-muted); font-size: 0.8rem;">
                         ${t.timestamp.substring(0, 10)}<br class="d-block d-sm-none"><span class="d-none d-sm-inline"> </span>${t.timestamp.substring(11, 16)}
                     </td>
-                    <td class="fw-black text-body" style="font-size: 0.95rem;">
+                    <td class="fw-black fs-6 text-body">
                         <div class="d-flex align-items-center gap-1 flex-wrap">${t.device_name} ${uptimeBadge}</div>
                     </td>
                     <td class="text-center">
@@ -550,8 +542,9 @@
                             ${iconSvg} <span class="d-none d-sm-inline">${isDryer ? 'อบผ้า' : 'ซักผ้า'}</span><span class="d-inline d-sm-none">${isDryer ? 'อบ' : 'ซัก'}</span>
                         </span>
                     </td>
-                    <td class="text-end fw-black fs-4 pe-3">
+                    <td class="text-end fw-black fs-4 pe-3 pe-md-4">
                         <span class="${gradTextClass}" style="display: inline-block;">+${incomeBaht}</span> 
+                        <span class="fs-6 ms-1" style="color: var(--text-muted); -webkit-text-fill-color: initial;">฿</span>
                     </td>
                 </tr>`;
             }).join('') : `<tr><td colspan="4" class="text-center py-5 text-muted fw-bold">ไม่มีข้อมูล</td></tr>`;
@@ -607,7 +600,6 @@
             }
             const displayEl = document.getElementById('dateRangeDisplay');
             
-            // ทำให้ text วันที่กระชับขึ้นบนมือถือ
             let dateText = startStr === endStr ? `${formatThaiDateShort(startStr)}` : `${formatThaiDateShort(startStr)} - ${formatThaiDateShort(endStr)}`;
             if(displayEl) displayEl.innerText = `📅 ${dateText}`;
             
@@ -699,3 +691,10 @@
     </script>
 </body>
 </html>
+
+							<script>
+                            	
+							</script>
+                        </body>
+                        </html>
+                    
