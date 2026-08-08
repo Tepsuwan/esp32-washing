@@ -1,375 +1,358 @@
 <!DOCTYPE html>
-<html lang="th">
-
+<html lang="th" data-bs-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wash Lover - Bento Box Edition</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = { darkMode: 'class' }
-    </script>
+    <title>Wash Lover - Vibrant Typo Edition</title>
+    
+    <!-- Bootstrap 5.3 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
     <style>
-        /* 🎨 Bento Background & Grid Pattern */
+        :root {
+            /* 🌈 โหมดสว่าง */
+            --bg-body: #f4f7fb;
+            --bg-card: #ffffff;
+            --border-color: #e2e8f0;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            
+            --table-row-bg: #ffffff;
+            --table-row-border: #f1f5f9;
+            --table-row-hover: #f8fafc;
+
+            --grad-income: linear-gradient(135deg, #f43f5e 0%, #fb923c 100%);
+            --grad-jobs: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
+            --grad-wash: linear-gradient(135deg, #0ea5e9 0%, #3b82f6 100%);
+            --grad-dry: linear-gradient(135deg, #f97316 0%, #ef4444 100%);
+
+            --shadow-wash: rgba(14, 165, 233, 0.4);
+            --shadow-dry: rgba(249, 115, 22, 0.4);
+        }
+
+        [data-bs-theme="dark"] {
+            /* 🌌 โหมดมืด */
+            --bg-body: #090e17; 
+            --bg-card: #162032; 
+            --border-color: #1e293b;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            
+            --table-row-bg: #1c273b; 
+            --table-row-border: #283852; 
+            --table-row-hover: #233149; 
+
+            --grad-income: linear-gradient(135deg, #ff0f7b 0%, #f89b29 100%);
+            --grad-jobs: linear-gradient(135deg, #b026ff 0%, #5225ff 100%);
+            --grad-wash: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
+            --grad-dry: linear-gradient(135deg, #ff4e00 0%, #ec9f05 100%);
+        }
+
         body {
             font-family: 'Kanit', sans-serif;
-            background-color: #f4f4f5;
-            /* สีเทาอ่อน Zinc */
-            background-image: radial-gradient(#d4d4d8 1.5px, transparent 1.5px);
+            background-color: var(--bg-body);
+            background-image: radial-gradient(var(--border-color) 2px, transparent 2px);
             background-size: 24px 24px;
-            color: #18181b;
+            color: var(--text-main);
             transition: all 0.3s ease;
             min-height: 100vh;
         }
 
-        body.dark {
-            background-color: #09090b;
-            /* ดำสนิท */
-            background-image: radial-gradient(#27272a 1.5px, transparent 1.5px);
-            color: #fafafa;
-        }
-
-        /* 🍱 Bento Widget Cards */
-        .card {
-            background: #ffffff;
-            border-radius: 32px;
-            /* โค้งมนขั้นสุด */
-            border: 2px solid #e4e4e7;
-            /* เงาแบบแข็ง (Solid Drop Shadow) */
-            box-shadow: 4px 6px 0px #e4e4e7;
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
-        }
-
-        body.dark .card {
-            background: #18181b;
-            border: 2px solid #27272a;
-            box-shadow: 4px 6px 0px #000000;
-        }
-
-        /* Interactive Hover Action */
-        .card:hover {
-            transform: translate(2px, 2px);
-            box-shadow: 2px 2px 0px #e4e4e7;
-        }
-
-        body.dark .card:hover {
-            box-shadow: 2px 2px 0px #000000;
-        }
-
-        /* 🔘 Custom Form Elements */
-        select,
-        input[type="date"],
-        button {
-            border-radius: 20px !important;
-            border: 2px solid #e4e4e7 !important;
-            box-shadow: 2px 4px 0px #e4e4e7;
-            transition: all 0.1s;
-        }
-
-        body.dark select,
-        body.dark input,
-        body.dark button {
-            border-color: #3f3f46 !important;
-            box-shadow: 2px 4px 0px #000000;
-            background-color: #27272a !important;
-            color: white !important;
-        }
-
-        select:active,
-        input:active,
-        button:active {
-            transform: translate(2px, 2px);
-            box-shadow: 0px 0px 0px transparent !important;
-        }
-
-        /* 🖌️ Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: transparent;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: #d4d4d8;
-            border-radius: 20px;
-        }
-
-        body.dark ::-webkit-scrollbar-thumb {
-            background: #3f3f46;
-        }
-
-        /* 🚀 Animations */
-        @keyframes popIn {
-            0% {
-                opacity: 0;
-                transform: scale(0.95) translateY(10px);
-            }
-
-            100% {
-                opacity: 1;
-                transform: scale(1) translateY(0);
-            }
-        }
-
-        .animate-fade {
-            animation: popIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-            opacity: 0;
-        }
-
-        .delay-100 {
-            animation-delay: 0.1s;
-        }
-
-        .delay-200 {
-            animation-delay: 0.2s;
-        }
-
-        .delay-300 {
-            animation-delay: 0.3s;
-        }
-
-        /* 💊 Table Pill Style */
-        tbody tr {
-            border-bottom: 2px dashed #e4e4e7;
-        }
-
-        body.dark tbody tr {
-            border-bottom: 2px dashed #27272a;
-        }
-
-        tbody tr:last-child {
-            border-bottom: none;
-        }
-
-        /* Loader */
-        #loading-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
+        /* 📦 Smooth Cards */
+        .neon-card {
+            background-color: var(--bg-card);
+            border-radius: 24px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s;
             height: 100%;
-            background: rgba(244, 244, 245, 0.95);
-            backdrop-filter: blur(10px);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-            transition: opacity 0.3s;
+        }
+        [data-bs-theme="dark"] .neon-card { box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5); }
+        .neon-card:hover { transform: translateY(-4px); box-shadow: 0 15px 35px -10px rgba(0, 0, 0, 0.12); }
+        [data-bs-theme="dark"] .neon-card:hover { box-shadow: 0 15px 35px -10px rgba(0, 0, 0, 0.8); }
+
+        /* ✨ 3D Emoji Icons */
+        .icon-3d {
+            width: 56px; height: 56px;
+            border-radius: 20px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 28px;
+            background: rgba(255, 255, 255, 0.6); 
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(5px);
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+        }
+        [data-bs-theme="dark"] .icon-3d { background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(255, 255, 255, 0.05); }
+        .neon-card:hover .icon-3d { transform: scale(1.15) rotate(5deg); }
+
+        /* 🔠 Gradient Text Classes */
+        .text-grad-income { background: var(--grad-income); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .text-grad-jobs { background: var(--grad-jobs); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .text-grad-wash { background: var(--grad-wash); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .text-grad-dry { background: var(--grad-dry); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+        /* 🔘 Controls */
+        .control-pill {
+            border-radius: 50px !important; padding: 0.6rem 1.2rem;
+            border: 1px solid var(--border-color) !important;
+            background-color: var(--bg-card); color: var(--text-main);
+            font-weight: 700; box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+            transition: all 0.2s; outline: none;
+        }
+        .control-pill:focus { border-color: #0ea5e9 !important; box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.2) !important; }
+
+        /* 📋 Beautiful Floating Table */
+        .table-floating { border-collapse: separate; border-spacing: 0 12px; margin: 0; }
+        
+        .table-floating thead th { 
+            border: none; font-size: 0.85rem; color: #6366f1; 
+            font-weight: 800; text-transform: uppercase; letter-spacing: 1px; 
+            padding: 0 1.2rem 0.5rem 1.2rem; background: transparent !important;
+        }
+        [data-bs-theme="dark"] .table-floating thead th { color: #818cf8; }
+        
+        .table-floating tbody tr { 
+            background-color: var(--table-row-bg) !important; 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.04); transition: all 0.2s; border-radius: 16px;
+        }
+        [data-bs-theme="dark"] .table-floating tbody tr { box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+
+        .table-floating tbody tr:hover { 
+            background-color: var(--table-row-hover) !important;
+            transform: scale(1.01) translateY(-2px); box-shadow: 0 10px 25px rgba(0,0,0,0.1); 
+            position: relative; z-index: 10;
+        }
+        [data-bs-theme="dark"] .table-floating tbody tr:hover { box-shadow: 0 10px 25px rgba(0,0,0,0.6); }
+
+        .table-floating td { 
+            border: none; padding: 1.2rem; vertical-align: middle; 
+            border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color);
+            background: transparent !important; 
+        }
+        
+        .table-floating td:first-child { border-top-left-radius: 16px; border-bottom-left-radius: 16px; border-left: 1px solid var(--border-color); }
+        .table-floating td:last-child { border-top-right-radius: 16px; border-bottom-right-radius: 16px; border-right: 1px solid var(--border-color); }
+
+        .row-wash td:first-child { border-left: 6px solid #0ea5e9 !important; }
+        .row-dry td:first-child { border-left: 6px solid #f97316 !important; }
+
+        /* 💊 Badge สถานะเครื่อง */
+        .badge-neon {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 8px 18px; border-radius: 50px;
+            font-size: 0.85rem; font-weight: 800; color: white !important;
+            text-transform: uppercase; letter-spacing: 0.5px;
+        }
+        .badge-wash { background: var(--grad-wash); box-shadow: 0 4px 15px var(--shadow-wash); }
+        .badge-dry { background: var(--grad-dry); box-shadow: 0 4px 15px var(--shadow-dry); }
+
+        /* ==========================================
+           🟢 Live Status Badge (แก้ใหม่ สีเขียวสวยๆ) 
+           ========================================== */
+        .status-badge {
+            display: inline-flex; align-items: center; gap: 6px;
+            background: #dcfce7; /* สีพื้นหลังเขียวอ่อน */
+            color: #059669; /* สีอักษรเขียวมรกต */
+            padding: 4px 12px; border-radius: 50px;
+            font-size: 0.75rem; font-weight: 800;
+            border: 1px solid #bbf7d0; letter-spacing: 0.5px;
+        }
+        [data-bs-theme="dark"] .status-badge { 
+            background: rgba(16, 185, 129, 0.15); 
+            color: #34d399; /* สีเขียวนีออนในโหมดมืด */
+            border: 1px solid rgba(16, 185, 129, 0.3); 
         }
 
-        body.dark #loading-overlay {
-            background: rgba(9, 9, 11, 0.95);
+        /* 🟢 จุดไฟกระพริบ */
+        .pulse-dot {
+            width: 8px; height: 8px; 
+            background-color: #10b981; 
+            border-radius: 50%;
+            box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+            animation: pulse-green 2s infinite;
+        }
+        @keyframes pulse-green { 
+            0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); } 
+            70% { box-shadow: 0 0 0 5px rgba(16, 185, 129, 0); } 
+            100% { box-shadow: 0 0 0 0 rgba(0,0,0,0); } 
         }
 
-        .spinner-logo {
-            width: 80px;
-            animation: bounce 1s infinite alternate;
-        }
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
 
-        @keyframes bounce {
-            from {
-                transform: translateY(0);
-            }
+        /* Animations */
+        @keyframes bounceIn { 0% { opacity: 0; transform: scale(0.95) translateY(20px); } 100% { opacity: 1; transform: scale(1) translateY(0); } }
+        .animate-fade { animation: bounceIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; opacity: 0; }
+        .delay-100 { animation-delay: 0.1s; } .delay-200 { animation-delay: 0.2s; } .delay-300 { animation-delay: 0.3s; }
 
-            to {
-                transform: translateY(-15px);
-            }
+        #loading-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(10px);
+            display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 9999; transition: opacity 0.3s;
         }
+        [data-bs-theme="dark"] #loading-overlay { background: rgba(9, 14, 23, 0.9); }
+        .spinner-logo { width: 90px; animation: heartbeat 1.5s infinite; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.1));}
+        @keyframes heartbeat { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
     </style>
 </head>
+<body class="p-3 p-md-4">
 
-<body class="p-3 sm:p-5 md:p-8 font-semibold">
-
-    <!-- Loading -->
     <div id="loading-overlay">
         <img src="https://i.ibb.co/v6F6dNMf/logo-removebg-preview.png" class="spinner-logo" alt="Loading...">
-        <p class="mt-6 text-lg font-extrabold tracking-widest text-zinc-800 dark:text-zinc-200 uppercase">กำลังโหลด...</p>
+        <p class="mt-4 fs-5 fw-black text-uppercase text-grad-wash" style="letter-spacing: 2px;">Syncing Data...</p>
     </div>
 
-    <div class="max-w-7xl mx-auto space-y-6">
+    <div class="container-fluid mx-auto d-flex flex-column gap-3 gap-md-4" style="max-width: 85rem; padding: 0;">
 
-        <!-- 🎛️ Header Console (Bento Style) -->
-        <div
-            class="card p-4 md:p-6 flex flex-col xl:flex-row justify-between items-start xl:items-center gap-6 animate-fade">
-            <!-- Brand & Tag -->
-            <div class="flex items-center gap-4 w-full xl:w-auto">
-                <div class="p-3 rounded-2xl shrink-0">
-                    <img src="https://i.ibb.co/v6F6dNMf/logo-removebg-preview.png" alt="Logo"
-                        class="h-20 w-auto filter drop-shadow-md">
+        <!-- 🎛️ Header Console -->
+        <div class="neon-card p-3 p-md-4 d-flex flex-column flex-xl-row justify-content-between align-items-start align-items-xl-center gap-4 animate-fade">
+            <div class="d-flex align-items-center gap-3 w-100" style="max-width: fit-content;">
+                <div class="p-2 rounded-circle" style="background: var(--bg-body); border: 1px solid var(--border-color); box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);">
+                    <img src="https://i.ibb.co/v6F6dNMf/logo-removebg-preview.png" alt="Logo" style="height: 3.5rem; width: 3.5rem; object-fit: contain;">
                 </div>
                 <div>
-                    <h1 class="text-2xl md:text-3xl font-extrabold tracking-tight text-pink-600 dark:text-white">
-                        WASH<span class="text-cyan-500"> LOVER</span>
-                    </h1>
-                    <div class="flex items-center gap-2 mt-1">
-                        <span class="relative flex h-3 w-3">
-                            <span
-                                class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                            <span class="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
-                        </span>
-                        <span class="text-xs font-bold text-zinc-500 uppercase tracking-wider">System Online</span>
+                    <h1 class="fs-2 fw-black m-0 text-grad-wash">WASH LOVER</h1>
+                    <div class="d-flex align-items-center gap-2 mt-1">
+                        <div class="spinner-grow spinner-grow-sm text-primary" style="width: 10px; height: 10px;"></div>
+                        <span class="small fw-bold text-uppercase" style="color: var(--text-muted); letter-spacing: 1px;">Live Dashboard</span>
                     </div>
                 </div>
             </div>
 
-            <!-- Controls Group -->
-            <div class="flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-3 w-full xl:w-auto">
-                <!-- Location -->
-                <select id="branchFilter" onchange="fetchData()"
-                    class="bg-white dark:bg-zinc-800 text-sm font-bold px-5 py-3 outline-none cursor-pointer w-full sm:w-auto">
+            <div class="d-flex flex-column flex-sm-row flex-wrap align-items-stretch align-items-sm-center gap-2 gap-md-3 w-100" style="max-width: fit-content;">
+                <select id="branchFilter" onchange="fetchData()" class="form-select control-pill w-100" style="max-width: fit-content;">
                     <option value="all">กำลังโหลดสาขา...</option>
                 </select>
-
-                <!-- Date Info -->
-                <div id="dateRangeDisplay"
-                    class="text-xs text-zinc-500 font-bold px-5 py-3 bg-zinc-200/50 dark:bg-zinc-800/50 rounded-2xl w-full sm:w-auto text-center border-2 border-transparent">
+                <div id="dateRangeDisplay" class="control-pill d-flex align-items-center justify-content-center" style="font-size: 0.9rem; color: var(--text-muted);">
                     📅 กำลังโหลด...
                 </div>
-
-                <div id="customDateWrapper" class="hidden flex-col sm:flex-row gap-2 w-full sm:w-auto">
-                    <input type="date" id="customDateStart" class="bg-white px-4 py-3 text-sm outline-none w-full">
-                    <input type="date" id="customDateEnd" class="bg-white px-4 py-3 text-sm outline-none w-full">
+                <div id="customDateWrapper" class="d-none flex-column flex-sm-row gap-2 w-100" style="max-width: fit-content;">
+                    <input type="date" id="customDateStart" class="form-control control-pill">
+                    <input type="date" id="customDateEnd" class="form-control control-pill">
                 </div>
-
-                <div class="flex gap-2 w-full sm:w-auto">
-                    <select id="timeFilter" onchange="checkFilter()"
-                        class="flex-1 sm:flex-none bg-white px-4 py-3 text-sm outline-none cursor-pointer">
+                <div class="d-flex gap-2 w-100" style="max-width: fit-content;">
+                    <select id="timeFilter" onchange="checkFilter()" class="form-select control-pill flex-grow-1 flex-sm-grow-0">
                         <option value="daily">วันนี้</option>
                         <option value="weekly">7 วันล่าสุด</option>
                         <option value="monthly">30 วันล่าสุด</option>
-                        <option value="custom">กำหนดเอง</option>
+                        <option value="custom">ระบุเอง</option>
                     </select>
-                    <button id="btnSearchCustom" onclick="fetchData()"
-                        class="bg-blue-600 border-blue-700 text-white px-6 py-3 hidden text-sm shadow-[2px_4px_0px_#1d4ed8]">ค้นหา</button>
-                    <button id="theme-toggle-btn" onclick="toggleDarkMode()"
-                        class="px-4 py-3 bg-white text-xl">⚡</button>
+                    <button id="btnSearchCustom" onclick="fetchData()" class="btn text-white d-none px-4 rounded-pill fw-bold border-0 shadow-sm" style="background: var(--grad-wash);">ค้นหา</button>
+                    <button id="theme-toggle-btn" onclick="toggleDarkMode()" class="btn control-pill fs-5 py-1 px-3 d-flex align-items-center justify-content-center">🌙</button>
                 </div>
             </div>
         </div>
 
-        <!-- 🧩 Stats Widgets (Bento Grid) -->
-        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 animate-fade delay-100">
-            <!-- Widget: รายได้ -->
-            <div class="card p-5 md:p-6 bg-[#E0F2FE] dark:bg-[#082F49] border-[#bae6fd] dark:border-[#0369a1]">
-                <div class="flex justify-between items-start mb-4">
-                    <span
-                        class="text-xs md:text-sm font-extrabold uppercase text-[#0284c7] dark:text-[#38bdf8] tracking-wider">รายได้ทั้งหมด</span>
-                    <span class="text-2xl bg-white dark:bg-zinc-900 p-2 rounded-xl shadow-sm">💰</span>
+        <!-- 🧩 Stats Widgets -->
+        <div class="row g-3 g-md-4 animate-fade delay-100">
+            <div class="col-6 col-lg-3">
+                <div class="neon-card p-4 d-flex flex-column justify-content-between">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <span class="small fw-bold text-uppercase" style="color: var(--text-muted); letter-spacing: 1px;">รายได้ทั้งหมด</span>
+                        <div class="icon-3d">💸</div>
+                    </div>
+                    <div>
+                        <h3 id="statCoins" class="display-5 fw-black text-truncate m-0 text-grad-income">0</h3>
+                        <p class="small fw-bold mt-1 mb-0" style="color: var(--text-muted);">บาท (THB)</p>
+                    </div>
                 </div>
-                <h3 id="statCoins"
-                    class="text-2xl sm:text-3xl md:text-4xl font-black text-[#0c4a6e] dark:text-white truncate tracking-tight">
-                    0</h3>
-                <p class="text-xs font-bold text-[#0369a1] dark:text-[#7dd3fc] mt-1">ทั้งหมด บาท</p>
             </div>
-
-            <!-- Widget: รอบทำงาน -->
-            <div class="card p-5 md:p-6 bg-[#F3E8FF] dark:bg-[#3B0764] border-[#e9d5ff] dark:border-[#7e22ce]">
-                <div class="flex justify-between items-start mb-4">
-                    <span
-                        class="text-xs md:text-sm font-extrabold uppercase text-[#7e22ce] dark:text-[#c084fc] tracking-wider">รอบซัก/อบ</span>
-                    <span class="text-2xl bg-white dark:bg-zinc-900 p-2 rounded-xl shadow-sm">⚙️</span>
+            <div class="col-6 col-lg-3">
+                <div class="neon-card p-4 d-flex flex-column justify-content-between">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <span class="small fw-bold text-uppercase" style="color: var(--text-muted); letter-spacing: 1px;">จำนวนรอบ</span>
+                        <div class="icon-3d">🧺</div>
+                    </div>
+                    <div>
+                        <h3 id="statJobs" class="display-5 fw-black text-truncate m-0 text-grad-jobs">0</h3>
+                        <p class="small fw-bold mt-1 mb-0" style="color: var(--text-muted);">รอบซัก/อบ</p>
+                    </div>
                 </div>
-                <h3 id="statJobs"
-                    class="text-2xl sm:text-3xl md:text-4xl font-black text-[#3b0764] dark:text-white truncate tracking-tight">
-                    0</h3>
-                <p class="text-xs font-bold text-[#6b21a8] dark:text-[#d8b4fe] mt-1">รอบทั้งหมด</p>
             </div>
-
-            <!-- Widget: ซักผ้า -->
-            <div class="card p-5 md:p-6 bg-[#DCFCE7] dark:bg-[#052E16] border-[#bbf7d0] dark:border-[#15803d]">
-                <div class="flex justify-between items-start mb-4">
-                    <span
-                        class="text-xs md:text-sm font-extrabold uppercase text-[#15803d] dark:text-[#4ade80] tracking-wider">ซัก</span>
-                    <span class="text-2xl bg-white dark:bg-zinc-900 p-2 rounded-xl shadow-sm">🌊</span>
+            <div class="col-6 col-lg-3">
+                <div class="neon-card p-4 d-flex flex-column justify-content-between">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <span class="small fw-bold text-uppercase" style="color: var(--text-muted); letter-spacing: 1px;">เครื่องซักผ้า</span>
+                        <div class="icon-3d">🫧</div>
+                    </div>
+                    <div>
+                        <h3 id="statWasher" class="display-5 fw-black text-truncate m-0 text-grad-wash">0</h3>
+                        <p class="small fw-bold mt-1 mb-0" style="color: var(--text-muted);">รอบทำงาน</p>
+                    </div>
                 </div>
-                <h3 id="statWasher"
-                    class="text-2xl sm:text-3xl md:text-4xl font-black text-[#052e16] dark:text-white truncate tracking-tight">
-                    0</h3>
-                <p class="text-xs font-bold text-[#166534] dark:text-[#86efac] mt-1">รอบ</p>
             </div>
-
-            <!-- Widget: อบผ้า -->
-            <div class="card p-5 md:p-6 bg-[#FFEDD5] dark:bg-[#431407] border-[#fed7aa] dark:border-[#c2410c]">
-                <div class="flex justify-between items-start mb-4">
-                    <span
-                        class="text-xs md:text-sm font-extrabold uppercase text-[#c2410c] dark:text-[#fb923c] tracking-wider">อบ</span>
-                    <span class="text-2xl bg-white dark:bg-zinc-900 p-2 rounded-xl shadow-sm">♨️</span>
+            <div class="col-6 col-lg-3">
+                <div class="neon-card p-4 d-flex flex-column justify-content-between">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <span class="small fw-bold text-uppercase" style="color: var(--text-muted); letter-spacing: 1px;">เครื่องอบผ้า</span>
+                        <div class="icon-3d">♨️</div>
+                    </div>
+                    <div>
+                        <h3 id="statDryer" class="display-5 fw-black text-truncate m-0 text-grad-dry">0</h3>
+                        <p class="small fw-bold mt-1 mb-0" style="color: var(--text-muted);">รอบทำงาน</p>
+                    </div>
                 </div>
-                <h3 id="statDryer"
-                    class="text-2xl sm:text-3xl md:text-4xl font-black text-[#431407] dark:text-white truncate tracking-tight">
-                    0</h3>
-                <p class="text-xs font-bold text-[#9a3412] dark:text-[#fdba74] mt-1">รอบ</p>
             </div>
         </div>
 
         <!-- 📈 กราฟแนวโน้ม -->
-        <div class="card p-4 md:p-6 animate-fade delay-200">
-            <div class="flex items-center gap-3 mb-6">
-                <div class="h-8 w-2 bg-zinc-800 dark:bg-white rounded-full"></div>
-                <h2 class="text-base md:text-xl font-black text-zinc-800 dark:text-white uppercase tracking-wide">กราฟความถี่การใช้งาน</h2>
-            </div>
-            <div class="w-full relative h-[250px] sm:h-[300px] md:h-[350px]">
+        <div class="neon-card p-4 p-md-5 animate-fade delay-200">
+            <h2 class="fs-4 fw-black mb-4 d-flex align-items-center gap-3">
+                <span style="font-size: 1.5rem;">📈</span> แนวโน้มการใช้งาน
+            </h2>
+            <div class="w-100 position-relative" style="height: 350px;">
                 <canvas id="peakHoursLineChart"></canvas>
             </div>
         </div>
 
         <!-- 🍩 Charts Group -->
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6 animate-fade delay-300">
-            <!-- โดนัท -->
-            <div class="card p-4 md:p-6 lg:col-span-1 flex flex-col h-full">
-                <div class="flex items-center gap-3 mb-6 shrink-0">
-                    <div class="h-8 w-2 bg-pink-500 rounded-full"></div>
-                    <h2 class="text-base md:text-lg font-black text-zinc-800 dark:text-white uppercase tracking-wide">
-                        อัตราซัก อบ</h2>
-                </div>
-                <div class="flex-1 flex justify-center items-center py-2">
-                    <div class="w-full max-w-[180px] sm:max-w-[200px] md:max-w-[240px]"><canvas
-                            id="doughnutChart"></canvas></div>
+        <div class="row g-3 g-md-4 animate-fade delay-300">
+            <div class="col-12 col-lg-4">
+                <div class="neon-card p-4 p-md-5 d-flex flex-column h-100">
+                    <h2 class="fs-4 fw-black mb-4 flex-shrink-0">📊 สัดส่วน</h2>
+                    <div class="flex-grow-1 d-flex justify-content-center align-items-center py-2">
+                        <div style="width: 100%; max-width: 250px;"><canvas id="doughnutChart"></canvas></div>
+                    </div>
                 </div>
             </div>
-            <!-- บาร์ชาร์ต -->
-            <div class="card p-4 md:p-6 lg:col-span-2 flex flex-col justify-between">
-                <div class="flex items-center gap-3 mb-4 shrink-0">
-                    <div class="h-8 w-2 bg-blue-500 rounded-full"></div>
-                    <h2 class="text-base md:text-lg font-black text-zinc-800 dark:text-white uppercase tracking-wide">
-                        การทำงานของอุปกรณ์</h2>
-                </div>
-                <div class="w-full relative flex-1 min-h-[300px] sm:min-h-[400px]">
-                    <canvas id="horizontalBarChart"></canvas>
+            <div class="col-12 col-lg-8">
+                <div class="neon-card p-4 p-md-5 d-flex flex-column h-100">
+                    <h2 class="fs-4 fw-black mb-4 flex-shrink-0">🏆 รายได้แยกตามตู้</h2>
+                    <div class="w-100 position-relative flex-grow-1" style="min-height: 300px;">
+                        <canvas id="horizontalBarChart"></canvas>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- 📋 Data Table (Pill Rows) -->
-        <div class="card overflow-hidden animate-fade delay-300 bg-zinc-50 dark:bg-zinc-900/50">
-            <div class="p-5 md:p-6 bg-white dark:bg-zinc-900 border-b-2 border-zinc-200 dark:border-zinc-800">
-                <div class="flex items-center gap-3">
-                    <div class="h-8 w-2 bg-green-500 rounded-full"></div>
-                    <h2 class="text-base md:text-lg font-black text-zinc-800 dark:text-white uppercase tracking-wide">
-                        ฟีดการใช้งาน</h2>
+        <!-- 📋 Data Table -->
+        <div class="neon-card p-4 p-md-5 animate-fade delay-300">
+            <div class="mb-4 d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center gap-3">
+                    <span style="font-size: 1.8rem;">🧾</span>
+                    <h2 class="fs-4 fw-black m-0 text-main">ฟีดการทำรายการล่าสุด 
+                        <span class="fs-6 fw-bold" style="color: var(--text-muted);">(100 รายการ)</span>
+                    </h2>
                 </div>
             </div>
-
-            <div class="overflow-x-auto max-h-[450px] p-2 md:p-4">
-                <table class="w-full text-left relative border-collapse min-w-[500px]">
-                    <thead class="sticky top-0 bg-zinc-50 dark:bg-zinc-900/90 backdrop-blur z-10 shadow-sm">
-                        <tr
-                            class="text-[10px] md:text-xs text-zinc-400 uppercase tracking-widest font-black whitespace-nowrap">
-                            <th class="py-4 px-4">เวลา</th>
-                            <th class="py-4 px-4">ชื่อเครื่อง</th>
-                            <th class="py-4 px-4 text-center">ชนิด</th>
-                            <th class="py-4 px-4 text-right">ยอด</th>
+            
+            <div class="table-responsive pe-2" style="max-height: 550px;">
+                <table class="table table-floating w-100 m-0" style="min-width: 750px;">
+                    <thead class="position-sticky top-0 z-1" style="background: var(--bg-card);">
+                        <tr>
+                            <th class="text-start ps-4">วัน / เวลา</th>
+                            <th class="text-start">ชื่อเครื่อง</th>
+                            <th class="text-center">ประเภท</th>
+                            <th class="text-end pe-4">รายได้ (บาท)</th>
                         </tr>
                     </thead>
-                    <tbody id="tableBody" class="font-bold">
+                    <tbody id="tableBody">
                         <!-- JS Content -->
                     </tbody>
                 </table>
@@ -377,12 +360,21 @@
         </div>
     </div>
 
-    <!-- Script ควบคุม (เหมือนเดิมเป๊ะ) -->
     <script>
         const DB_API_URL = 'https://api.all123th.com/inw/api/wl_transactions/';
         const BRANCH_API_URL = 'https://washing.adokub.com/api/branch';
+        
         let doughnutChartInstance = null; let barChartInstance = null; let lineChartInstance = null;
         let cacheData = { washer: 0, dryer: 0, deviceLabels: [], deviceTotals: [], washerHourly: Array(24).fill(0), dryerHourly: Array(24).fill(0) };
+
+        function toggleDarkMode() {
+            const html = document.documentElement;
+            const currentTheme = html.getAttribute('data-bs-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-bs-theme', newTheme);
+            document.getElementById('theme-toggle-btn').innerText = newTheme === 'dark' ? '☀️' : '🌙';
+            updateCharts();
+        }
 
         async function loadBranches() {
             try {
@@ -401,24 +393,37 @@
             }
         }
 
+        const PAGE_SIZE = 2000; const MAX_PAGES = 20;
+
+        async function fetchAllTransactionsInRange(startDateOnly, endDateOnly, selectedBranch) {
+            let allRows = []; let offset = 0; let page = 0;
+            while (page < MAX_PAGES) {
+                const params = new URLSearchParams({ form: 'date', start: startDateOnly, end: endDateOnly, orderby: 'timestamp', by: 'DESC', limit: `${offset},${PAGE_SIZE}` });
+                const res = await fetch(`${DB_API_URL}?${params.toString()}`);
+                const json = await res.json();
+                const rows = Array.isArray(json) ? json : (json.data || []);
+                allRows = allRows.concat(rows);
+                if (rows.length < PAGE_SIZE) break;
+                offset += PAGE_SIZE; page++;
+            }
+            return allRows;
+        }
+
         async function fetchData() {
             const loader = document.getElementById('loading-overlay');
             loader.style.display = 'flex'; loader.style.opacity = '1';
             try {
-                const res = await fetch(`${DB_API_URL}?limit=2000`);
-                let rawTransactions = await res.json();
                 const dates = getDateRange();
-                const targetStart = dates.start + " 00:00:00"; const targetEnd = dates.end + " 23:59:59";
                 const selectedBranch = document.getElementById('branchFilter').value;
+                const rawTransactions = await fetchAllTransactionsInRange(dates.start, dates.end, selectedBranch);
+                const targetStart = dates.start + " 00:00:00"; const targetEnd = dates.end + " 23:59:59";
 
-                let filteredTransactions = rawTransactions.filter(t => {
+                const filteredTransactions = rawTransactions.filter(t => {
                     if (!t.timestamp) return false;
                     return (t.timestamp >= targetStart && t.timestamp <= targetEnd) && (selectedBranch === 'all' || t.branch === selectedBranch);
                 });
                 processDataAndRender(filteredTransactions);
-            } catch (err) {
-                console.error(err);
-            } finally {
+            } catch (err) { } finally {
                 loader.style.opacity = '0';
                 setTimeout(() => loader.style.display = 'none', 300);
             }
@@ -426,17 +431,31 @@
 
         async function silentFetchData() {
             try {
-                const res = await fetch(`${DB_API_URL}?limit=2000`);
-                let rawTransactions = await res.json();
-                const dates = getDateRange();
+                const dates = getDateRange(); const selectedBranch = document.getElementById('branchFilter').value;
+                const rawTransactions = await fetchAllTransactionsInRange(dates.start, dates.end, selectedBranch);
                 const targetStart = dates.start + " 00:00:00"; const targetEnd = dates.end + " 23:59:59";
-                const selectedBranch = document.getElementById('branchFilter').value;
-                let filteredTransactions = rawTransactions.filter(t => {
+                const filteredTransactions = rawTransactions.filter(t => {
                     if (!t.timestamp) return false;
                     return (t.timestamp >= targetStart && t.timestamp <= targetEnd) && (selectedBranch === 'all' || t.branch === selectedBranch);
                 });
                 processDataAndRender(filteredTransactions);
             } catch (err) { }
+        }
+
+        // 🟢 เปลี่ยนป้ายเวลาเป็นสีเขียวมินต์ พร้อมจุดกระพริบ
+        function formatUptimeBadge(minutes) {
+            if (minutes === null || minutes === undefined || isNaN(minutes)) { return ""; }
+            let m = parseInt(minutes);
+            let timeText = m >= 1440 ? `${Math.floor(m / 1440)} วัน ${Math.floor((m % 1440) / 60) > 0 ? Math.floor((m % 1440) / 60) + ' ชม.' : ''}`
+                       : m >= 60 ? `${Math.floor(m / 60)} ชม. ${m % 60 > 0 ? (m % 60) + ' น.' : ''}`
+                       : `${m} นาที`;
+            
+            return `
+                <span class="status-badge ms-3">
+                    <span class="pulse-dot"></span>
+                    ออนไลน์ ${timeText}
+                </span>
+            `;
         }
 
         function processDataAndRender(transactions) {
@@ -445,83 +464,97 @@
             const deviceIncomeMap = {};
             const washerHourly = Array(24).fill(0); const dryerHourly = Array(24).fill(0);
 
-            const tableHtml = transactions.length ? transactions.map((t) => {
-                const coins = parseInt(t.coins_paid) || 0;
-                const incomeBaht = coins * 10;
+            transactions.forEach((t) => {
+                const coins = parseInt(t.coins_paid) || 0; const incomeBaht = coins * 10;
                 totalIncome += incomeBaht;
                 const isDryer = t.machine_type === 'Dryer' || t.device_name.includes('อบ');
                 if (isDryer) dryerCount++; else washerCount++;
-                if (incomeBaht > 0) deviceIncomeMap[t.device_name] = (deviceIncomeMap[t.device_name] || 0) + incomeBaht;
 
+                if (incomeBaht > 0) deviceIncomeMap[t.device_name] = (deviceIncomeMap[t.device_name] || 0) + incomeBaht;
                 const hour = parseInt(t.timestamp.substring(11, 13));
                 if (!isNaN(hour) && hour >= 0 && hour < 24) {
                     if (isDryer) dryerHourly[hour] += incomeBaht; else washerHourly[hour] += incomeBaht;
                 }
+            });
 
-                // สไตล์ปุ่มในตารางแบบกล่องมนๆ
-                const badgeClass = isDryer
-                    ? 'bg-[#fb923c] text-white border-b-2 border-[#c2410c]'
-                    : 'bg-[#38bdf8] text-white border-b-2 border-[#0284c7]';
+            const displayTransactions = transactions.slice(0, 100);
+
+            const tableHtml = displayTransactions.length ? displayTransactions.map((t) => {
+                const coins = parseInt(t.coins_paid) || 0; const incomeBaht = coins * 10;
+                const isDryer = t.machine_type === 'Dryer' || t.device_name.includes('อบ');
+                const uptimeBadge = formatUptimeBadge(t.uptime_minutes);
+
+                const badgeClass = isDryer ? 'badge-dry' : 'badge-wash';
+                const rowClass = isDryer ? 'row-dry' : 'row-wash';
+                const gradTextClass = isDryer ? 'text-grad-dry' : 'text-grad-wash';
+
+                const iconSvg = isDryer 
+                    ? `<svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3"></path></svg>`
+                    : `<svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9 9 0 100-18 9 9 0 000 18zm0-14c2.206 0 4 1.794 4 4s-1.794 4-4 4-4-1.794-4-4 1.794-4 4-4z"/></svg>`;
 
                 return `
-                    <tr class="text-xs sm:text-sm hover:bg-white dark:hover:bg-zinc-800 transition-colors">
-                        <td class="py-3 px-4 text-zinc-500 whitespace-nowrap">${t.timestamp.substring(0, 16)}</td>
-                        <td class="py-3 px-4 text-zinc-800 dark:text-zinc-200 font-extrabold whitespace-nowrap">${t.device_name}</td>
-                        <td class="py-3 px-4 text-center whitespace-nowrap"><span class="${badgeClass} px-3 py-1.5 rounded-xl text-[10px] sm:text-xs font-black uppercase tracking-wider whitespace-nowrap">${isDryer ? 'อบ' : 'ซัก'}</span></td>
-                        <td class="py-3 px-4 text-right font-black text-lg text-zinc-900 dark:text-white whitespace-nowrap">+${incomeBaht}</td>
-                    </tr>`;
-            }).join('') : `<tr><td colspan="4" class="text-center py-10 text-zinc-400">ไม่มีข้อมูล</td></tr>`;
+                <tr class="${rowClass}">
+                    <td class="fw-bold text-nowrap ps-4" style="color: var(--text-main); font-size: 0.95rem;">${t.timestamp.substring(0, 16)}</td>
+                    <td class="fw-black text-nowrap fs-6 text-body d-flex align-items-center">${t.device_name} ${uptimeBadge}</td>
+                    <td class="text-center text-nowrap">
+                        <span class="badge-neon ${badgeClass}">
+                            ${iconSvg} ${isDryer ? 'อบผ้า' : 'ซักผ้า'}
+                        </span>
+                    </td>
+                    <td class="text-end fw-black fs-3 text-nowrap pe-4">
+                        <span class="${gradTextClass}" style="display: inline-block;">+${incomeBaht}</span> 
+                        <span class="fs-6 ms-1" style="color: var(--text-muted); -webkit-text-fill-color: initial;">฿</span>
+                    </td>
+                </tr>`;
+            }).join('') : `<tr><td colspan="4" class="text-center py-5 text-muted fw-bold">ไม่มีข้อมูลในช่วงเวลานี้</td></tr>`;
 
             document.getElementById('statCoins').innerText = totalIncome.toLocaleString();
             document.getElementById('statJobs').innerText = totalJobs.toLocaleString();
             document.getElementById('statWasher').innerText = washerCount.toLocaleString();
             document.getElementById('statDryer').innerText = dryerCount.toLocaleString();
             document.getElementById('tableBody').innerHTML = tableHtml;
-
+            
             const sortedDevices = Object.entries(deviceIncomeMap)
                 .map(([name, total]) => ({ name, total }))
                 .sort((a, b) => {
-                    const isAWasher = a.name.includes('ซัก');
-                    const isBWasher = b.name.includes('ซัก');
-                    if (isAWasher && !isBWasher) return -1;
-                    if (!isAWasher && isBWasher) return 1;
+                    const isAWasher = a.name.includes('ซัก'); const isBWasher = b.name.includes('ซัก');
+                    if (isAWasher && !isBWasher) return -1; if (!isAWasher && isBWasher) return 1;
                     return parseInt(a.name.match(/\d+$/)?.[0] || 0) - parseInt(b.name.match(/\d+$/)?.[0] || 0);
                 });
+
             cacheData.washer = washerCount; cacheData.dryer = dryerCount;
             cacheData.deviceLabels = sortedDevices.map(d => d.name);
             cacheData.deviceTotals = sortedDevices.map(d => d.total);
             cacheData.washerHourly = washerHourly; cacheData.dryerHourly = dryerHourly;
-
             updateCharts();
         }
 
         function checkFilter() {
             const isCustom = document.getElementById('timeFilter').value === 'custom';
             const wrapper = document.getElementById('customDateWrapper');
-            wrapper.classList.toggle('hidden', !isCustom);
-            wrapper.classList.toggle('flex', isCustom);
-            document.getElementById('btnSearchCustom').classList.toggle('hidden', !isCustom);
-            if (!isCustom) fetchData();
+            const btnSearch = document.getElementById('btnSearchCustom');
+            if (isCustom) {
+                wrapper.classList.remove('d-none'); wrapper.classList.add('d-flex');
+                btnSearch.classList.remove('d-none');
+            } else {
+                wrapper.classList.add('d-none'); wrapper.classList.remove('d-flex');
+                btnSearch.classList.add('d-none'); fetchData();
+            }
         }
 
         function formatThaiDateShort(dateStr) {
-            if (!dateStr) return "-";
-            const parts = dateStr.split('-');
+            if (!dateStr) return "-"; const parts = dateStr.split('-');
             const months = ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'];
             return `${parseInt(parts[2])} ${months[parseInt(parts[1]) - 1]} ${parseInt(parts[0]) + 543}`;
         }
 
         function getDateRange() {
-            const f = document.getElementById('timeFilter').value;
-            let startStr = "", endStr = "";
+            const f = document.getElementById('timeFilter').value; let startStr = "", endStr = "";
             const formatDate = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
-            if (f === 'custom') {
-                startStr = document.getElementById('customDateStart').value;
-                endStr = document.getElementById('customDateEnd').value;
-            } else {
+            if (f === 'custom') { startStr = document.getElementById('customDateStart').value; endStr = document.getElementById('customDateEnd').value; } 
+            else {
                 const t = new Date(), s = new Date();
-                if (f === 'weekly') s.setDate(t.getDate() - 7);
-                if (f === 'monthly') s.setDate(t.getDate() - 30);
+                if (f === 'weekly') s.setDate(t.getDate() - 7); if (f === 'monthly') s.setDate(t.getDate() - 30);
                 startStr = formatDate(s); endStr = formatDate(t);
             }
             const displayEl = document.getElementById('dateRangeDisplay');
@@ -532,97 +565,82 @@
         Chart.defaults.font.family = "'Kanit', sans-serif";
 
         function updateCharts() {
-            const isDark = document.body.classList.contains('dark');
-            const textColor = isDark ? '#a1a1aa' : '#52525b';
-            const gridColor = isDark ? '#27272a' : '#e4e4e7';
+            const isDark = document.documentElement.getAttribute('data-bs-theme') === 'dark';
+            const textColor = isDark ? '#94a3b8' : '#64748b';
+            const gridColor = isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)';
+            const isMobile = window.innerWidth < 768; const chartFontSize = isMobile ? 10 : 13;
 
-            const isMobile = window.innerWidth < 768;
-            const chartFontSize = isMobile ? 10 : 12;
+            Chart.defaults.color = textColor;
 
-            // สีโทน Neon จัดจ้านตัดกับพื้นหลัง
-            const colorW = '#3b82f6'; // Blue
-            const colorD = '#f97316'; // Orange
+            const ctxDoughnut = document.getElementById('doughnutChart').getContext('2d');
+            let gradWash = ctxDoughnut.createLinearGradient(0, 0, 0, 400);
+            gradWash.addColorStop(0, '#0ea5e9'); gradWash.addColorStop(1, '#3b82f6');
+            
+            let gradDry = ctxDoughnut.createLinearGradient(0, 0, 0, 400);
+            gradDry.addColorStop(0, '#f97316'); gradDry.addColorStop(1, '#ef4444');
 
             if (doughnutChartInstance) doughnutChartInstance.destroy();
-            doughnutChartInstance = new Chart(document.getElementById('doughnutChart').getContext('2d'), {
+            doughnutChartInstance = new Chart(ctxDoughnut, {
                 type: 'doughnut',
                 data: {
-                    labels: ['ซัก', 'อบ'],
-                    datasets: [{
-                        data: [cacheData.washer, cacheData.dryer],
-                        backgroundColor: [colorW, colorD],
-                        borderWidth: 4,
-                        borderColor: isDark ? '#18181b' : '#ffffff',
-                        hoverOffset: 4
-                    }]
+                    labels: ['เครื่องซักผ้า', 'เครื่องอบผ้า'],
+                    datasets: [{ data: [cacheData.washer, cacheData.dryer], backgroundColor: [gradWash, gradDry], borderWidth: 0, hoverOffset: 15 }]
                 },
-                options: { responsive: true, cutout: '75%', plugins: { legend: { position: 'bottom', labels: { color: textColor, padding: 15, usePointStyle: true, font: { size: chartFontSize, weight: 'bold' } } } } }
+                options: { responsive: true, cutout: '75%', plugins: { legend: { position: 'bottom', labels: { usePointStyle: true, padding: 20, font: { size: chartFontSize, weight: '700' } } } } }
             });
 
             if (lineChartInstance) lineChartInstance.destroy();
             const ctxLine = document.getElementById('peakHoursLineChart').getContext('2d');
+            
+            let lineWashBg = ctxLine.createLinearGradient(0, 0, 0, 350); lineWashBg.addColorStop(0, 'rgba(14, 165, 233, 0.4)'); lineWashBg.addColorStop(1, 'rgba(14, 165, 233, 0)');
+            let lineDryBg = ctxLine.createLinearGradient(0, 0, 0, 350); lineDryBg.addColorStop(0, 'rgba(249, 115, 22, 0.4)'); lineDryBg.addColorStop(1, 'rgba(249, 115, 22, 0)');
 
             lineChartInstance = new Chart(ctxLine, {
                 type: 'line',
                 data: {
                     labels: Array.from({ length: 24 }, (_, i) => String(i).padStart(2, '0') + ':00'),
                     datasets: [
-                        { label: 'ซัก', data: cacheData.washerHourly, borderColor: colorW, backgroundColor: 'transparent', tension: 0.4, borderWidth: 4, pointRadius: 0, pointHoverRadius: 6 },
-                        { label: 'อบ', data: cacheData.dryerHourly, borderColor: colorD, backgroundColor: 'transparent', tension: 0.4, borderWidth: 4, pointRadius: 0, pointHoverRadius: 6 }
+                        { label: 'ซักผ้า', data: cacheData.washerHourly, borderColor: '#0ea5e9', backgroundColor: lineWashBg, tension: 0.5, borderWidth: 4, fill: true, pointRadius: 0, pointHoverRadius: 8, pointBackgroundColor: '#0ea5e9' },
+                        { label: 'อบผ้า', data: cacheData.dryerHourly, borderColor: '#f97316', backgroundColor: lineDryBg, tension: 0.5, borderWidth: 4, fill: true, pointRadius: 0, pointHoverRadius: 8, pointBackgroundColor: '#f97316' }
                     ]
                 },
                 options: {
-                    responsive: true, maintainAspectRatio: false,
-                    interaction: { mode: 'index', intersect: false },
-                    plugins: { legend: { position: 'top', align: 'end', labels: { color: textColor, usePointStyle: true, boxWidth: 6, font: { size: chartFontSize, weight: 'bold' } } } },
+                    responsive: true, maintainAspectRatio: false, interaction: { mode: 'index', intersect: false },
+                    plugins: { legend: { position: 'top', align: 'end', labels: { usePointStyle: true, boxWidth: 10, font: { size: chartFontSize, weight: '800' } } } },
                     scales: {
-                        x: { grid: { display: false }, ticks: { color: textColor, maxRotation: 45, font: { size: chartFontSize, weight: 'bold' } } },
-                        y: { grid: { color: gridColor, borderDash: [5, 5] }, ticks: { color: textColor, font: { size: chartFontSize, weight: 'bold' } }, border: { display: false }, beginAtZero: true }
+                        x: { grid: { display: false }, ticks: { maxRotation: 45, font: { size: chartFontSize, weight: '700' } } },
+                        y: { grid: { color: gridColor, borderDash: [5, 5] }, border: { display: false }, beginAtZero: true, ticks: { font: { size: chartFontSize, weight: '700' } } }
                     }
                 }
             });
 
             if (barChartInstance) barChartInstance.destroy();
-            barChartInstance = new Chart(document.getElementById('horizontalBarChart').getContext('2d'), {
+            const ctxBar = document.getElementById('horizontalBarChart').getContext('2d');
+            
+            barChartInstance = new Chart(ctxBar, {
                 type: 'bar',
                 data: {
                     labels: cacheData.deviceLabels,
                     datasets: [{
                         data: cacheData.deviceTotals,
-                        backgroundColor: cacheData.deviceLabels.map(l => l.includes('ซัก') ? colorW : colorD),
-                        borderRadius: 8, // มนๆ สไตล์ Bento
-                        barThickness: isMobile ? 12 : 20
+                        backgroundColor: cacheData.deviceLabels.map(l => l.includes('ซัก') ? gradWash : gradDry),
+                        borderRadius: 50, barPercentage: 0.5, categoryPercentage: 0.8
                     }]
                 },
                 options: {
-                    indexAxis: 'y', responsive: true, maintainAspectRatio: false,
-                    plugins: { legend: { display: false } },
+                    indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } },
                     scales: {
-                        x: { grid: { color: gridColor, borderDash: [5, 5] }, ticks: { color: textColor, font: { size: chartFontSize, weight: 'bold' } }, border: { display: false } },
-                        y: { grid: { display: false }, ticks: { color: textColor, font: { size: chartFontSize, weight: 'bold' } }, border: { display: false } }
+                        x: { grid: { color: gridColor, borderDash: [5, 5] }, border: { display: false }, ticks: { font: { size: chartFontSize, weight: '700' } } },
+                        y: { grid: { display: false }, border: { display: false }, ticks: { font: { size: chartFontSize, weight: '800' }, color: isDark ? '#fff' : '#1e293b' } }
                     }
                 }
             });
         }
 
-        async function initDashboard() {
-            await loadBranches();
-            await fetchData();
-        }
+        async function initDashboard() { await loadBranches(); await fetchData(); }
         initDashboard();
-
         setInterval(silentFetchData, 5 * 60 * 1000);
-
-        function toggleDarkMode() {
-            document.body.classList.toggle('dark');
-            document.getElementById('theme-toggle-btn').innerText = document.body.classList.contains('dark') ? '☀️' : '⚡';
-            updateCharts();
-        }
-
-        window.addEventListener('resize', () => {
-            if (doughnutChartInstance && lineChartInstance && barChartInstance) updateCharts();
-        });
+        window.addEventListener('resize', () => { if (doughnutChartInstance && lineChartInstance && barChartInstance) updateCharts(); });
     </script>
 </body>
-
 </html>
