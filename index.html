@@ -1,398 +1,698 @@
-
-                        <!DOCTYPE html>
-                        <html lang="en">
-                        <head>
-                            <meta charset="UTF-8">
-                            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-							<style>
-								body {
-									background-color: white; /* Ensure the iframe has a white background */
-								}
-
-								
-							</style>
-                        </head>
-                        <body>
-                            <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="th" data-bs-theme="light">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wash Lover - Ultimate Responsive 3D Edition</title>
-    
-    <!-- Bootstrap 5.2.3 CSS -->
+    <title>Wash Lover - 3D Neumorphism Pro</title>
+
+    <!-- Bootstrap 5.3 & Chart.js -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
 
     <style>
         :root {
-            /* 🌈 โหมดสว่าง */
-            --bg-body: #f4f7fb;
-            --bg-card: #ffffff;
-            --border-color: #e2e8f0;
-            --text-main: #0f172a;
-            --text-muted: #64748b;
-            
-            --table-row-bg: #ffffff;
-            --table-row-border: #f1f5f9;
-            --table-row-hover: #f8fafc;
+            /* ⚪ Light Mode - Soft Clay */
+            --bg-main: #E0E5EC;
+            --text-main: #2D3748;
+            --text-sub: #718096;
 
-            --grad-income: linear-gradient(135deg, #f43f5e 0%, #fb923c 100%);
-            --grad-jobs: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
-            --grad-wash: linear-gradient(135deg, #0ea5e9 0%, #3b82f6 100%);
-            --grad-dry: linear-gradient(135deg, #f97316 0%, #ef4444 100%);
+            /* Shadows for Light Mode */
+            --shadow-light: #ffffff;
+            --shadow-dark: #a3b1c6;
 
-            --shadow-wash: rgba(14, 165, 233, 0.3);
-            --shadow-dry: rgba(249, 115, 22, 0.3);
+            --neo-out: 9px 9px 16px var(--shadow-dark), -9px -9px 16px var(--shadow-light);
+            --neo-out-hover: 4px 4px 8px var(--shadow-dark), -4px -4px 8px var(--shadow-light);
+            --neo-in: inset 6px 6px 10px 0 var(--shadow-dark), inset -6px -6px 10px 0 var(--shadow-light);
+
+            /* 3D Accents */
+            --c-wsh: #00A3FF;
+            --c-dry: #FF6B00;
+            --c-inc: #00C853;
+            --c-job: #8A2BE2;
         }
 
         [data-bs-theme="dark"] {
-            /* 🌌 โหมดมืด */
-            --bg-body: #090e17; 
-            --bg-card: #162032; 
-            --border-color: #1e293b;
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-            
-            --table-row-bg: #1c273b; 
-            --table-row-border: #283852; 
-            --table-row-hover: #233149; 
+            /* ⚫ Dark Mode - Matte Graphite */
+            --bg-main: #2A2D32;
+            --text-main: #F7FAFC;
+            --text-sub: #A0AEC0;
 
-            --grad-income: linear-gradient(135deg, #ff0f7b 0%, #f89b29 100%);
-            --shadow-income: rgba(255, 15, 123, 0.3);
-            --grad-jobs: linear-gradient(135deg, #b026ff 0%, #5225ff 100%);
-            --shadow-jobs: rgba(176, 38, 255, 0.3);
-            --grad-wash: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
-            --shadow-wash: rgba(0, 242, 254, 0.3);
-            --grad-dry: linear-gradient(135deg, #ff4e00 0%, #ec9f05 100%);
-            --shadow-dry: rgba(255, 78, 0, 0.3);
+            /* Shadows for Dark Mode */
+            --shadow-light: #373b41;
+            --shadow-dark: #1d1f23;
+
+            --neo-out: 8px 8px 16px var(--shadow-dark), -8px -8px 16px var(--shadow-light);
+            --neo-out-hover: 4px 4px 8px var(--shadow-dark), -4px -4px 8px var(--shadow-light);
+            --neo-in: inset 6px 6px 10px 0 var(--shadow-dark), inset -6px -6px 10px 0 var(--shadow-light);
+
+            --c-wsh: #00D1FF;
+            --c-dry: #FF4D4D;
+            --c-inc: #00E676;
+            --c-job: #B478FF;
         }
 
         body {
             font-family: 'Kanit', sans-serif;
-            background-color: var(--bg-body);
-            background-image: radial-gradient(var(--border-color) 1.5px, transparent 1.5px);
-            background-size: 20px 20px;
+            background-color: var(--bg-main);
             color: var(--text-main);
-            transition: all 0.3s ease;
             min-height: 100vh;
-            padding-bottom: 2rem;
+            padding-bottom: 4rem;
+            transition: all 0.3s ease;
+            -webkit-font-smoothing: antialiased;
         }
 
-        /* 📦 Smooth Cards */
-        .neon-card {
-            background-color: var(--bg-card);
+        /* 📦 Neumorphic Base Card (นูนขึ้นมา) */
+        .neo-card {
+            background-color: var(--bg-main);
             border-radius: 24px;
-            border: 1px solid var(--border-color);
-            box-shadow: 0 10px 25px -10px rgba(0, 0, 0, 0.05);
-            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s;
+            padding: 1.8rem;
+            box-shadow: var(--neo-out);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: box-shadow 0.3s ease, transform 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
             height: 100%;
         }
-        [data-bs-theme="dark"] .neon-card { box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5); }
-        .neon-card:hover { transform: translateY(-3px); box-shadow: 0 15px 35px -10px rgba(0, 0, 0, 0.12); }
-        [data-bs-theme="dark"] .neon-card:hover { box-shadow: 0 15px 35px -10px rgba(0, 0, 0, 0.8); }
 
-        /* ✨ 3D Emoji Icons */
-        .icon-3d {
-            width: 50px; height: 50px;
+        /* 🕳️ Neumorphic Inset (บุ๋มลงไป) */
+        .neo-inset {
+            background-color: var(--bg-main);
             border-radius: 16px;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 24px;
-            background: rgba(255, 255, 255, 0.6); 
-            border: 1px solid rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(8px);
-            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-            box-shadow: 0 8px 16px rgba(0,0,0,0.06);
+            padding: 1rem;
+            box-shadow: var(--neo-in);
+        }
+
+        /* 🎛️ Header */
+        .header-wrap {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        /* 📱 CSS GRID สำหรับแผงควบคุม (Responsive 100%) */
+        .controls-wrapper {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            align-items: center;
+            margin-bottom: 2rem;
+            width: 100%;
+        }
+
+        .neo-btn,
+        .neo-input {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            border: none;
+            border-radius: 16px;
+            padding: 0.8rem 1.2rem;
+            font-weight: 600;
+            font-size: 0.95rem;
+            outline: none;
+            transition: all 0.2s ease;
+            text-align: center;
+            font-family: 'Kanit';
+        }
+
+        .neo-btn {
+            box-shadow: var(--neo-out);
+            cursor: pointer;
+            appearance: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .neo-btn:hover {
+            box-shadow: var(--neo-out-hover);
+            transform: translateY(2px);
+        }
+
+        .neo-btn:active {
+            box-shadow: var(--neo-in);
+            transform: translateY(4px);
+        }
+
+        select.neo-btn {
+            padding-right: 2.5rem;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23718096' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 14px;
+        }
+
+        .neo-input {
+            box-shadow: var(--neo-in);
+            width: 100%;
+        }
+
+        .neo-input::-webkit-calendar-picker-indicator {
+            cursor: pointer;
+            opacity: 0.6;
+            filter: invert(0.5);
+        }
+
+        [data-bs-theme="dark"] .neo-input::-webkit-calendar-picker-indicator {
+            filter: invert(0.8);
+        }
+
+        .date-display {
+            box-shadow: var(--neo-in);
+            color: var(--c-wsh);
+            font-weight: 700;
+            cursor: default;
+        }
+
+        .flex-1 {
+            flex: 1;
+            min-width: 150px;
+        }
+
+        .flex-2 {
+            flex: 2;
+            min-width: 250px;
+        }
+
+        .date-group {
+            display: flex;
+            gap: 16px;
+            width: 100%;
+        }
+
+        @media (max-width: 991px) {
+            .controls-wrapper {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 16px;
+            }
+
+            .neo-btn,
+            .neo-input,
+            .date-display {
+                width: 100%;
+                text-align: center;
+            }
+
+            select.neo-btn {
+                text-align-last: center;
+            }
+
+            .date-group {
+                display: grid !important;
+                grid-template-columns: 1fr 1fr;
+                gap: 16px;
+            }
+
+            .theme-btn {
+                position: absolute;
+                top: 1.5rem;
+                right: 1rem;
+                width: 48px;
+                height: 48px;
+            }
+        }
+
+        /* 📊 3D Stat Cards */
+        .stat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1.5rem;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--text-sub);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .stat-footer {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .stat-value {
+            font-size: 2.8rem;
+            font-weight: 900;
+            color: var(--text-main);
+            line-height: 1;
+            margin: 0;
+            letter-spacing: -1px;
+            word-break: break-word;
+        }
+
+        .stat-unit {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-sub);
+            margin-top: 6px;
+        }
+
+        .orb-3d {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
             flex-shrink: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            box-shadow: 6px 6px 12px var(--shadow-dark), -6px -6px 12px var(--shadow-light), inset 2px 2px 5px rgba(255, 255, 255, 0.4), inset -2px -2px 5px rgba(0, 0, 0, 0.2);
         }
-        [data-bs-theme="dark"] .icon-3d { background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(255, 255, 255, 0.05); }
-        .neon-card:hover .icon-3d { transform: scale(1.15) rotate(5deg); }
-        
-        .glow-income { box-shadow: 0 10px 20px var(--shadow-income); }
-        .glow-jobs { box-shadow: 0 10px 20px var(--shadow-jobs); }
-        .glow-wash { box-shadow: 0 10px 20px var(--shadow-wash); }
-        .glow-dry { box-shadow: 0 10px 20px var(--shadow-dry); }
 
-        /* 🔠 Gradient Text */
-        .text-grad-income { background: var(--grad-income); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .text-grad-jobs { background: var(--grad-jobs); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .text-grad-wash { background: var(--grad-wash); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .text-grad-dry { background: var(--grad-dry); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-
-        /* 🔘 Controls */
-        .control-pill {
-            border-radius: 50px !important; 
-            padding: 0.5rem 1.2rem;
-            border: 1px solid var(--border-color) !important;
-            background-color: var(--bg-card); color: var(--text-main);
-            font-weight: 700; font-size: 0.9rem;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.02);
-            transition: all 0.2s; outline: none;
-            height: 42px; /* ล็อกความสูงให้ปุ่มเท่ากันหมด */
-            display: flex; align-items: center; justify-content: center;
+        .orb-inc {
+            background: linear-gradient(145deg, #00E676, #00A3FF);
         }
-        .control-pill:focus { border-color: #0ea5e9 !important; box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.2) !important; }
 
-        /* =========================================
-           📋 BEAUTIFUL TABLE DESIGN 
-           ========================================= */
-        .table-floating { border-collapse: separate; border-spacing: 0 10px; margin: 0; }
-        .table-floating thead th { 
-            border: none; font-size: 0.8rem; color: #6366f1; 
-            font-weight: 800; text-transform: uppercase; letter-spacing: 1px; 
-            padding: 0 1rem 0.5rem 1rem; background: transparent !important; white-space: nowrap;
+        .orb-job {
+            background: linear-gradient(145deg, #B478FF, #6A1B9A);
         }
-        [data-bs-theme="dark"] .table-floating thead th { color: #818cf8; }
-        
-        .table-floating tbody tr { 
-            background-color: var(--table-row-bg) !important; 
-            box-shadow: 0 4px 8px rgba(0,0,0,0.03); 
-            transition: all 0.2s; border-radius: 14px;
+
+        .orb-wsh {
+            background: linear-gradient(145deg, #00D1FF, #0052D4);
         }
-        [data-bs-theme="dark"] .table-floating tbody tr { box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
 
-        .table-floating tbody tr:hover { 
-            background-color: var(--table-row-hover) !important;
-            transform: scale(1.005) translateY(-2px); 
-            box-shadow: 0 8px 20px rgba(0,0,0,0.08); 
-            position: relative; z-index: 10;
+        .orb-dry {
+            background: linear-gradient(145deg, #FF6B00, #D50000);
         }
-        [data-bs-theme="dark"] .table-floating tbody tr:hover { box-shadow: 0 8px 20px rgba(0,0,0,0.6); }
 
-        .table-floating td { 
-            border: none; padding: 1rem; vertical-align: middle; 
-            border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color);
-            background: transparent !important; white-space: nowrap;
+        @media (max-width: 767px) {
+            .stat-value {
+                font-size: 2.2rem;
+            }
         }
-        .table-floating td:first-child { border-top-left-radius: 14px; border-bottom-left-radius: 14px; border-left: 1px solid var(--border-color); }
-        .table-floating td:last-child { border-top-right-radius: 14px; border-bottom-right-radius: 14px; border-right: 1px solid var(--border-color); }
 
-        .row-wash td:first-child { border-left: 5px solid #0ea5e9 !important; }
-        .row-dry td:first-child { border-left: 5px solid #f97316 !important; }
-
-        /* 💊 Badge สถานะเครื่อง */
-        .badge-neon {
-            display: inline-flex; align-items: center; gap: 4px;
-            padding: 6px 12px; border-radius: 50px;
-            font-size: 0.75rem; font-weight: 800; color: white !important;
-            text-transform: uppercase; letter-spacing: 0.5px;
+        /* 💬 Feed Section */
+        .feed-container {
+            max-height: 500px;
+            overflow-y: auto;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
         }
-        .badge-wash { background: var(--grad-wash); box-shadow: 0 4px 10px var(--shadow-wash); }
-        .badge-dry { background: var(--grad-dry); box-shadow: 0 4px 10px var(--shadow-dry); }
 
-        /* 🟢 Uptime Badge */
-        .time-badge {
-            background: #dcfce7; color: #15803d;
-            padding: 2px 8px; border-radius: 50px; font-size: 0.7rem; font-weight: 700;
-            border: 1px solid #bbf7d0; display: inline-flex; align-items: center; gap: 4px;
-            margin-left: 8px;
+        .feed-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--bg-main);
+            padding: 1rem 1.2rem;
+            border-radius: 16px;
+            box-shadow: var(--neo-out);
+            transition: 0.2s;
         }
-        [data-bs-theme="dark"] .time-badge { background: rgba(34, 197, 94, 0.15); color: #4ade80; border-color: rgba(34, 197, 94, 0.3); }
 
-        .pulse-dot {
-            width: 6px; height: 6px; background-color: #22c55e; border-radius: 50%;
-            animation: pulse-ring 2s infinite; flex-shrink: 0;
+        .feed-item:hover {
+            box-shadow: var(--neo-out-hover);
+            transform: scale(1.01);
         }
-        @keyframes pulse-ring { 0% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7); } 70% { box-shadow: 0 0 0 4px rgba(34, 197, 94, 0); } 100% { box-shadow: 0 0 0 0 rgba(0,0,0,0); } }
 
-        /* Scrollbar */
-        ::-webkit-scrollbar { width: 6px; height: 6px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+        .f-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
 
-        /* Animations */
-        @keyframes bounceIn { 0% { opacity: 0; transform: scale(0.95) translateY(15px); } 100% { opacity: 1; transform: scale(1) translateY(0); } }
-        .animate-fade { animation: bounceIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; opacity: 0; }
-        .delay-100 { animation-delay: 0.1s; } .delay-200 { animation-delay: 0.2s; } .delay-300 { animation-delay: 0.3s; }
+        .f-icon-wrap {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            box-shadow: var(--neo-in);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
 
+        .f-icon-wrap.w {
+            color: var(--c-wsh);
+        }
+
+        .f-icon-wrap.d {
+            color: var(--c-dry);
+        }
+
+        .f-name {
+            font-weight: 700;
+            font-size: 1.05rem;
+            color: var(--text-main);
+            margin-bottom: 2px;
+        }
+
+        .f-time {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-sub);
+        }
+
+        .f-price {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: var(--text-main);
+            text-align: right;
+        }
+
+        .uptime-badge {
+            font-size: 0.7rem;
+            font-weight: 700;
+            box-shadow: var(--neo-in);
+            padding: 4px 10px;
+            border-radius: 50px;
+            color: var(--text-sub);
+        }
+
+        /* 🟢 Loader */
         #loading-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px);
-            display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 9999; transition: opacity 0.3s;
-        }
-        [data-bs-theme="dark"] #loading-overlay { background: rgba(9, 14, 23, 0.95); }
-        .spinner-logo { width: 70px; animation: heartbeat 1.5s infinite; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.1));}
-        @keyframes heartbeat { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
-
-        /* =========================================
-           📱 RESPONSIVE DESIGN TWEAKS
-           ========================================= */
-        .chart-container-line { height: 250px; }
-        .chart-container-bar { min-height: 280px; }
-        
-        @media (min-width: 768px) {
-            .chart-container-line { height: 350px; }
-            .chart-container-bar { min-height: 350px; }
-            .icon-3d { width: 64px; height: 64px; font-size: 32px; }
-            .stat-number { font-size: 3rem !important; }
+            position: fixed;
+            inset: 0;
+            background: var(--bg-main);
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.5s ease, visibility 0.5s;
         }
 
-        @media (max-width: 575px) {
-            .icon-3d { width: 42px; height: 42px; font-size: 20px; border-radius: 12px; }
-            .stat-number { font-size: 1.8rem !important; }
+        .loader-outer {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: var(--bg-main);
+            box-shadow: var(--neo-out);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .loader-spinner {
+            position: absolute;
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 4px solid transparent;
+            border-top-color: var(--c-wsh);
+            border-right-color: var(--c-job);
+            animation: spin-ring 1.2s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;
+        }
+
+        .loader-inner {
+            width: 84px;
+            height: 84px;
+            border-radius: 50%;
+            background: var(--bg-main);
+            box-shadow: var(--neo-in);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .loader-logo {
+            width: 50px;
+            height: 50px;
+            object-fit: contain;
+            animation: float-logo 2s ease-in-out infinite;
+            filter: drop-shadow(0 4px 4px rgba(0, 0, 0, 0.1));
+        }
+
+        .loader-text {
+            font-size: 0.9rem;
+            font-weight: 800;
+            color: var(--text-sub);
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            margin-top: 2rem;
+        }
+
+        .dot-1,
+        .dot-2,
+        .dot-3 {
+            animation: blink-dot 1.4s infinite both;
+        }
+
+        .dot-2 {
+            animation-delay: 0.2s;
+        }
+
+        .dot-3 {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes spin-ring {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes float-logo {
+
+            0%,
+            100% {
+                transform: translateY(0px) scale(1);
+                opacity: 1;
+            }
+
+            50% {
+                transform: translateY(-4px) scale(0.95);
+                opacity: 0.7;
+            }
+        }
+
+        @keyframes blink-dot {
+            0% {
+                opacity: 0.2;
+            }
+
+            20% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 0.2;
+            }
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-main);
+            box-shadow: var(--neo-in);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--text-sub);
+            border-radius: 10px;
         }
     </style>
 </head>
-<body class="p-2 p-sm-3 p-md-4">
 
-    <!-- Loading -->
+<body class="p-3 p-md-4 mt-2">
+
+    <!-- 🟢 3D Premium Loader with Logo -->
     <div id="loading-overlay">
-        <img src="https://i.ibb.co/v6F6dNMf/logo-removebg-preview.png" class="spinner-logo" alt="Loading...">
-        <p class="mt-4 fs-6 fw-black text-uppercase text-grad-wash" style="letter-spacing: 2px;">Syncing Data...</p>
+        <div class="loader-outer">
+            <div class="loader-spinner"></div>
+            <div class="loader-inner">
+                <img src="https://i.ibb.co/v6F6dNMf/logo-removebg-preview.png" alt="Logo" class="loader-logo">
+            </div>
+        </div>
+        <div class="loader-text">
+            SYNCING<span class="dot-1">.</span><span class="dot-2">.</span><span class="dot-3">.</span>
+        </div>
     </div>
 
-    <!-- Container หลักยืดหยุ่น -->
-    <div class="container-fluid mx-auto d-flex flex-column gap-3 gap-md-4" style="max-width: 85rem; padding: 0;">
+    <div class="container-fluid mx-auto" style="max-width: 85rem; padding: 0;">
 
-        <!-- 🎛️ Header Console -->
-        <div class="neon-card p-3 p-md-4 d-flex flex-column flex-xl-row justify-content-between align-items-center gap-3 animate-fade">
-            
-            <!-- Logo Area -->
-            <div class="d-flex align-items-center gap-3 w-100 justify-content-center justify-content-xl-start">
-                <div class="p-1 p-md-2 rounded-circle" style="background: var(--bg-body); border: 1px solid var(--border-color); box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);">
-                    <img src="https://i.ibb.co/v6F6dNMf/logo-removebg-preview.png" alt="Logo" style="height: 3rem; width: 3rem; object-fit: contain;">
+        <!-- 🏢 Header -->
+        <div class="header-wrap position-relative">
+            <div class="d-flex align-items-center gap-3">
+                <div
+                    style="width: 55px; height: 55px; border-radius: 18px; box-shadow: var(--neo-out); display: flex; justify-content: center; align-items: center; padding: 8px;">
+                    <img src="https://i.ibb.co/v6F6dNMf/logo-removebg-preview.png" alt="Logo"
+                        style="width: 100%; height: 100%; object-fit: contain;">
                 </div>
                 <div>
-                    <h1 class="fs-4 fs-md-2 fw-black m-0 text-grad-wash" style="line-height: 1;">WASH LOVER</h1>
-                    <div class="d-flex align-items-center gap-1 mt-1 justify-content-center justify-content-xl-start">
-                        <div class="pulse-dot" style="width: 5px; height: 5px;"></div>
-                        <span class="fw-bold text-uppercase" style="color: var(--text-muted); font-size: 0.7rem; letter-spacing: 1px;">Live Dashboard</span>
+                    <h1 class="m-0 fw-black fs-4 text-uppercase" style="letter-spacing: 1px;">Wash Lover</h1>
+                    <div class="d-flex align-items-center gap-2 mt-1">
+                        <span
+                            style="width: 8px; height: 8px; background: var(--c-inc); border-radius: 50%; box-shadow: 0 0 8px var(--c-inc);"></span>
+                        <span
+                            style="font-size: 0.75rem; color: var(--text-sub); font-weight: 700; text-transform: uppercase;">Smart
+                            Dashboard</span>
                     </div>
                 </div>
             </div>
 
-            <!-- Controls (ฉลาดขึ้น: มือถือเรียง 2 แถว / คอมเรียง 1 แถวยาวฝั่งขวา) -->
-            <div class="d-flex flex-wrap justify-content-center justify-content-xl-end align-items-center gap-2 w-100">
-                
-                <select id="branchFilter" onchange="fetchData()" class="form-select control-pill flex-grow-1 flex-md-grow-0" style="min-width: 140px; max-width: 200px;">
-                    <option value="all">กำลังโหลดสาขา...</option>
-                </select>
-
-                <div id="dateRangeDisplay" class="control-pill flex-grow-1 flex-md-grow-0 text-truncate" style="color: var(--text-muted); min-width: 180px; max-width: 250px;">
-                    📅 โหลดข้อมูล...
-                </div>
-
-                <div id="customDateWrapper" class="d-none w-100 w-md-auto flex-wrap gap-2 justify-content-center">
-                    <input type="date" id="customDateStart" class="form-control control-pill flex-grow-1" style="min-width: 140px; max-width: 180px;">
-                    <input type="date" id="customDateEnd" class="form-control control-pill flex-grow-1" style="min-width: 140px; max-width: 180px;">
-                </div>
-
-                <select id="timeFilter" onchange="checkFilter()" class="form-select control-pill flex-grow-1 flex-md-grow-0" style="min-width: 140px; max-width: 180px;">
-                    <option value="daily">วันนี้</option>
-                    <option value="weekly">7 วันล่าสุด</option>
-                    <option value="monthly">30 วันล่าสุด</option>
-                    <option value="custom">ระบุเอง</option>
-                </select>
-
-                <button id="btnSearchCustom" onclick="fetchData()" class="btn text-white d-none control-pill border-0 shadow-sm flex-grow-1 flex-md-grow-0" style="background: var(--grad-wash); min-width: 100px;">ค้นหา</button>
-                <button id="theme-toggle-btn" onclick="toggleDarkMode()" class="btn control-pill fs-5 d-flex align-items-center justify-content-center flex-shrink-0" style="width: 42px; padding: 0;">🌙</button>
-            </div>
+            <button onclick="toggleDarkMode()" class="neo-btn theme-btn d-none d-lg-flex"
+                style="width: 50px; height: 50px; padding: 0;">
+                <i data-lucide="moon" id="theme-icon"></i>
+            </button>
+            <button onclick="toggleDarkMode()" class="neo-btn theme-btn d-flex d-lg-none" style="padding: 0;">
+                <i data-lucide="moon" id="theme-icon-mobile"></i>
+            </button>
         </div>
 
-        <!-- 🧩 Stats Widgets -->
-        <div class="row g-2 g-sm-3 g-md-4 animate-fade delay-100">
-            <!-- รายได้ -->
-            <div class="col-6 col-xl-3">
-                <!-- โครงสร้างที่ฉลาด: มือถือ (ไอคอนบน-เลขล่าง) / คอม (เลขซ้าย-ไอคอนขวา) -->
-                <div class="neon-card p-3 p-xl-4 d-flex flex-column flex-xl-row justify-content-between align-items-start align-items-xl-center">
-                    <div class="d-flex flex-column order-2 order-xl-1 mt-3 mt-xl-0 w-100">
-                        <span class="small fw-bold text-uppercase mb-1" style="color: var(--text-muted); font-size: 0.75rem; letter-spacing: 0.5px;">รายได้ทั้งหมด</span>
-                        <h3 id="statCoins" class="fw-black m-0 text-grad-income stat-number text-truncate" style="line-height: 1.1;">0</h3>
-                        <p class="fw-bold m-0 mt-1" style="color: var(--text-muted); font-size: 0.75rem;">บาท (THB)</p>
-                    </div>
-                    <div class="icon-3d glow-income order-1 order-xl-2">💸</div>
-                </div>
+        <!-- 🎛️ Filter Grid (Mobile Perfection) -->
+        <div class="controls-wrapper">
+            <select id="branchFilter" onchange="fetchData()" class="neo-btn flex-1">
+                <option value="all">รวมทุกสาขา</option>
+            </select>
+
+            <div id="dateRangeDisplay" class="neo-input date-display flex-2 text-truncate">
+                <i data-lucide="calendar" style="width: 16px; margin-right: 4px; margin-bottom: 2px;"></i> <span
+                    id="dateText">...</span>
             </div>
-            <!-- รอบทำงาน -->
-            <div class="col-6 col-xl-3">
-                <div class="neon-card p-3 p-xl-4 d-flex flex-column flex-xl-row justify-content-between align-items-start align-items-xl-center">
-                    <div class="d-flex flex-column order-2 order-xl-1 mt-3 mt-xl-0 w-100">
-                        <span class="small fw-bold text-uppercase mb-1" style="color: var(--text-muted); font-size: 0.75rem; letter-spacing: 0.5px;">จำนวนรอบ</span>
-                        <h3 id="statJobs" class="fw-black m-0 text-grad-jobs stat-number text-truncate" style="line-height: 1.1;">0</h3>
-                        <p class="fw-bold m-0 mt-1" style="color: var(--text-muted); font-size: 0.75rem;">รอบซัก/อบ</p>
-                    </div>
-                    <div class="icon-3d glow-jobs order-1 order-xl-2">🧺</div>
-                </div>
+
+            <select id="timeFilter" onchange="checkFilter()" class="neo-btn flex-1">
+                <option value="daily">วันนี้</option>
+                <option value="weekly">7 วัน</option>
+                <option value="monthly">30 วัน</option>
+                <option value="custom">ระบุเอง</option>
+            </select>
+
+            <!-- Custom Dates -->
+            <div id="customDateWrapper" class="date-group d-none flex-2">
+                <input type="date" id="customDateStart" class="neo-input">
+                <input type="date" id="customDateEnd" class="neo-input">
             </div>
-            <!-- ซักผ้า -->
-            <div class="col-6 col-xl-3">
-                <div class="neon-card p-3 p-xl-4 d-flex flex-column flex-xl-row justify-content-between align-items-start align-items-xl-center">
-                    <div class="d-flex flex-column order-2 order-xl-1 mt-3 mt-xl-0 w-100">
-                        <span class="small fw-bold text-uppercase mb-1" style="color: var(--text-muted); font-size: 0.75rem; letter-spacing: 0.5px;">เครื่องซักผ้า</span>
-                        <h3 id="statWasher" class="fw-black m-0 text-grad-wash stat-number text-truncate" style="line-height: 1.1;">0</h3>
-                        <p class="fw-bold m-0 mt-1" style="color: var(--text-muted); font-size: 0.75rem;">รอบทำงาน</p>
-                    </div>
-                    <div class="icon-3d glow-wash order-1 order-xl-2">🫧</div>
-                </div>
-            </div>
-            <!-- อบผ้า -->
-            <div class="col-6 col-xl-3">
-                <div class="neon-card p-3 p-xl-4 d-flex flex-column flex-xl-row justify-content-between align-items-start align-items-xl-center">
-                    <div class="d-flex flex-column order-2 order-xl-1 mt-3 mt-xl-0 w-100">
-                        <span class="small fw-bold text-uppercase mb-1" style="color: var(--text-muted); font-size: 0.75rem; letter-spacing: 0.5px;">เครื่องอบผ้า</span>
-                        <h3 id="statDryer" class="fw-black m-0 text-grad-dry stat-number text-truncate" style="line-height: 1.1;">0</h3>
-                        <p class="fw-bold m-0 mt-1" style="color: var(--text-muted); font-size: 0.75rem;">รอบทำงาน</p>
-                    </div>
-                    <div class="icon-3d glow-dry order-1 order-xl-2">♨️</div>
-                </div>
-            </div>
+
+            <button id="btnSearchCustom" onclick="fetchData()" class="neo-btn d-none flex-1"
+                style="color: var(--c-wsh);">
+                <i data-lucide="search" style="width: 18px;"></i> ค้นหา
+            </button>
         </div>
 
-        <!-- 📈 กราฟแนวโน้ม -->
-        <div class="neon-card p-3 p-md-5 animate-fade delay-200">
-            <h2 class="fs-5 fs-md-4 fw-black mb-3 mb-md-4 d-flex align-items-center gap-2">
-                <span>📈</span> แนวโน้มการใช้งาน
-            </h2>
-            <div class="w-100 position-relative chart-container-line">
-                <canvas id="peakHoursLineChart"></canvas>
-            </div>
-        </div>
-
-        <!-- 🍩 Charts Group -->
-        <div class="row g-2 g-sm-3 g-md-4 animate-fade delay-300">
-            <div class="col-12 col-xl-4">
-                <div class="neon-card p-3 p-md-5 d-flex flex-column h-100">
-                    <h2 class="fs-5 fs-md-4 fw-black mb-3 flex-shrink-0">📊 สัดส่วน</h2>
-                    <div class="flex-grow-1 d-flex justify-content-center align-items-center py-2">
-                        <div style="width: 100%; max-width: 250px;"><canvas id="doughnutChart"></canvas></div>
+        <!-- 📊 3D Stats Cards -->
+        <div class="row g-4 mb-5">
+            <div class="col-6 col-xl-3">
+                <div class="neo-card">
+                    <div class="stat-header">
+                        <span class="stat-label">รายได้รวม</span>
+                        <div class="orb-3d orb-inc"><i data-lucide="banknote"></i></div>
+                    </div>
+                    <div class="stat-footer">
+                        <h3 id="statCoins" class="stat-value text-truncate">0</h3>
+                        <span class="stat-unit">THB (บาท)</span>
                     </div>
                 </div>
             </div>
-            <div class="col-12 col-xl-8">
-                <div class="neon-card p-3 p-md-5 d-flex flex-column h-100">
-                    <h2 class="fs-5 fs-md-4 fw-black mb-3 flex-shrink-0">🏆 รายได้แยกตามตู้</h2>
-                    <div class="w-100 position-relative flex-grow-1 chart-container-bar">
-                        <canvas id="horizontalBarChart"></canvas>
+            <div class="col-6 col-xl-3">
+                <div class="neo-card">
+                    <div class="stat-header">
+                        <span class="stat-label">รอบทำงาน</span>
+                        <div class="orb-3d orb-job"><i data-lucide="activity"></i></div>
+                    </div>
+                    <div class="stat-footer">
+                        <h3 id="statJobs" class="stat-value text-truncate">0</h3>
+                        <span class="stat-unit">รอบทั้งหมด</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-xl-3">
+                <div class="neo-card">
+                    <div class="stat-header">
+                        <span class="stat-label">ซักผ้า</span>
+                        <div class="orb-3d orb-wsh"><i data-lucide="waves"></i></div>
+                    </div>
+                    <div class="stat-footer">
+                        <h3 id="statWasher" class="stat-value text-truncate">0</h3>
+                        <span class="stat-unit">รอบซัก</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-xl-3">
+                <div class="neo-card">
+                    <div class="stat-header">
+                        <span class="stat-label">อบผ้า</span>
+                        <div class="orb-3d orb-dry"><i data-lucide="flame"></i></div>
+                    </div>
+                    <div class="stat-footer">
+                        <h3 id="statDryer" class="stat-value text-truncate">0</h3>
+                        <span class="stat-unit">รอบอบ</span>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- 📋 Data Table (มี Padding ล้อมรอบเงาตาราง) -->
-        <div class="neon-card p-3 p-md-4 animate-fade delay-300 mb-4">
-            <div class="mb-3 d-flex align-items-center gap-2 px-2">
-                <span style="font-size: 1.5rem;">🧾</span>
-                <h2 class="fs-5 fs-md-4 fw-black m-0 text-main">รายการล่าสุด 
-                    <span class="fw-bold d-none d-sm-inline" style="color: var(--text-muted); font-size: 0.8rem;">(100 รายการ)</span>
-                </h2>
+        <!-- 📈 Charts & Deep Feed -->
+        <div class="row g-4 mb-5">
+            <!-- ซ้าย: กราฟเจาะลึก (Inset) -->
+            <div class="col-12 col-xl-7 d-flex flex-column gap-4">
+                <div class="neo-card d-flex flex-column" style="min-height: 400px;">
+                    <div class="d-flex align-items-center gap-3 mb-4">
+                        <div
+                            style="width: 36px; height: 36px; border-radius: 10px; box-shadow: var(--neo-in); display: flex; justify-content: center; align-items: center;">
+                            <i data-lucide="trending-up" style="width: 18px; color: var(--c-wsh);"></i>
+                        </div>
+                        <h2 class="fs-5 fw-bold m-0 text-uppercase">แนวโน้มตลอดวัน</h2>
+                    </div>
+                    <div class="neo-inset w-100 flex-grow-1 position-relative">
+                        <canvas id="peakHoursLineChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="row g-4 flex-grow-1">
+                    <div class="col-12 col-md-5">
+                        <div class="neo-card d-flex flex-column h-100">
+                            <h2 class="fs-6 fw-bold mb-4 text-center text-uppercase">สัดส่วนบริการ</h2>
+                            <div class="neo-inset flex-grow-1 d-flex justify-content-center align-items-center">
+                                <div style="width: 100%; max-width: 200px;"><canvas id="doughnutChart"></canvas></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-7">
+                        <div class="neo-card d-flex flex-column h-100">
+                            <h2 class="fs-6 fw-bold mb-4 text-uppercase">รายได้แยกเครื่อง</h2>
+                            <div class="neo-inset w-100 flex-grow-1 position-relative" style="min-height: 200px;">
+                                <canvas id="horizontalBarChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            
-            <div class="table-responsive px-2 pb-3" style="max-height: 500px;">
-                <table class="table table-floating w-100 m-0" style="min-width: 600px;">
-                    <thead class="position-sticky top-0 z-1" style="background: var(--bg-card);">
-                        <tr>
-                            <th class="text-start ps-4">วัน / เวลา</th>
-                            <th class="text-start">ชื่ออุปกรณ์</th>
-                            <th class="text-center">ประเภท</th>
-                            <th class="text-end pe-4">รายได้ (฿)</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tableBody">
-                        <!-- JS Content -->
-                    </tbody>
-                </table>
+
+            <!-- ขวา: Neumorphic Feed -->
+            <div class="col-12 col-xl-5">
+                <div class="neo-card h-100 d-flex flex-column"
+                    style="max-height: 800px; padding: 1.5rem 1rem 1.5rem 1.5rem;">
+                    <div class="d-flex justify-content-between align-items-center mb-4 pe-2">
+                        <h2 class="fs-5 fw-bold m-0 text-uppercase d-flex align-items-center gap-3">
+                            <div
+                                style="width: 36px; height: 36px; border-radius: 10px; box-shadow: var(--neo-in); display: flex; justify-content: center; align-items: center;">
+                                <i data-lucide="history" style="width: 18px; color: var(--c-job);"></i>
+                            </div>
+                            Live Feed
+                        </h2>
+                        <span class="uptime-badge">100 Items</span>
+                    </div>
+
+                    <div class="neo-inset flex-grow-1" style="padding: 10px;">
+                        <div class="feed-container" id="tableBody">
+                            <!-- JS Content -->
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -401,18 +701,46 @@
     <script>
         const DB_API_URL = 'https://api.all123th.com/inw/api/wl_transactions/';
         const BRANCH_API_URL = 'https://washing.adokub.com/api/branch';
-        
+
         let doughnutChartInstance = null; let barChartInstance = null; let lineChartInstance = null;
         let cacheData = { washer: 0, dryer: 0, deviceLabels: [], deviceTotals: [], washerHourly: Array(24).fill(0), dryerHourly: Array(24).fill(0) };
+
+        function getCSSVar(name) { return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
+        function renderIcons() { lucide.createIcons(); }
 
         function toggleDarkMode() {
             const html = document.documentElement;
             const currentTheme = html.getAttribute('data-bs-theme');
             const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
             html.setAttribute('data-bs-theme', newTheme);
-            
-            document.getElementById('theme-toggle-btn').innerText = newTheme === 'dark' ? '☀️' : '🌙';
-            updateCharts();
+            document.getElementById('theme-icon').setAttribute('data-lucide', newTheme === 'dark' ? 'sun' : 'moon');
+            const mobileIcon = document.getElementById('theme-icon-mobile');
+            if (mobileIcon) mobileIcon.setAttribute('data-lucide', newTheme === 'dark' ? 'sun' : 'moon');
+            renderIcons(); updateCharts();
+        }
+
+        // 🔢 ฟังก์ชันสร้างเอฟเฟกต์ตัวเลขวิ่ง (Count-up / Count-down)
+        function animateValue(id, start, end, duration) {
+            const obj = document.getElementById(id);
+            if (!obj) return;
+            if (start === end) {
+                obj.innerHTML = end.toLocaleString();
+                return;
+            }
+            let startTimestamp = null;
+            const step = (timestamp) => {
+                if (!startTimestamp) startTimestamp = timestamp;
+                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                const easeProgress = 1 - Math.pow(1 - progress, 3); // ease-out-cubic
+                const currentVal = Math.floor(easeProgress * (end - start) + start);
+                obj.innerHTML = currentVal.toLocaleString();
+                if (progress < 1) {
+                    window.requestAnimationFrame(step);
+                } else {
+                    obj.innerHTML = end.toLocaleString();
+                }
+            };
+            window.requestAnimationFrame(step);
         }
 
         async function loadBranches() {
@@ -420,7 +748,7 @@
                 const res = await fetch(BRANCH_API_URL);
                 const branches = await res.json();
                 const branchSelect = document.getElementById('branchFilter');
-                branchSelect.innerHTML = '';
+                branchSelect.innerHTML = '<option value="all">รวมทุกสาขา</option>';
                 branches.forEach(b => {
                     const option = document.createElement('option');
                     option.value = b.serial; option.textContent = b.name;
@@ -462,7 +790,7 @@
                     return (t.timestamp >= targetStart && t.timestamp <= targetEnd) && (selectedBranch === 'all' || t.branch === selectedBranch);
                 });
                 processDataAndRender(filteredTransactions);
-            } catch (err) { } finally {
+            } catch (err) { console.error(err) } finally {
                 loader.style.opacity = '0';
                 setTimeout(() => loader.style.display = 'none', 300);
             }
@@ -482,17 +810,10 @@
         }
 
         function formatUptimeBadge(minutes) {
-            if (minutes === null || minutes === undefined || isNaN(minutes)) { return ""; }
+            if (minutes === null || minutes === undefined || isNaN(minutes)) return "";
             let m = parseInt(minutes);
-            let timeText = m >= 1440 ? `${Math.floor(m / 1440)} ว. ${Math.floor((m % 1440) / 60) > 0 ? Math.floor((m % 1440) / 60) + ' ช.' : ''}`
-                       : m >= 60 ? `${Math.floor(m / 60)} ช. ${m % 60 > 0 ? (m % 60) + ' น.' : ''}`
-                       : `${m} น.`;
-            return `
-                <span class="time-badge">
-                    <span class="pulse-dot"></span>
-                    <span class="d-none d-sm-inline">ออนไลน์</span> ${timeText}
-                </span>
-            `;
+            let timeText = m >= 1440 ? `${Math.floor(m / 1440)}d ${Math.floor((m % 1440) / 60)}h` : m >= 60 ? `${Math.floor(m / 60)}h ${m % 60}m` : `${m}m`;
+            return `<span class="uptime-badge"><i data-lucide="clock" style="width: 10px; margin-right: 4px; display:inline-block;"></i>${timeText}</span>`;
         }
 
         function processDataAndRender(transactions) {
@@ -506,7 +827,6 @@
                 totalIncome += incomeBaht;
                 const isDryer = t.machine_type === 'Dryer' || t.device_name.includes('อบ');
                 if (isDryer) dryerCount++; else washerCount++;
-
                 if (incomeBaht > 0) deviceIncomeMap[t.device_name] = (deviceIncomeMap[t.device_name] || 0) + incomeBaht;
                 const hour = parseInt(t.timestamp.substring(11, 13));
                 if (!isNaN(hour) && hour >= 0 && hour < 24) {
@@ -516,45 +836,46 @@
 
             const displayTransactions = transactions.slice(0, 100);
 
-            const tableHtml = displayTransactions.length ? displayTransactions.map((t) => {
+            const feedHtml = displayTransactions.length ? displayTransactions.map((t) => {
                 const coins = parseInt(t.coins_paid) || 0; const incomeBaht = coins * 10;
                 const isDryer = t.machine_type === 'Dryer' || t.device_name.includes('อบ');
                 const uptimeBadge = formatUptimeBadge(t.uptime_minutes);
 
-                const badgeClass = isDryer ? 'badge-dry' : 'badge-wash';
-                const rowClass = isDryer ? 'row-dry' : 'row-wash';
-                const gradTextClass = isDryer ? 'text-grad-dry' : 'text-grad-wash';
-
-                const iconSvg = isDryer 
-                    ? `<svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3"></path></svg>`
-                    : `<svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9 9 0 100-18 9 9 0 000 18zm0-14c2.206 0 4 1.794 4 4s-1.794 4-4 4-4-1.794-4-4 1.794-4 4-4z"/></svg>`;
-
+                const iconClass = isDryer ? 'd' : 'w';
+                const iconName = isDryer ? 'flame' : 'waves';
                 return `
-                <tr class="${rowClass}">
-                    <td class="fw-bold ps-3 ps-md-4" style="color: var(--text-muted); font-size: 0.8rem;">
-                        ${t.timestamp.substring(0, 10)}<br class="d-block d-sm-none"><span class="d-none d-sm-inline"> </span>${t.timestamp.substring(11, 16)}
-                    </td>
-                    <td class="fw-black fs-6 text-body">
-                        <div class="d-flex align-items-center gap-1 flex-wrap">${t.device_name} ${uptimeBadge}</div>
-                    </td>
-                    <td class="text-center">
-                        <span class="badge-neon ${badgeClass}">
-                            ${iconSvg} <span class="d-none d-sm-inline">${isDryer ? 'อบผ้า' : 'ซักผ้า'}</span><span class="d-inline d-sm-none">${isDryer ? 'อบ' : 'ซัก'}</span>
-                        </span>
-                    </td>
-                    <td class="text-end fw-black fs-4 pe-3 pe-md-4">
-                        <span class="${gradTextClass}" style="display: inline-block;">+${incomeBaht}</span> 
-                        <span class="fs-6 ms-1" style="color: var(--text-muted); -webkit-text-fill-color: initial;">฿</span>
-                    </td>
-                </tr>`;
-            }).join('') : `<tr><td colspan="4" class="text-center py-5 text-muted fw-bold">ไม่มีข้อมูล</td></tr>`;
+                <div class="feed-item">
+                    <div class="f-left">
+                        <div class="f-icon-wrap ${iconClass}"><i data-lucide="${iconName}" style="width: 18px;"></i></div>
+                        <div>
+                            <div class="f-name">${t.device_name}</div>
+                            <div class="f-time">
+                                <span>${t.timestamp.substring(11, 16)}</span>
+                                <span class="mx-1">&bull;</span>
+                                <span>${t.timestamp.substring(5, 10).replace('-', '/')}</span>
+                                ${uptimeBadge ? `<span class="mx-1">&bull;</span>${uptimeBadge}` : ''}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="f-price">+${incomeBaht}<span style="font-size: 0.8rem; font-weight: normal; color: var(--text-sub); margin-left: 2px;">฿</span></div>
+                </div>`;
+            }).join('') : `<div class="text-center py-5 fw-bold" style="color: var(--text-sub);">ไม่พบข้อมูล</div>`;
 
-            document.getElementById('statCoins').innerText = totalIncome.toLocaleString();
-            document.getElementById('statJobs').innerText = totalJobs.toLocaleString();
-            document.getElementById('statWasher').innerText = washerCount.toLocaleString();
-            document.getElementById('statDryer').innerText = dryerCount.toLocaleString();
-            document.getElementById('tableBody').innerHTML = tableHtml;
-            
+            // ดึงค่าเก่าบนหน้าจอมาเพื่อทำเอฟเฟกต์ตัวเลขวิ่ง
+            const oldCoins = parseInt(document.getElementById('statCoins').innerText.replace(/,/g, '')) || 0;
+            const oldJobs = parseInt(document.getElementById('statJobs').innerText.replace(/,/g, '')) || 0;
+            const oldWasher = parseInt(document.getElementById('statWasher').innerText.replace(/,/g, '')) || 0;
+            const oldDryer = parseInt(document.getElementById('statDryer').innerText.replace(/,/g, '')) || 0;
+
+            // รันอนิเมชัน 1.5 วินาที (1500ms)
+            animateValue('statCoins', oldCoins, totalIncome, 1500);
+            animateValue('statJobs', oldJobs, totalJobs, 1500);
+            animateValue('statWasher', oldWasher, washerCount, 1500);
+            animateValue('statDryer', oldDryer, dryerCount, 1500);
+
+            document.getElementById('tableBody').innerHTML = feedHtml;
+
+            renderIcons();
             const sortedDevices = Object.entries(deviceIncomeMap)
                 .map(([name, total]) => ({ name, total }))
                 .sort((a, b) => {
@@ -562,7 +883,6 @@
                     if (isAWasher && !isBWasher) return -1; if (!isAWasher && isBWasher) return 1;
                     return parseInt(a.name.match(/\d+$/)?.[0] || 0) - parseInt(b.name.match(/\d+$/)?.[0] || 0);
                 });
-
             cacheData.washer = washerCount; cacheData.dryer = dryerCount;
             cacheData.deviceLabels = sortedDevices.map(d => d.name);
             cacheData.deviceTotals = sortedDevices.map(d => d.total);
@@ -575,126 +895,133 @@
             const wrapper = document.getElementById('customDateWrapper');
             const btnSearch = document.getElementById('btnSearchCustom');
             if (isCustom) {
-                wrapper.classList.remove('d-none'); wrapper.classList.add('d-flex');
+                wrapper.classList.remove('d-none');
                 btnSearch.classList.remove('d-none');
             } else {
-                wrapper.classList.add('d-none'); wrapper.classList.remove('d-flex');
-                btnSearch.classList.add('d-none'); fetchData();
+                wrapper.classList.add('d-none');
+                btnSearch.classList.add('d-none');
+                fetchData();
             }
         }
 
         function formatThaiDateShort(dateStr) {
             if (!dateStr) return "-"; const parts = dateStr.split('-');
             const months = ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'];
-            return `${parseInt(parts[2])} ${months[parseInt(parts[1]) - 1]} ${parseInt(parts[0]) + 543}`;
+            return `${parseInt(parts[2])} ${months[parseInt(parts[1]) - 1]}`;
         }
 
         function getDateRange() {
             const f = document.getElementById('timeFilter').value; let startStr = "", endStr = "";
             const formatDate = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
-            if (f === 'custom') { startStr = document.getElementById('customDateStart').value; endStr = document.getElementById('customDateEnd').value; } 
+            if (f === 'custom') { startStr = document.getElementById('customDateStart').value; endStr = document.getElementById('customDateEnd').value; }
             else {
                 const t = new Date(), s = new Date();
                 if (f === 'weekly') s.setDate(t.getDate() - 7); if (f === 'monthly') s.setDate(t.getDate() - 30);
                 startStr = formatDate(s); endStr = formatDate(t);
             }
-            const displayEl = document.getElementById('dateRangeDisplay');
-            
-            let dateText = startStr === endStr ? `${formatThaiDateShort(startStr)}` : `${formatThaiDateShort(startStr)} - ${formatThaiDateShort(endStr)}`;
-            if(displayEl) displayEl.innerText = `📅 ${dateText}`;
-            
+            const dateText = startStr === endStr ? `${formatThaiDateShort(startStr)}` : `${formatThaiDateShort(startStr)} - ${formatThaiDateShort(endStr)}`;
+            document.getElementById('dateText').innerText = dateText;
             return { start: startStr, end: endStr };
         }
 
+        // Charts
         Chart.defaults.font.family = "'Kanit', sans-serif";
 
         function updateCharts() {
             const isDark = document.documentElement.getAttribute('data-bs-theme') === 'dark';
-            const textColor = isDark ? '#94a3b8' : '#64748b';
-            const gridColor = isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)';
-            const isMobile = window.innerWidth < 768; const chartFontSize = isMobile ? 10 : 12;
+            const textColor = isDark ? '#A0AEC0' : '#718096';
+            const colorW = getCSSVar('--c-wsh');
+            const colorD = getCSSVar('--c-dry');
 
             Chart.defaults.color = textColor;
 
-            const ctxDoughnut = document.getElementById('doughnutChart').getContext('2d');
-            let gradWash = ctxDoughnut.createLinearGradient(0, 0, 0, 400);
-            gradWash.addColorStop(0, '#0ea5e9'); gradWash.addColorStop(1, '#3b82f6');
-            
-            let gradDry = ctxDoughnut.createLinearGradient(0, 0, 0, 400);
-            gradDry.addColorStop(0, '#f97316'); gradDry.addColorStop(1, '#ef4444');
+            const commonOptions = {
+                responsive: true, maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'top', labels: { usePointStyle: true, boxWidth: 8, font: { size: 12, weight: '600' } } },
+                    tooltip: { backgroundColor: isDark ? '#1A202C' : '#FFFFFF', titleColor: isDark ? '#F7FAFC' : '#111827', bodyColor: textColor, borderWidth: 0, padding: 12, cornerRadius: 12, boxShadow: '0 4px 6px rgba(0,0,0,0.1)' }
+                }
+            };
 
+            // 🌟 1. กราฟวงกลม: เพิ่มแอนิเมชัน Pop & Rotate
             if (doughnutChartInstance) doughnutChartInstance.destroy();
-            doughnutChartInstance = new Chart(ctxDoughnut, {
+            doughnutChartInstance = new Chart(document.getElementById('doughnutChart').getContext('2d'), {
                 type: 'doughnut',
-                data: {
-                    labels: ['เครื่องซักผ้า', 'เครื่องอบผ้า'],
-                    datasets: [{ data: [cacheData.washer, cacheData.dryer], backgroundColor: [gradWash, gradDry], borderWidth: 0, hoverOffset: 10 }]
-                },
-                options: { responsive: true, cutout: '75%', plugins: { legend: { position: 'bottom', labels: { usePointStyle: true, padding: 15, font: { size: chartFontSize, weight: '700' } } } } }
+                data: { labels: ['ซักผ้า', 'อบผ้า'], datasets: [{ data: [cacheData.washer, cacheData.dryer], backgroundColor: [colorW, colorD], borderWidth: 0, hoverOffset: 5 }] },
+                options: {
+                    ...commonOptions,
+                    cutout: '80%',
+                    animation: {
+                        animateScale: true,
+                        animateRotate: true,
+                        duration: 1500,
+                        easing: 'easeOutBounce'
+                    },
+                    plugins: { ...commonOptions.plugins, legend: { position: 'bottom', labels: { usePointStyle: true, padding: 20 } } }
+                }
             });
 
+            // 🌟 2. กราฟเส้น: เพิ่มแอนิเมชันวาดเส้น
             if (lineChartInstance) lineChartInstance.destroy();
             const ctxLine = document.getElementById('peakHoursLineChart').getContext('2d');
-            
-            let lineWashBg = ctxLine.createLinearGradient(0, 0, 0, 350); lineWashBg.addColorStop(0, 'rgba(14, 165, 233, 0.3)'); lineWashBg.addColorStop(1, 'rgba(14, 165, 233, 0)');
-            let lineDryBg = ctxLine.createLinearGradient(0, 0, 0, 350); lineDryBg.addColorStop(0, 'rgba(249, 115, 22, 0.3)'); lineDryBg.addColorStop(1, 'rgba(249, 115, 22, 0)');
 
             lineChartInstance = new Chart(ctxLine, {
                 type: 'line',
                 data: {
                     labels: Array.from({ length: 24 }, (_, i) => String(i).padStart(2, '0') + ':00'),
                     datasets: [
-                        { label: 'ซักผ้า', data: cacheData.washerHourly, borderColor: '#0ea5e9', backgroundColor: lineWashBg, tension: 0.5, borderWidth: isMobile ? 3 : 4, fill: true, pointRadius: 0, pointHoverRadius: 8, pointBackgroundColor: '#0ea5e9' },
-                        { label: 'อบผ้า', data: cacheData.dryerHourly, borderColor: '#f97316', backgroundColor: lineDryBg, tension: 0.5, borderWidth: isMobile ? 3 : 4, fill: true, pointRadius: 0, pointHoverRadius: 8, pointBackgroundColor: '#f97316' }
+                        { label: 'ซักผ้า', data: cacheData.washerHourly, borderColor: colorW, backgroundColor: colorW + '10', fill: true, tension: 0.4, borderWidth: 3, pointRadius: 0, pointHoverRadius: 6 },
+                        { label: 'อบผ้า', data: cacheData.dryerHourly, borderColor: colorD, backgroundColor: colorD + '10', fill: true, tension: 0.4, borderWidth: 3, pointRadius: 0, pointHoverRadius: 6 }
                     ]
                 },
                 options: {
-                    responsive: true, maintainAspectRatio: false, interaction: { mode: 'index', intersect: false },
-                    plugins: { legend: { position: 'top', align: 'end', labels: { usePointStyle: true, boxWidth: 8, font: { size: chartFontSize, weight: '800' } } } },
-                    scales: {
-                        x: { grid: { display: false }, ticks: { maxRotation: 45, font: { size: chartFontSize, weight: '700' } } },
-                        y: { grid: { color: gridColor, borderDash: [5, 5] }, border: { display: false }, beginAtZero: true, ticks: { font: { size: chartFontSize, weight: '700' } } }
-                    }
+                    ...commonOptions,
+                    interaction: { mode: 'index', intersect: false },
+                    animation: {
+                        duration: 1500,
+                        easing: 'easeOutQuart'
+                    },
+                    scales: { x: { grid: { display: false } }, y: { grid: { display: false }, border: { display: false }, beginAtZero: true } }
                 }
             });
 
+            // 🌟 3. กราฟแท่ง: เพิ่มแอนิเมชันวิ่งไล่ระดับ (Staggered Delay)
             if (barChartInstance) barChartInstance.destroy();
-            const ctxBar = document.getElementById('horizontalBarChart').getContext('2d');
-            
-            barChartInstance = new Chart(ctxBar, {
+            barChartInstance = new Chart(document.getElementById('horizontalBarChart').getContext('2d'), {
                 type: 'bar',
                 data: {
                     labels: cacheData.deviceLabels,
-                    datasets: [{
-                        data: cacheData.deviceTotals,
-                        backgroundColor: cacheData.deviceLabels.map(l => l.includes('ซัก') ? gradWash : gradDry),
-                        borderRadius: 50, barPercentage: 0.5, categoryPercentage: 0.8
-                    }]
+                    datasets: [{ data: cacheData.deviceTotals, backgroundColor: cacheData.deviceLabels.map(l => l.includes('ซัก') ? colorW : colorD), borderRadius: 8, barPercentage: 0.5 }]
                 },
                 options: {
-                    indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } },
-                    scales: {
-                        x: { grid: { color: gridColor, borderDash: [5, 5] }, border: { display: false }, ticks: { font: { size: chartFontSize, weight: '700' } } },
-                        y: { grid: { display: false }, border: { display: false }, ticks: { font: { size: chartFontSize, weight: '800' }, color: isDark ? '#fff' : '#1e293b' } }
-                    }
+                    ...commonOptions,
+                    indexAxis: 'y',
+                    animation: {
+                        duration: 1000,
+                        easing: 'easeOutQuart',
+                        delay: (context) => {
+                            let delay = 0;
+                            if (context.type === 'data') {
+                                delay = context.dataIndex * 100;
+                            }
+                            return delay;
+                        }
+                    },
+                    plugins: { legend: { display: false }, tooltip: commonOptions.plugins.tooltip },
+                    scales: { x: { grid: { display: false }, border: { display: false } }, y: { grid: { display: false }, border: { display: false }, ticks: { color: isDark ? '#F7FAFC' : '#111827', font: { weight: 'bold' } } } }
                 }
             });
         }
 
-        async function initDashboard() { await loadBranches(); await fetchData(); }
-        initDashboard();
-        setInterval(silentFetchData, 5 * 60 * 1000);
-        window.addEventListener('resize', () => { 
-            getDateRange();
-            if (doughnutChartInstance && lineChartInstance && barChartInstance) updateCharts(); 
-        });
+        async function initDashboard() {
+            renderIcons();
+            document.getElementById('customDateStart').valueAsDate = new Date(); document.getElementById('customDateEnd').valueAsDate = new Date();
+            await loadBranches(); await fetchData();
+        }
+
+        initDashboard(); setInterval(silentFetchData, 5 * 60 * 1000);
+        window.addEventListener('resize', () => { setTimeout(() => { if (lineChartInstance) updateCharts(); }, 250); });
     </script>
 </body>
-</html>
 
-							<script>
-                            	
-							</script>
-                        </body>
-                        </html>
-                    
+</html>
